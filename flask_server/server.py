@@ -13,17 +13,23 @@ cot_api = cot.cot_api(token) # grab the api and pass it the token value
 print(cot_api.get_data("1429"))
 
 # load static files
-#url_for('static', filename='style.css')
-#with app.test_request_context():
-#    print(url_for('index'))
-#    print(url_for('login'))
-#    print(url_for('login', next='/'))
-#    print(url_for('profile', username='John Doe'))
+#{{ url_for('static', filename='dashboard.css') }}
 
 # Routing - Visible public sites
 @app.route('/')
 def index():
-    return 'index'
+    return render_template('dashboard.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+
+
+
+
+
+
 
 @app.route('/user/<username>')
 def profile(username):
