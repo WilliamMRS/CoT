@@ -4,7 +4,7 @@ from markupsafe import escape
 # Private modules
 import cot
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1NjcyIn0.y6Ud_mLvXvJeSAsdikQXq5AsIXUBBp0E9UBP0_UNw2Q"
 
