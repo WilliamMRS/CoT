@@ -20,12 +20,10 @@ def powerPriceFetch(api_key) : # Funksjon for å hente inn strømpriser fra Ents
     start = pd.Timestamp('20210413', tz="Europe/Oslo")
     end = pd.Timestamp('20210414', tz="Europe/Oslo")
     country_code = 'NO_3'  # Norway, Trondelag
-    data = client.query_day_ahead_prices(country_code, start, end)
-    print(data)
-    return data # SPESIFISERE HVILKEN DATA SOM SKAL RETURNERES???
+    response = client.query_day_ahead_prices(country_code, start, end)
+    return responce # SPESIFISERE HVILKEN DATA SOM SKAL RETURNERES???
 
-# powerPriceFetch(api_key)
-
+print (powerPriceFetch(api_key))
 
 def putCoT(data, status) : #Tar inn info_apparat og oppdaterer med ny status i CoT 
     data["Value"] = status
@@ -56,6 +54,7 @@ class powerConsumer: # Klassen til alle strømforbrukennde apparater i leilighet
     def changeEffect(self) :
         response = 1#PLACEHOLDER
         return response 
+
 
     def printShit(self): #PrintShit
         print(self.room)
@@ -112,7 +111,9 @@ consumers = { # Definerer ulike strømforbrukende apparater
 "curtains_4" : powerConsumer("bedroom_4", 40, 1, info_curtains_4),
 "heater_4" : powerConsumer("bedroom_4", 40, 1, info_heater_4),
 }
+
 rooms = {
+"Total" : consumers,
 "kitchen" : [],
 "bathroom" : [],
 "bedroom_1" : [],
@@ -120,15 +121,13 @@ rooms = {
 "bedroom_3" : [],
 "bedroom_4" : [],
 }
-def putObjectsInRooms() :g
-    for i in consumers :
-        if consumers[i].room == "kitchen" :
-            rooms["kitchen"].append(consumers[i])
-        
-for i in range(len(rooms["kitchen"])):
-    print(rooms["kitchen"][i].room)
+def putObjectsInRooms(consumerList, roomList) :
+    for key in roomList.keys() :
+        for i in consumerList :
+            if consumerList[i].room == key :
+                roomList[key].append(consumerList[i])
 
-print (consumers["stove"].status())
+""" print (consumers["stove"].status()) """
 
 def updateConsumerStatus(dictionary): # Oppdaterer de ulike objektene sin powerStatus (Av/PÅ) fra CoT
     for i in dictionary:
@@ -142,14 +141,11 @@ def powerConsumptionLogging(unit): #Funksjon for å skrive til en .csv fil
         writer = csv.writer(f)
         writer.writerow([now, str(kW)])
 
-
 # status(consumers, "dishwasher")
 # powerConsumptionLogging(consumers["dishwasher"])
 #print (consumers["stove"].status(info_stove))
 
-
-
-def logThisDictionary(dictionary) : # Oppdaterer status på apparater og skriver forbruket til csv.fil. Tar inn dictionary med apparat objektene
+def logThis(dictionary) : # Oppdaterer status på apparater og skriver forbruket til csv.fil. Tar inn dictionary med apparat objektene
     updateConsumerStatus(dictionary)
     currentConsumption = 0
     for i in dictionary :
@@ -162,6 +158,7 @@ def logThisDictionary(dictionary) : # Oppdaterer status på apparater og skriver
 
 # placeholderTitle(consumers)
 
+putObjectsInRooms(consumers, rooms)
 
 
 
