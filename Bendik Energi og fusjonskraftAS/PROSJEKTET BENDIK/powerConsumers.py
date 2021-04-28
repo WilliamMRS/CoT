@@ -54,7 +54,6 @@ class powerConsumer: # Klassen til alle strømforbrukennde apparater i leilighet
         response = 1#PLACEHOLDER
         return response 
 
-
     def printShit(self): #PrintShit
         print(self.room)
         print(self.effect)
@@ -140,22 +139,29 @@ def updateConsumerStatus(dictionary): # Oppdaterer de ulike objektene sin powerS
         dictionary[i].status()
 
 
-
 # status(consumers, "dishwasher")
 # powerConsumptionLogging(consumers["dishwasher"])
 #print (consumers["stove"].status(info_stove))
 
 def logThis(consumerList, roomList) : # Oppdaterer status på apparater og skriver forbruket til csv.fil. Tar inn dictionary med apparat objektene
     #updateConsumerStatus(consumers)
-    totalCurrentConsumption = 0
     for key in roomList.keys() :
-        roomConsumption = 0
         for i in roomList[key] :
+            Consumption = 0
             if roomList[key][i].status() == 1 :
-                currentConsumption += roomList[key][i].effect
+                Consumption += roomList[key][i].effect
             else : 
                 pass
-        #log room Consumption here      
+            #log room Consumption here      
+
+def initCsv(roomList) :
+    listOfCSVHeaders = ["Time"]
+    for key in roomList :
+        listOfCSVHeaders.append(roomlist[key])
+    with open ("powerUsage.csv", "a", newline="") as f:
+        csvReader = csv.DictReader
+# LEGGE TIL HEADER I CSV FILA
+
 
 
 def powerConsumptionLogging(room, consumption): #Funksjon for å skrive til en .csv fil
@@ -170,7 +176,7 @@ putObjectsInRooms(consumers, rooms)
 logThis(consumers, rooms)
 
 # CSV file layout:
-# TIME, TOTAl, livingroom, Kitchen, Bathroom, bedroom_1, bedroom_2, bedroom_3, bedroom_4, solarPanel, TotalCost
+# TIME, TOTAlConsumption, livingroom, Kitchen, Bathroom, bedroom_1, bedroom_2, bedroom_3, bedroom_4, solarPanel, TotalCost, SolarPanelSavings
 
 
 
