@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="/static/css/dashboard.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
-    <script src="/static/js/graphs_es5.js"></script>
-    <script src="/static/js/dashboard.js"></script>
+    <script defer src="/static/js/graphs_es5.js"></script>
+    <script defer src="/static/js/dashboard.js"></script>
 </head>
 <body>
     <h1>Dashboard</h1>
@@ -26,7 +26,7 @@
 
     </div>
     <div class="panel" id ="weatherData">
-
+        
     </div>
     <div class="panel" id ="booking">
 
