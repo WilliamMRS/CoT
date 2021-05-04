@@ -1,4 +1,4 @@
-let ctx, i
+
 /*options = {
 	ctx: ctx, text: "Hi", x: 100, y: 100, fillstyle: "Red", font: "18px Arial"
 }*/
@@ -209,7 +209,16 @@ const graphs =
 		}
 	},
 
-	/* CHARTING TOOLS */
+	/* CHARTING TOOLS 
+	
+		canvas is canvas html object
+		ctx is canvas.getContext("2d")
+		x is array of x values
+		y is array of y values
+		midZero is a boolen. If true, the graph is drawn with 0 as the centerline
+		dataPointsCount are the amount of datapoints to be graphed
+	
+	*/
 	drawChart: function (canvas, ctx, x, y, midZero, dataPointsCount) {
 		let max = 0
 		let min = 0
@@ -233,19 +242,19 @@ const graphs =
 			scale = 1
 
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		drawHorizontalLines(canvas, ctx, 10, '#bab8b7', 0.25)
-		drawVerticalLines(canvas, ctx, 50, '#bab8b7', 0.25, dataPointsCount)
+		this.drawHorizontalLines(canvas, ctx, 10, '#bab8b7', 0.25)
+		this.drawVerticalLines(canvas, ctx, 50, '#bab8b7', 0.25, dataPointsCount)
 		try{
 			if(x[0]){
-				drawVerticalValues(canvas, ctx, 15, 5, "white", 10, scale, midZero);
-				drawHorizontalValues(canvas, ctx, 50, 15, "white", 10, scale, x, dataPointsCount);
+				this.drawVerticalValues(canvas, ctx, 15, 5, "white", 10, scale, midZero);
+				this.drawHorizontalValues(canvas, ctx, 50, 15, "white", 10, scale, x, dataPointsCount);
 				let spacingBetweenEachPoint = canvas.width/dataPointsCount
-				drawPolyline(canvas, ctx, x, y, spacingBetweenEachPoint, 250, 'red', scale, 2)
+				this.drawPolyline(canvas, ctx, x, y, spacingBetweenEachPoint, 50, 'red', scale, 2)
 			}
 		}catch(err){
 			console.log(err)
 		}
-		drawSquare({ ctx: ctx, x: 0, y: 0, height: canvas.height, width: canvas.width, color: "#4cd137", lineWidth: 2, })
+		this.drawSquare({ ctx: ctx, x: 0, y: 0, height: canvas.height, width: canvas.width, color: "#4cd137", lineWidth: 2, })
 	},
 
 	/*

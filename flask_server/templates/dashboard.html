@@ -1,35 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width= , initial-scale=1.0">
-    <title>Kollektiv Dashboard</title>
-    <link rel="stylesheet" href="/static/css/dashboard.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
-    <script defer src="/static/js/graphs_es5.js"></script>
-    <script defer src="/static/js/dashboard.js"></script>
-</head>
-<body>
-    <h1>Dashboard</h1>
-    <div class="panel" id = "">
-        123
-    </div>
-    <div class="panel" id = "graphicalView">
-
-    </div>
-    <div class="panel" id="powerConsumptionGraph">
-
-    </div>
-    <div class="panel" id="roomData">
-
-    </div>
-    <div class="panel" id ="weatherData">
-        
-    </div>
-    <div class="panel" id ="booking">
-
-    </div>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width= , initial-scale=1.0">
+        <title>Kollektiv Dashboard</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" href="/static/css/dashboard.css"> <!-- loaded last to overload previous skeleton.css settings (margin for example) -->
+        <script defer src="/static/js/graphs_es5.js"></script>
+        <script defer src="/static/js/dashboard.js"></script>
+        <script defer src="path/to/chartjs/dist/chart.js"></script>
+    </head>
+    <body>
+        <div class="panel" id = "Header">
+            <h2>SMARTHYBEL DASHBOARD</h2>
+        </div>
+        <div class = "row">
+            <div class="panel six columns" id="roomData">
+                <div class = "row">
+                    <table class="ten columns">
+                        <tr>
+                            <th>Rom</th>
+                            <th>Personer</th>
+                            <th>Strømbruk siste 24t</th>
+                            <th>Book</th>
+                        </tr>
+                        <!-- Her kommer generert info om rommene -->
+                    </table>
+                    <div class="two columns" id ="booking">
+                        booking
+                    </div>
+                </div>
+            </div>
+            <div class="panel six columns" id="hybel">
+                <div class="row roomRow">
+                    <div class = "four columns room" id="kitchen">
+                        Kjøkken
+                    </div>
+                    <div class="two columns room" id="entrance">
+                        Trappegang
+                    </div>
+                    <div class="two columns room" id="bathroom">
+                        Bad
+                    </div>
+                </div>
+                <div class="row roomRow">
+                    <div class = "two columns room" id="sleep1">
+                        Hybel 1
+                    </div>
+                    <div class = "eight columns room" id="commonroom">
+                        
+                    </div>
+                    <div class = "two columns room" id="sleep6">
+                        Hybel 6
+                    </div>
+                </div>
+                <div class="row roomRow">
+                    <div class = "two columns offset-by-two room" id="sleep2">
+                        Hybel 2
+                    </div>
+                    <div class = "two columns room" id="sleep3">
+                        Hybel 3
+                    </div>
+                    <div class = "two columns room" id="sleep4">
+                        Hybel 4
+                    </div>
+                    <div class = "two columns room" id="sleep5">
+                        Hybel 5
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class = "row">
+            <div class="panel six columns" id = "powerConsumptionGraph">
+                <canvas height="400px" width="600px"></canvas>
+            </div>
+            <div class="panel six columns" id ="weatherData">
+                weather data
+            </div>
+        </div>
+    </body>
 </html>

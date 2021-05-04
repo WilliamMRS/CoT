@@ -1,7 +1,106 @@
-.panel{
-    background-color: rgb(172, 172, 172);
+body{
+    background-color: rgb(37, 37, 37);
+    color: rgb(255, 255, 255);
 }
 
-h1{
-    color: red;
+h1,h2,h3,h4,h5,h6,p,th,td{
+    color: white;
+}
+
+#Header{
+    text-align: center;
+    margin: 0.5%;
+    padding: 0.5%;
+}
+#Header > h2{
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(0, 135, 202);
+}
+
+.panel{
+    background-color: rgb(49, 49, 49);
+    margin: 0;
+    padding: 1%;
+    margin: 1%;
+}
+
+#hybel{
+    background-color: rgb(49, 49, 49);
+    text-align: center;
+}
+
+.room{
+    background-color: rgb(70, 70, 70);
+    border-width: 3px;
+    border-color: rgb(165, 165, 165);
+    border-style: solid;
+}
+.roomRow{
+    min-height: 33%;
+    text-align: center;
+}
+
+/* room specific for hybel */
+
+#kitchen{
+    margin-left: 19.4%;
+    border-bottom: rgb(92, 92, 92);
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
+
+#entrance{
+    border-bottom: rgb(92, 92, 92);
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
+#bathroom{
+    border-bottom: rgb(92, 92, 92);
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
+
+#commonroom{
+    margin-left: 0;
+    border-color: rgb(92, 92, 92);
+    border-style: dashed;
+    border-width: 1px;
+}
+
+#sleep1{
+    margin-left: 4%;
+    border-right: rgb(92, 92, 92);
+    border-right-style: dashed;
+    border-right-width: 1px;
+}
+#sleep2{
+    margin-left: 20.66666666666667%;
+}
+#sleep6{
+    border-left: rgb(92, 92, 92);
+    margin-left: 0;
+    border-left-style: dashed;
+    border-left-width: 1px;
+}
+#sleep2{
+    border-top: rgb(92, 92, 92);
+    border-top-style: dashed;
+    border-top-width: 1px;
+}
+#sleep3{
+    border-top: rgb(92, 92, 92);
+    border-top-style: dashed;
+    border-top-width: 1px;
+}
+#sleep4{
+    border-top: rgb(92, 92, 92);
+    border-top-style: dashed;
+    border-top-width: 1px;
+}
+#sleep5{
+    border-top: rgb(92, 92, 92);
+    border-top-style: dashed;
+    border-top-width: 1px;
 }
