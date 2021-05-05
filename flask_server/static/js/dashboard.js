@@ -35,7 +35,7 @@ onTableChange = () => {
     let roomData = document.getElementById("roomData");
     console.log(roomData);
     let table = roomData.querySelector("table");
-    loop1: for(let i = 1; i < table.children.length; i++){ // starts at 1 to skip the header
+    for(let i = 1; i < table.children.length; i++){ // starts at 1 to skip the header
         let attributes = table.children[i].querySelector("tr").children;
         parseFloat(attributes[1].innerText) > 0 ? attributes[1].style.color = "white" : attributes[1].style.color = "gray";
     }
@@ -51,7 +51,50 @@ url = 'http://localhost:5000'
 getWeatherData = async ()=>{
     let res = await fetch(url+'/api/forecast')
     let json = await res.json()
-    console.log(json)
+    let imgSource = json.symbol_code + ".svg"
+    document.getElementById("weatherIcon").src = "/static/weatherIcons/"+ imgSource;
+    let weatherData = document.getElementById("weatherData");
+    let table = weatherData.querySelector("table");
+    let builtHTML = ""
+    for(variable in json.variables){
+        let prefix = "";
+        let value = json.variables[variable].split(":")[1];
+        switch(json.variables[variable].split(":")[0]){
+            case "air_pressure_at_sea_level":
+            prefix = "Trykk";
+            break;
+            case "air_temperature":
+            prefix = "&deg;C";
+            value = value.split("celsius")[0]
+            break;
+            case "cloud_area_fraction":
+            prefix = "Skydekke";
+            break;
+            case "precipitation_amount":
+            prefix = "Nedbør";
+            break;
+            case "relative_humidity":
+            prefix = "Fuktighet";
+            break;
+            case "wind_from_direction":
+            prefix = "Vindretning";
+            value = value.split("degrees")[0] + "&deg;"
+            break;
+            case "wind_speed":
+            prefix = "Vindhastighet";
+            break;
+            default:
+            prefix = "Ukjent"
+            break;
+        }
+        builtHTML += 
+        `<tr>
+            <td>${prefix}</td>
+            <td>${value}</td>
+        </tr>`
+    }
+    table.innerHTML = builtHTML;
+
     return json // returns weather data
 }
 

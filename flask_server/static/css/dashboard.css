@@ -7,6 +7,18 @@ h1,h2,h3,h4,h5,h6,p,th,td{
     color: white;
 }
 
+#weatherIcon{
+    width: 50%;
+    float: right;
+}
+
+#weatherData > table{
+    font-size: 0.88vw;
+}
+#weatherData > table > tbody > tr > td{
+    padding: 4px;
+}
+
 #Header{
     text-align: center;
     margin: 0.5%;
