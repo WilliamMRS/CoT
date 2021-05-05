@@ -175,6 +175,8 @@ var myChart = new Chart(ctx2, {
     }
 });
 
+/* Exchange this with real power-usage data */
+
 const kwhGeneratedLive = [90,91,90,92,94,95,94]
 const kwhUsedLive = [11.1, 11.1, 11.2, 11.0, 11.0, 10.9, 11]
 const labelsLive = ["11:01:01", "11:01:02", "11:01:03", "11:01:04", "11:01:05", "11:01:06", "11:01:07", "11:01:08"]
