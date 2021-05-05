@@ -1,6 +1,4 @@
 // Husk å bruke 'defer' i linkingen i HTML slik siden er lastet før js filen kjører.
-
-graphs.load();
 let roomData = document.getElementById("roomData")
 let table = roomData.querySelector("table");
 
@@ -28,36 +26,61 @@ let updateRoomTables = () => {
     }
 }
 
-const canvas = document.getElementById("powerConsumptionGraph").querySelector("canvas");
-const ctx = canvas.getContext("2d");
-setInterval(()=>{
-    graphs.drawChart(canvas, ctx, [0,1,2,3,4,5], [5,3,-2,6,1,3], true, 30);
-}, 1000)
+/*
+    ONCHANGE TABLE:
+    Run 'updateTableStyle
+*/
+
+onTableChange = () => {
+    let roomData = document.getElementById("roomData");
+    console.log(roomData);
+    let table = roomData.querySelector("table");
+    loop1: for(let i = 1; i < table.children.length; i++){ // starts at 1 to skip the header
+        let attributes = table.children[i].querySelector("tr").children;
+        parseFloat(attributes[1].innerText) > 0 ? attributes[1].style.color = "white" : attributes[1].style.color = "gray";
+    }
+}
+
+setInterval( async ()=>{
+    //graphs.drawChart(canvas, ctx, [0,1,2,3,4,5], [5,3,-2,6,1,3], true, 30);
+    getWeatherData();
+}, 60000)
+
+url = 'http://localhost:5000'
+
+getWeatherData = async ()=>{
+    let res = await fetch(url+'/api/forecast')
+    let json = await res.json()
+    console.log(json)
+    return json // returns weather data
+}
+
 
 // Dynamically resize graph after container
 window.addEventListener( 'resize', onWindowResize, false );
 function onWindowResize(){
+    /*
     let innerPadding = 12;
-    let container = document.getElementById("powerConsumptionGraph");
+    let container = document.getElementById("powerChart");
     refHeight = container.clientHeight;
     refWidth = container.clientWidth - (innerPadding*2); // sets width of graph canvas
 
-    let cnvs = container.querySelector("canvas");
+    let cnvs = document.getElementById("realTime"); // grabs real-time graph and sets its size equal to powerChart
     cnvs.width = refWidth;
+    */
     //cnvs.height = refHeight;
 
     // resize hybel
     let hybel = document.getElementById("hybel");
     let roomData = document.getElementById("roomData");
 
+    // Hybel dynamisk sizing
     hybel.style.height = `${roomData.clientHeight}px`
-
     hybel.querySelector("#kitchen").style.height = `${hybel.clientHeight / 3}px`
     hybel.querySelector("#commonroom").style.height = `${hybel.clientHeight / 3}px`
     hybel.querySelector("#kitchen").style.height = `${hybel.clientHeight / 3}px`
     hybel.querySelector("#entrance").style.height = `${hybel.clientHeight / 3}px`
     hybel.querySelector("#bathroom").style.height = `${hybel.clientHeight / 3}px`
-
     hybel.querySelector("#sleep1").style.height = `${hybel.clientHeight / 3}px`
     hybel.querySelector("#sleep2").style.height = `${hybel.clientHeight / 3 - 24}px`
     hybel.querySelector("#sleep3").style.height = `${hybel.clientHeight / 3 - 24}px`
@@ -67,42 +90,39 @@ function onWindowResize(){
 
 }
 
-// Run once:
-updateRoomTables(); // run once to init
-onWindowResize(); // run once to style graph
-
-
-
-
 /* Chartjs */
+
+// labels are x-axis (time)
+// data is y-axis (Kwh used)
+const kwhGenerated = [12,10,7,16,20,22,24]
+const kwhUsed = [65, 59, 80, 81, 56, 55, 40]
+const labels = ["January", "February", "March", "April", "May", "June", "July", "August"]
+const data = {
+  labels: labels,
+  datasets: [
+    {
+        label: 'Solkraft',
+        data: kwhGenerated,
+        fill: true,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1,
+        backgroundColor: 'rgba(75, 192, 192, 0.493)',
+      },
+    {
+    label: 'Strømforbruk',
+    data: kwhUsed,
+    fill: true,
+    borderColor: 'rgb(236, 129, 7)',
+    tension: 0.1,
+    backgroundColor: 'rgba(146, 80, 5, 0.5)',
+  },
+]
+};
 
 var ctx2 = document.getElementById('powerChart').getContext('2d');
 var myChart = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
+    type: 'line',
+    data: data,
     options: {
         scales: {
             y: {
@@ -111,3 +131,48 @@ var myChart = new Chart(ctx2, {
         }
     }
 });
+
+const kwhGeneratedLive = [90,91,90,92,94,95,94]
+const kwhUsedLive = [11.1, 11.1, 11.2, 11.0, 11.0, 10.9, 11]
+const labelsLive = ["11:01:01", "11:01:02", "11:01:03", "11:01:04", "11:01:05", "11:01:06", "11:01:07", "11:01:08"]
+const datart = {
+  labels: labelsLive,
+  datasets: [
+    {
+        label: 'Strømforbruk',
+        data: kwhUsedLive,
+        fill: true,
+        borderColor: 'rgb(236, 129, 7)',
+        tension: 0.1,
+        backgroundColor: 'rgba(146, 80, 5, 0.5)',
+      },
+    {
+        label: 'Solkraft',
+        data: kwhGeneratedLive,
+        fill: true,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1,
+        backgroundColor: 'rgba(75, 192, 192, 0.493)',
+      },
+]
+};
+
+var ctx = document.getElementById('realTime').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: datart,
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+
+// Run once after everything has loaded:
+updateRoomTables(); // run once to init
+onWindowResize(); // run once to style graph
+onTableChange();
+getWeatherData();

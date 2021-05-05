@@ -3,6 +3,8 @@ from flask import Flask, url_for, request, render_template
 from markupsafe import escape
 # Private modules
 import cot
+import weatherData
+import json
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -24,12 +26,20 @@ def index():
 def dashboard():
     return render_template('dashboard.html')
 
+# API - Data for the dashboard
 
-
-
-
-
-
+# Routing - Secured API
+@app.route('/api/forecast', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        response = app.response_class(
+            response=json.dumps(weatherData.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
+    else:
+        return "POST Not ready yet"
 
 @app.route('/user/<username>')
 def profile(username):
@@ -54,11 +64,3 @@ def show_subpath(subpath):
 @app.route('/hello/<name>')
 def hello(name=None):
     return render_template('hello.html', name=name)
-
-# Routing - Secured API
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        return do_the_login()
-    else:
-        return show_the_login_form()

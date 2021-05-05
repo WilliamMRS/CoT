@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Apr 14 12:57:36 2021
-
 @author: Jensn
 """
 from metno_locationforecast import Place, Forecast
@@ -12,15 +11,11 @@ def Future_forecast():
     Trondheim_forecast = Forecast(Trondheim, USER_AGENT)
     Trondheim_forecast.update()
     return(Trondheim_forecast)
-
-
 #print(Future_forecast())
-
 
 def getTemperature():
     data = Future_forecast().variables["air_temperature"]
     return data
-
 #print(getTemperature())
 
 def get_Cloud_area_fraction():
@@ -38,10 +33,7 @@ def Get_data_now():
     First_interval = get_data_now.data.intervals[2]
     
     return First_interval
-    
-    
-
-print(future_forecast())
+#print(future_forecast())
 
     
     
