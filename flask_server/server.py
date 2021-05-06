@@ -41,4 +41,11 @@ def login():
     else:
         return "POST Not ready yet"
 
-# TODO: Implement powerusage api
+# TODO: Implement powerusage api and read/write to csv
+
+# TODO: Implement booking system with CoT and a storage (csv file) for all bookings.
+
+# TODO: LIVE CHARTS:
+# https://nagix.github.io/chartjs-plugin-streaming/
+# https://www.chartjs.org/docs/latest/developers/updates.html
+# https://www.chartjs.org/docs/latest/charts/line.html

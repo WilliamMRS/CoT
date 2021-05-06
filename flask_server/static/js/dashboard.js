@@ -89,8 +89,8 @@ getWeatherData = async ()=>{
         }
         builtHTML += 
         `<tr>
-            <td>${prefix}</td>
             <td>${value}</td>
+            <td>${prefix}</td>
         </tr>`
     }
     table.innerHTML = builtHTML;
