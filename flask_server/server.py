@@ -60,9 +60,11 @@ def bookRoom():
         # Hvis ledig, book, hvis ikke, redirect til '
         df = booking_functions.csvToDf("booking.csv")
         booking_functions.updateTime(df)
-        booking_functions.website_booking(df, resident_id, room_id, start_time, end_time)
+        feedback = booking_functions.website_booking(df, resident_id, room_id, start_time, end_time)
         booking_functions.saveDf(df, "booking.csv")
-        #print(df)
+        
+        print(feedback)
+        print(df)
 
         return render_template('dashboard.html')
     else:

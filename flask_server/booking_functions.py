@@ -197,7 +197,7 @@ def website_booking(df, resident, room_num, start_time, end_time): # tar inn en 
         if((resident in df[room_booked][row]) == False): # sjekker om beboeren allerede har booket rommet
             if (len(df[room_booked][row]) < room_capacity): # sjekker om rommet har ledig kapasitet
                 df[room_booked][row].append(resident)
-                print("Room booked")
+                #print("Room booked")
             else:
                 fullyBooked = True
                 fullyBookedTimes.append(df["Time"][row])
@@ -207,9 +207,15 @@ def website_booking(df, resident, room_num, start_time, end_time): # tar inn en 
             alreadyBooked = True
             alreadyBookedTimes.append(df["Time"][row])
             #print("You have already booked this room")
-        
+    
+    rooms_for_feedback = ["badet", "TV-kroken", "kjøkkenet"]
+
+    feedback = "Du har nå booket " + rooms_for_feedback[room_num] + " fra " + start_time + " til " + end_time + "."
+
     if(fullyBooked):
-        print("This room is fully booked between", fullyBookedTimes[0], "and", fullyBookedTimes[-1])
-    if(alreadyBooked):
-        print("You have already booked this room between", alreadyBookedTimes[0], "and", alreadyBookedTimes[-1])
+        feedback = rooms_for_feedback[room_num].capitalize() + " er fullbooket i dette tidsrommet."
+    elif(alreadyBooked):
+        feedback = "Du har allerede booket " +  rooms_for_feedback[room_num] + " i dette tidsrommet."
             #break
+
+    return feedback
