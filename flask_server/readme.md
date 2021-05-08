@@ -5,7 +5,9 @@ Create venv on mac & linux: 'python3 -m venv venv'
 windows: 'py -3 -m venv venv'
 
 
-in the directory flask_server activate environemnt for development using command: '. venv/bin/activate'
+in the directory flask_server activate environemnt for development using command:
+mac: '. venv/bin/activate'
+windows: 'venv\Scripts\activate'
 
 ---------------------------------------------------------------- RUN
 For å kjøre serveren, først i flask_server mappen skriv:

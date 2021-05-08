@@ -7,6 +7,7 @@ import weatherData
 import json
 import booking_functions
 import key
+import pandas as pd
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -43,20 +44,52 @@ def login():
     else:
         return "POST Not ready yet"
 
+@app.route('/lol')
+def responsefunc():
+    return 'lmao'
+
 @app.route('/api/bookRoom', methods=['POST', 'GET'])
 def bookRoom():
     if request.method == 'POST':
-        print("GETTING FORM!")
-        print(request.form.get("room_form"))
-        print(request.form.get("time_start"))
-        print(request.form.get("time_end"))
-        print(request.form.get("user_name"))
+        room_id = request.form.get("room_form") #roomid 0: bad, 1: stue/tvkrok, 2: kjøkken
+        start_time = request.form.get("time_start") # 14:30
+        end_time = request.form.get("time_end") # 15:30
+        resident_id = request.form.get("user_name") #userid: 1: william, 2: fredrik, 3: Jens, 4: Bendik, 5: Erling, 6: Julenissen
+
+        # Sjekk om tiden er ledig i CSV filen
+        # Hvis ledig, book, hvis ikke, redirect til '
+        df = booking_functions.csvToDf("booking.csv")
+        booking_functions.updateTime(df)
+        booking_functions.website_booking(df, resident_id, room_id, start_time, end_time)
+        booking_functions.saveDf(df, "booking.csv")
+        #print(df)
+
         return render_template('dashboard.html')
     else:
         return render_template('dashboard.html')
+
+# TODO: show current bookings as a list in the dashboard
+@app.route('/api/getBookings', methods=['POST', 'GET'])
+def readRooms():
+    bookings = { "data": [] }
+    df = booking_functions.csvToDf("booking.csv")
+    booking_functions.updateTime(df)
+    print(df)
+
+    # read dataframe for bookings and add them to bookings{} as a list
+    for index, row in df.iterrows():
+        print(row[index])
+
+    response = app.response_class(
+        response=json.dumps(bookings.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
+
 # TODO: Implement powerusage api and read/write to csv
 
-# TODO: Implement booking system with CoT and a storage (csv file) for all bookings.
+# TODO: Implement feedback. stop redirect.
 
 # TODO: LIVE CHARTS:
 # https://nagix.github.io/chartjs-plugin-streaming/
