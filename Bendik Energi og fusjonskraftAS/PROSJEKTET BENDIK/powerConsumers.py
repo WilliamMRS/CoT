@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import csv
 import key as key #Personlige tokens
-
+import json
 
 token = key.token # Henter CoT Token fra key.py fil
 
@@ -115,28 +115,23 @@ rooms = {
 
 def putObjectsInRooms(consumerList, roomList) :
     for key in roomList.keys() :
+        print(key)
         for i in consumerList :
             if consumerList[i].room == key :
                 print (consumerList[i].room)
                 roomList[key].append(consumerList[i])
 
+def logThis(roomList) : #skriver forbruket til csv.fil. Tar inn dictionary med frobrukere og romliste
+    print(roomList.keys())
+    for key in roomList.keys():
+        if key == "Total":
+            continue
+        for i in range(0, len(roomList[key])):
+            print(json.dumps(roomList[key][i].__dict__, indent=4, sort_keys=True, default=str))
 
 def updateConsumerStatus(dictionary): # Oppdaterer de ulike objektene sin powerStatus (Av/PÅ) fra CoT
     for i in dictionary:
         dictionary[i].status()
-
-
-def logThis(consumerList, roomList) : #skriver forbruket til csv.fil. Tar inn dictionary med frobrukere og romliste
-    for key in roomList.keys() :
-        print (key)
-        for i in roomList[key] :
-            print (i)
-            print (roomList[key][i])
-            Consumption = 0
-            if roomList[key][i].status() == 1 :
-                Consumption += roomList[key][i].effect
-            else : 
-                pass     
 
 def initCsv(roomList) :
     listOfCSVHeaders = ["Time"]
@@ -157,7 +152,7 @@ def powerConsumptionLogging(room, consumption): #Funksjon for å skrive til en .
         writer.writerow([now, str(kW)])
 
 putObjectsInRooms(consumers, rooms)
-logThis(consumers, rooms)
+logThis(rooms)
 
 # CSV file layout:
 # TIME, TOTAlConsumption, livingroom, Kitchen, Bathroom, bedroom_1, bedroom_2, bedroom_3, bedroom_4, solarPanel, TotalCost, SolarPanelSavings
