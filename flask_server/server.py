@@ -6,10 +6,11 @@ import cot
 import weatherData
 import json
 import booking_functions
+import key
 
 app = Flask(__name__, static_url_path='/static')
 
-token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1NjcyIn0.y6Ud_mLvXvJeSAsdikQXq5AsIXUBBp0E9UBP0_UNw2Q"
+token = key.token
 
 cot_api = cot.cot_api(token) # grab the api and pass it the token value
 
