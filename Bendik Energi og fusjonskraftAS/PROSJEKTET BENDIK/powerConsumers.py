@@ -20,7 +20,6 @@ def putCoT(data, status) : #Tar inn info_apparat og oppdaterer med ny status i C
     else :
         requests.put("https://circusofthings.com/WriteValue",data=json.dumps(data),headers={'Content-Type':'application/json'})
 
-
 class powerConsumer: # Klassen til alle strømforbrukennde apparater i leiligheten. 
     def __init__(self, room, effect, numOfUses, payload ) :# Rom, forbruk i watt, antall bruk før kjøring, kommunikasjonsnøkkel
         self.room = room
@@ -145,8 +144,6 @@ def initCsv(roomList) :
     with open ("powerUsage.csv", "a", newline="") as f:
         csvReader = csv.DictReader
 # LEGGE TIL HEADER I CSV FILA
-
-
 
 def powerConsumptionLogging(room, consumption): #Funksjon for å skrive til en .csv fil
     kW = consumption/1000 # Gjør om til kiloWatt
