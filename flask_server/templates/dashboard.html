@@ -19,17 +19,34 @@
         <div class = "row">
             <div class="panel six columns" id="roomData">
                 <div class = "row">
-                    <table class="ten columns">
+                    <table class="eight columns">
                         <tr>
                             <th>Rom</th>
                             <th>Personer</th>
-                            <th>Strømbruk siste 24t</th>
-                            <th>Book</th>
+                            <th>kwh/24t</th>
                         </tr>
                         <!-- Her kommer generert info om rommene -->
                     </table>
-                    <div class="two columns" id ="booking">
-                        booking
+                    <div class="four columns" id ="booking">
+                        <h5>Booking</h5>
+                        <form action="/api/bookRoom" method="post">
+                            <label for="room_form">Velg hva du vil booke</label>
+                            <select name="room_form" id="room_form">
+                                <option value="kjokken">Kjøkken</option>
+                                <option value="oppvaskmaskin">Oppvaskmaskin (Kjøkken)</option>
+                                <option value="tvkrok">TV kroken (5 pers)</option>
+                                <option value="bad">Bad</option>
+                                <option value="vaskemaskin">Vaskemaskin (Bad)</option>
+                            </select>
+                            <label for="time">Start Tid</label>
+                            <input type="time" name="time_start" id="timePickerStart" />
+                            <label for="time">Slutt Tid</label>
+                            <input type="time" name="time_end" id="timePickerEnd" />
+                            <label for="name">Navn</label>
+                            <input type="text" name="user_name">
+                            <br><br>
+                            <input class="submitbutton" type="submit">
+                        </form>
                     </div>
                 </div>
             </div>

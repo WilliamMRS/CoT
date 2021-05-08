@@ -41,6 +41,17 @@ def login():
     else:
         return "POST Not ready yet"
 
+@app.route('/api/bookRoom', methods=['POST', 'GET'])
+def bookRoom():
+    if request.method == 'POST':
+        print("GETTING FORM!")
+        print(request.form.get("room_form"))
+        print(request.form.get("time_start"))
+        print(request.form.get("time_end"))
+        print(request.form.get("user_name"))
+        return render_template('dashboard.html')
+    else:
+        return render_template('dashboard.html')
 # TODO: Implement powerusage api and read/write to csv
 
 # TODO: Implement booking system with CoT and a storage (csv file) for all bookings.
