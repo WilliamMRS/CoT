@@ -164,8 +164,8 @@ def csvToDf(path): # lager en df på riktig format fra en csv-fil
 def website_booking(df, resident, room_num, start_time, end_time): # tar inn en kode på riktig format og booker tilhørende rom
     #booking_code = str(booking_code)
 
-    #resident = resident
-    #room_num = room_num
+    resident = int(resident)
+    room_num = int(room_num)
     #start_hour = booking_code[2:4]
     #start_minute = booking_code[4:6]
     #duration = int(booking_code[6:9])
