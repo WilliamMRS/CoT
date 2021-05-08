@@ -1,4 +1,3 @@
-from entsoe import EntsoeRawClient
 import time 
 import requests
 import json
@@ -8,21 +7,11 @@ import key as key #Personlige tokens
 
 
 token = key.token # Henter CoT Token fra key.py fil
-api_key = key.api_key # Token til ENTSOE fra key.py
+
 
 
 # todo 
 # Dele opp rommene sitt strømforbruk 
-
-
-def powerPriceFetch(api_key) : # Funksjon for å hente inn strømpriser fra Entsoe
-    client = EntsoeRawClient(api_key)
-    start = pd.Timestamp('20210413', tz="Europe/Oslo")
-    end = pd.Timestamp('20210414', tz="Europe/Oslo")
-    country_code = 'NO_3'  # Norway, Trondelag
-    response = client.query_day_ahead_prices(country_code, start, end)
-    return response # SPESIFISERE HVILKEN DATA SOM SKAL RETURNERES???
-
 
 def putCoT(data, status) : #Tar inn info_apparat og oppdaterer med ny status i CoT 
     data["Value"] = status
@@ -51,7 +40,7 @@ class powerConsumer: # Klassen til alle strømforbrukennde apparater i leilighet
         return json.loads(response.content)["Value"]
 
     def changeEffect(self) :
-        response = 1#PLACEHOLDER
+        response = 1 #PLACEHOLDER
         return response 
 
     def printShit(self): #PrintShit
@@ -59,10 +48,6 @@ class powerConsumer: # Klassen til alle strømforbrukennde apparater i leilighet
         print(self.effect)
         print(self.numOfUses)
         print(self.status)
-
-# Ta inn sanntidsvaluta for EUR til NOK   
-# Vis forburk i realtid og historisk i graf
-# Vis kostand i graf (realtid og historisk)
 
 
 # Definerer "kontaktinfo" til apparatene i CoT
@@ -132,27 +117,26 @@ def putObjectsInRooms(consumerList, roomList) :
     for key in roomList.keys() :
         for i in consumerList :
             if consumerList[i].room == key :
+                print (consumerList[i].room)
                 roomList[key].append(consumerList[i])
+
 
 def updateConsumerStatus(dictionary): # Oppdaterer de ulike objektene sin powerStatus (Av/PÅ) fra CoT
     for i in dictionary:
         dictionary[i].status()
 
 
-# status(consumers, "dishwasher")
-# powerConsumptionLogging(consumers["dishwasher"])
-#print (consumers["stove"].status(info_stove))
-
-def logThis(consumerList, roomList) : # Oppdaterer status på apparater og skriver forbruket til csv.fil. Tar inn dictionary med apparat objektene
-    #updateConsumerStatus(consumers)
+def logThis(consumerList, roomList) : #skriver forbruket til csv.fil. Tar inn dictionary med frobrukere og romliste
     for key in roomList.keys() :
+        print (key)
         for i in roomList[key] :
+            print (i)
+            print (roomList[key][i])
             Consumption = 0
             if roomList[key][i].status() == 1 :
                 Consumption += roomList[key][i].effect
             else : 
-                pass
-            #log room Consumption here      
+                pass     
 
 def initCsv(roomList) :
     listOfCSVHeaders = ["Time"]
@@ -179,7 +163,7 @@ logThis(consumers, rooms)
 # TIME, TOTAlConsumption, livingroom, Kitchen, Bathroom, bedroom_1, bedroom_2, bedroom_3, bedroom_4, solarPanel, TotalCost, SolarPanelSavings
 
 
-
+""" Hvordan få justert effektforbruket etter utetemperatur og tid på  døgnet? """
 
 """ # Transform your dictionary to pandas dataframe
 df = pd.DataFrame.from_records([data2], index=[0])
