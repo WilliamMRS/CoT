@@ -3,6 +3,8 @@ from flask import Flask, url_for, request, render_template
 from markupsafe import escape
 # Private modules
 import cot
+import weatherData
+import json
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -24,41 +26,37 @@ def index():
 def dashboard():
     return render_template('dashboard.html')
 
-
-
-
-
-
-
-
-@app.route('/user/<username>')
-def profile(username):
-    return '{}\'s profile'.format(escape(username))
-
-@app.route('/user/<username>')
-def show_user_profile(username):
-    # show the user profile for that user
-    return 'User %s' % escape(username)
-
-@app.route('/post/<int:post_id>')
-def show_post(post_id):
-    # show the post with the given id, the id is an integer
-    return 'Post %d' % post_id
-
-@app.route('/path/<path:subpath>')
-def show_subpath(subpath):
-    # show the subpath after /path/
-    return 'Subpath %s' % escape(subpath)
-
-@app.route('/hello/')
-@app.route('/hello/<name>')
-def hello(name=None):
-    return render_template('hello.html', name=name)
+# API - Data for the dashboard
 
 # Routing - Secured API
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/api/forecast', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        return do_the_login()
+    if request.method == 'GET':
+        response = app.response_class(
+            response=json.dumps(weatherData.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
     else:
-        return show_the_login_form()
+        return "POST Not ready yet"
+
+@app.route('/api/bookRoom', methods=['POST', 'GET'])
+def bookRoom():
+    if request.method == 'POST':
+        print("GETTING FORM!")
+        print(request.form.get("room_form"))
+        print(request.form.get("time_start"))
+        print(request.form.get("time_end"))
+        print(request.form.get("user_name"))
+        return render_template('dashboard.html')
+    else:
+        return render_template('dashboard.html')
+# TODO: Implement powerusage api and read/write to csv
+
+# TODO: Implement booking system with CoT and a storage (csv file) for all bookings.
+
+# TODO: LIVE CHARTS:
+# https://nagix.github.io/chartjs-plugin-streaming/
+# https://www.chartjs.org/docs/latest/developers/updates.html
+# https://www.chartjs.org/docs/latest/charts/line.html

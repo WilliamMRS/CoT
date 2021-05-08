@@ -7,9 +7,12 @@ windows: 'py -3 -m venv venv'
 
 in the directory flask_server activate environemnt for development using command: '. venv/bin/activate'
 
+---------------------------------------------------------------- RUN
 For å kjøre serveren, først i flask_server mappen skriv:
 'export FLASK_APP=server.py'
 så 'flask run'
+---------------------------------------------------------------- RUN
+
 source: https://flask.palletsprojects.com/en/1.1.x/quickstart/
 
 Enable autoreload (så man ikke trenger å eksportere hver gang):

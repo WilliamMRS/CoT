@@ -1,7 +1,186 @@
-.panel{
-    background-color: rgb(172, 172, 172);
+body{
+    background-color: rgb(37, 37, 37);
+    color: rgb(255, 255, 255);
 }
 
-h1{
-    color: red;
+h1,h2,h3,h4,h5,h6,p,th,td{
+    color: white;
 }
+
+#weatherIcon{
+    width: 50%;
+    float: right;
+}
+
+#weatherData > table{
+    font-size: 0.88vw;
+}
+#weatherData > table > tbody > tr > td{
+    padding: 4px;
+}
+
+#Header{
+    text-align: center;
+    margin: 0.5%;
+    padding: 0.5%;
+}
+#Header > h2{
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgb(0, 135, 202);
+}
+
+.panel{
+    background-color: rgb(49, 49, 49);
+    margin: 0;
+    padding: 1%;
+    margin: 1%;
+}
+
+#hybel{
+    background-color: rgb(49, 49, 49);
+    text-align: center;
+}
+
+.room{
+    background-color: rgb(70, 70, 70);
+    border-width: 3px;
+    border-color: rgb(165, 165, 165);
+    border-style: solid;
+}
+.roomRow{
+    min-height: 33%;
+    text-align: center;
+}
+
+/* room specific for hybel */
+
+#kitchen{
+    margin-left: 19.4%;
+    border-bottom: rgb(92, 92, 92);
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
+
+#entrance{
+    border-bottom: rgb(92, 92, 92);
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
+#bathroom{
+    border-bottom: rgb(92, 92, 92);
+    border-bottom-style: dashed;
+    border-bottom-width: 1px;
+}
+
+#commonroom{
+    margin-left: 0;
+    border-color: rgb(92, 92, 92);
+    border-style: dashed;
+    border-width: 1px;
+}
+
+#sleep1{
+    margin-left: 4%;
+    border-right: rgb(92, 92, 92);
+    border-right-style: dashed;
+    border-right-width: 1px;
+}
+#sleep2{
+    margin-left: 20.66666666666667%;
+}
+#sleep6{
+    border-left: rgb(92, 92, 92);
+    margin-left: 0;
+    border-left-style: dashed;
+    border-left-width: 1px;
+}
+#sleep2{
+    border-top: rgb(92, 92, 92);
+    border-top-style: dashed;
+    border-top-width: 1px;
+}
+#sleep3{
+    border-top: rgb(92, 92, 92);
+    border-top-style: dashed;
+    border-top-width: 1px;
+}
+#sleep4{
+    border-top: rgb(92, 92, 92);
+    border-top-style: dashed;
+    border-top-width: 1px;
+}
+#sleep5{
+    border-top: rgb(92, 92, 92);
+    border-top-style: dashed;
+    border-top-width: 1px;
+}
+
+/*Form styling*/
+#booking{
+    text-align: center;
+    background-color:rgb(70, 70, 70);
+    padding: 2%;
+}
+#booking>h5{
+    color:rgb(196, 196, 196);
+    font-weight: lighten;
+}
+form{
+    text-align: center;
+}
+input{
+    color: black;
+    width: 8vw;
+}
+select{
+    color: black;
+    width: 12vw;
+}
+input[type=submit]{
+    color: white;
+}
+input[type=submit]:hover{
+    color: rgb(48, 148, 197);
+    border-color: rgb(48, 148, 197);
+}
+
+body, html {
+    --color: rgb(0, 135, 202);
+    --bgColor: #d89;
+    --size: 1.8rem;
+    --border: calc(var(--size) * 0.125);
+    --borderRadius: calc(var(--size) * 0.5);
+    --labelSize: calc(var(--size) * 0.75);
+    --margin: calc(var(--size) * 0.25);
+    --marginLeft: calc(var(--size) + calc(var(--size) * 0.5));
+
+    align-items: center;
+    justify-content: center;
+    font-family: helvetica, arial, sans-serif;
+  }
+  
+  label {
+    color: var(--color);
+    font-size: var(--labelSize);
+    font-weight: bold;
+  }
+  
+  input[type=time] {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle cx='20' cy='20' r='18.5' fill='none' stroke='%23222' stroke-width='3' /><path d='M20,4 20,8 M4,20 8,20 M36,20 32,20 M20,36 20,32' stroke='%23bbb' stroke-width='1' /><circle cx='20' cy='20' r='2' fill='%23222' stroke='%23222' stroke-width='2' /></svg>"), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M18.5,24.5 19.5,4 20.5,4 21.5,24.5 Z' fill='%23222' style='transform:rotate(120deg); transform-origin: 50% 50%;' /></svg>"), url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><path d='M18.5,24.5 19.5,8.5 20.5,8.5 21.5,24.5 Z' style='transform:rotate(20deg); transform-origin: 50% 50%;' /></svg>");
+    background-position: var(--margin) 50%;
+    background-repeat: no-repeat;
+    background-size: var(--size) var(--size);
+    border: var(--border) solid var(--color);
+    border-radius: var(--borderRadius);
+    color: #222;
+    font-size: var(--size);
+    padding: var(--margin) var(--margin) var(--margin) var(--marginLeft);
+    transition: backgroundImage 0.25s;
+  }
+  
+  input:focus {
+    outline: 2px dashed #945;
+    outline-offset: 3px;
+  }
