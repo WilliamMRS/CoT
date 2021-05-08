@@ -5,6 +5,7 @@ from markupsafe import escape
 import cot
 import weatherData
 import json
+import booking_functions
 
 app = Flask(__name__, static_url_path='/static')
 
