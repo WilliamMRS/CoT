@@ -51,16 +51,18 @@ def responsefunc():
 @app.route('/api/bookRoom', methods=['POST', 'GET'])
 def bookRoom():
     if request.method == 'POST':
-        print("GETTING FORM!")
-        print(request.form.get("room_form")) #roomid 0: bad, 1: stue/tvkrok, 2: kjøkken
-        print(request.form.get("time_start")) # 14:30
-        print(request.form.get("time_end")) # 15:30
-        print(request.form.get("user_name")) #userid: 1: william, 2: fredrik, 3: Jens, 4: Bendik, 5: Erling, 6: Julenissen
-
-        roomName = request.form.get("room_form")
+        room_id = request.form.get("room_form") #roomid 0: bad, 1: stue/tvkrok, 2: kjøkken
+        start_time = request.form.get("time_start") # 14:30
+        end_time = request.form.get("time_end") # 15:30
+        resident_id = request.form.get("user_name") #userid: 1: william, 2: fredrik, 3: Jens, 4: Bendik, 5: Erling, 6: Julenissen
 
         # Sjekk om tiden er ledig i CSV filen
         # Hvis ledig, book, hvis ikke, redirect til '
+        df = booking_functions.csvToDf("booking.csv")
+        booking_functions.updateTime(df)
+        booking_functions.website_booking(df, resident_id, room_id, start_time, end_time)
+        booking_functions.saveDf(df, "booking.csv")
+        #print(df)
 
         return render_template('dashboard.html')
     else:
