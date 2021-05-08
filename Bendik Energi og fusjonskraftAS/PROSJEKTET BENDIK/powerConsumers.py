@@ -4,21 +4,12 @@ import json
 import pandas as pd
 import csv
 import key as key #Personlige tokens
-import json
+import random # MIDLERTIDIG
+
 
 token = key.token # Henter CoT Token fra key.py fil
+api_key = key.api_key # Token til ENTSOE fra key.py
 
-
-
-# todo 
-# Dele opp rommene sitt strømforbruk 
-
-def putCoT(data, status) : #Tar inn info_apparat og oppdaterer med ny status i CoT 
-    data["Value"] = status
-    if (data["Value"] > 1 ) : # ErrorHandling
-        print("value to high")
-    else :
-        requests.put("https://circusofthings.com/WriteValue",data=json.dumps(data),headers={'Content-Type':'application/json'})
 
 class powerConsumer: # Klassen til alle strømforbrukennde apparater i leiligheten. 
     def __init__(self, room, effect, numOfUses, payload ) :# Rom, forbruk i watt, antall bruk før kjøring, kommunikasjonsnøkkel
@@ -26,27 +17,39 @@ class powerConsumer: # Klassen til alle strømforbrukennde apparater i leilighet
         self.effect = effect
         self.numOfUses = numOfUses
         self.payload = payload
-
-    def powerOn(self): #Sjekker hvor mange ganger apparatet er blitt brukt
-        totalUses = 0
-        if self.status == True:
-            totalUses +1
-        if totalUses == self.numOfUses:
-            return self.effect
+        self.timesUsed = 0
+        self.currentState = 0
+        self.previousState = 0
 
     def status(self) : # Henter AV/PÅ status fra CoT
         response = requests.get("https://circusofthings.com/ReadValue", params = self.payload)
-        return json.loads(response.content)["Value"]
+        self.previousState = self.currentState        
+        self.currentState = json.loads(response.content)["Value"]
+        return json.loads(response.content)
+
+    def powerOn(self): # Sjekker hvor mange ganger apparatet er blitt brukt, og om det skal registreres som aktivt. 
+        power = 0
+        if self.numOfUses > 1:
+            self.timesUsed = self.timesUsed+1
+            if self.currentState != self.previousState:
+                if self.timesUsed > self.numOfUses:
+                    self.timesUsed = 0   
+                if self.timesUsed == self.numOfUses:
+                    power = self.effect
+        if self.currentState == 1:
+                power = self.effect
+        return power
 
     def changeEffect(self) :
-        response = 1 #PLACEHOLDER
+        response = 1#PLACEHOLDER
         return response 
 
-    def printShit(self): #PrintShit
-        print(self.room)
-        print(self.effect)
-        print(self.numOfUses)
-        print(self.status)
+    def updateState(self, newState): # Sender manuelt status til CoT
+        dataDict = self.payload
+        dataDict["Value"] = newState
+        response = requests.put("https://circusofthings.com/WriteValue", data=json.dumps(dataDict),headers={'Content-Type':'application/json'} )
+        return json.loads(response.content)
+
 
 
 # Definerer "kontaktinfo" til apparatene i CoT
@@ -77,94 +80,98 @@ info_heater_4 = {'Key':'19494','Value':0,'Token':token}
 consumers = { # Definerer ulike strømforbrukende apparater 
 #Legg inn nye objekter her
 "livingroomLight" : powerConsumer("livingroom", 40, 1, info_livingRoomLight),
-"TV" : powerConsumer("livingroom", 0, 1, info_TV),
+"TV" : powerConsumer("livingroom", 10, 1, info_TV),
 "stove" : powerConsumer("kitchen", 2200, 1, info_stove),
 "dishwasher" : powerConsumer("kitchen",2000, 4, info_dishwasher),
 "coffeeMachine" : powerConsumer("kitchen", 1500, 1, info_coffeeMachine),
 "fridge" : powerConsumer("kitchen", 160, 1, info_fridge),
-"kitchenHeater" : powerConsumer("kitchen", 0, 1, info_kitchenHeater),
+"kitchenHeater" : powerConsumer("kitchen", 10, 1, info_kitchenHeater),
 "kitchenLight" : powerConsumer("kitchen", 40, 1, info_kitchenLight),
 "washingMachine" : powerConsumer("bathroom", 2500, 4, info_washingMachine),
 "shower" : powerConsumer("bathroom", 1000, 1, info_shower),
 "heatingCable" : powerConsumer("bathroom", 1000, 1, info_heatingCable),
 "light_1" : powerConsumer("bedroom_1", 40, 1, info_light_1),
-"curtains_1" : powerConsumer("bedroom_1", 0, 1, info_curtains_1),
-"heater_1" : powerConsumer("bedroom_1", 0, 1, info_heater_1),
+"curtains_1" : powerConsumer("bedroom_1", 10, 1, info_curtains_1),
+"heater_1" : powerConsumer("bedroom_1", 10, 1, info_heater_1),
 "light_2" : powerConsumer("bedroom_2", 40, 1, info_light_2),
-"curtains_2" : powerConsumer("bedroom_2", 0, 1, info_curtains_2),
-"heater_2" : powerConsumer("bedroom_2", 0, 1, info_heater_2),
+"curtains_2" : powerConsumer("bedroom_2", 10, 1, info_curtains_2),
+"heater_2" : powerConsumer("bedroom_2", 10, 1, info_heater_2),
 "light_3" : powerConsumer("bedroom_3", 40, 1, info_light_3),
-"curtains_3" : powerConsumer("bedroom_3", 0, 1, info_curtains_3),
-"heater_3" : powerConsumer("bedroom_3", 0, 1, info_heater_3),
+"curtains_3" : powerConsumer("bedroom_3", 10, 1, info_curtains_3),
+"heater_3" : powerConsumer("bedroom_3", 10, 1, info_heater_3),
 "light_4" : powerConsumer("bedroom_4", 40, 1, info_light_4),
-"curtains_4" : powerConsumer("bedroom_4", 0, 1, info_curtains_4),
-"heater_4" : powerConsumer("bedroom_4", 0, 1, info_heater_4),
+"curtains_4" : powerConsumer("bedroom_4", 10, 1, info_curtains_4),
+"heater_4" : powerConsumer("bedroom_4", 10, 1, info_heater_4),
 }
 
 rooms = {
 "Total" : consumers,
-"livingroom" : [],
-"kitchen" : [],
-"bathroom" : [],
-"bedroom_1" : [],
-"bedroom_2" : [],
-"bedroom_3" : [],
-"bedroom_4" : [],
+"livingroom" : {},
+"kitchen" : {},
+"bathroom" : {},
+"bedroom_1" : {},
+"bedroom_2" : {},
+"bedroom_3" : {},
+"bedroom_4" : {},
+"CostOfPower" : {},
+"solarPanels" : {}, # kwH power generated 
+"solarSavings" : {}, # kwh converted to money saved
 }
+
 
 def putObjectsInRooms(consumerList, roomList) :
     for key in roomList.keys() :
-        print(key)
         for i in consumerList :
             if consumerList[i].room == key :
-                print (consumerList[i].room)
-                roomList[key].append(consumerList[i])
-
-def logThis(roomList) : #skriver forbruket til csv.fil. Tar inn dictionary med frobrukere og romliste
-    print(roomList.keys())
-    for key in roomList.keys():
-        if key == "Total":
-            continue
-        for i in range(0, len(roomList[key])):
-            print(json.dumps(roomList[key][i].__dict__, indent=4, sort_keys=True, default=str))
+                roomList[key].update({i : consumerList[i]})
 
 def updateConsumerStatus(dictionary): # Oppdaterer de ulike objektene sin powerStatus (Av/PÅ) fra CoT
     for i in dictionary:
         dictionary[i].status()
 
-def initCsv(roomList) :
+def setConsumerStatus(newValue, roomlist) :
+    for key in roomlist.keys() :
+        for i in roomlist[key] :
+            roomlist[key][i].updateState(newValue)
+
+
+
+def initCsv(roomlist) :     #Sjekke for, og legge til header i CSV fil basert på hva som finnens i roomList
+    # Work in Progress. Help ? 
     listOfCSVHeaders = ["Time"]
-    for key in roomList :
-        listOfCSVHeaders.append(roomlist[key])
-    with open ("powerUsage.csv", "a", newline="") as f:
-        csvReader = csv.DictReader
-# LEGGE TIL HEADER I CSV FILA
+    for key in roomlist :
+        listOfCSVHeaders.append(key) # Lager liste med alle navnene i roomlist
+    df = pd.read_csv("powerUsage.csv", header=None)
+    df.to_csv("powerUsage.csv", header = listOfCSVHeaders, index=False)
 
-def powerConsumptionLogging(room, consumption): #Funksjon for å skrive til en .csv fil
-    kW = consumption/1000 # Gjør om til kiloWatt
-    now = time.strftime('%d-%m-%Y %H:%M:%S')
-    print("The time is" + now)
-    with open("powerUsage.csv", "a", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow([now, str(kW)])
+def logThis(consumptionDict,): #Funksjon for å skrive til en .csv fil. Tar inn dictionary med {rom : verdi}
+    df = pd.DataFrame().from_records([consumptionDict], index =[0])
+    df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
+    df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
 
-putObjectsInRooms(consumers, rooms)
-logThis(rooms)
+def consumptionLogger(roomList, kWhcompensation) : #skriver forbruket til csv.fil. Tar inn dictionary med key rom, og verdi strømforbrukende objekt.
+    consumptionDict = {}
+    for key in roomList.keys() :
+        consumption = 0
+        for i in roomList[key] :
+            if roomList[key][i].currentState == 1 :
+                consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt
+        consumptionDict.update({key : consumption})
+    logThis(consumptionDict)
+
+def randomizeStatus(roomlist) : # RANDOMIZE COT STATUSES.
+    for key in roomlist.keys():   
+        newValue = random.randint(0,1)
+        print("object is number " + str(key) + " and randomNum is: " + str(newValue))
+        roomlist[key].updateState(newValue)
+
+
 
 # CSV file layout:
-# TIME, TOTAlConsumption, livingroom, Kitchen, Bathroom, bedroom_1, bedroom_2, bedroom_3, bedroom_4, solarPanel, TotalCost, SolarPanelSavings
+# TIME, TOTAlConsumption, livingroom, Kitchen, Bathroom, bedroom_1, bedroom_2, bedroom_3, bedroom_4, solarPanel, TotalCost, SolarPanel
 
 
-""" Hvordan få justert effektforbruket etter utetemperatur og tid på  døgnet? """
 
-""" # Transform your dictionary to pandas dataframe
-df = pd.DataFrame.from_records([data2], index=[0])
-
-# Insert timestamp at first column (as desired)
-df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
-
-# Write to csv
-df.to_csv('my_file.csv', index=False) """
 
 
 """ 
