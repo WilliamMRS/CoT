@@ -71,11 +71,12 @@ def bookRoom():
 def readRooms():
     bookings = { "data": [] }
     df = booking_functions.csvToDf("booking.csv")
+    booking_functions.updateTime(df)
     print(df)
 
     # read dataframe for bookings and add them to bookings{} as a list
     for index, row in df.iterrows():
-        print(row[0], row[1])
+        print(row[index])
 
     response = app.response_class(
         response=json.dumps(bookings.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
