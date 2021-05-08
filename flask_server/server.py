@@ -89,6 +89,8 @@ def readRooms():
 
 # TODO: Implement powerusage api and read/write to csv
 
+# TODO: Implement feedback. stop redirect.
+
 # TODO: LIVE CHARTS:
 # https://nagix.github.io/chartjs-plugin-streaming/
 # https://www.chartjs.org/docs/latest/developers/updates.html
