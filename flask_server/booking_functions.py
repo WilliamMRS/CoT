@@ -160,3 +160,56 @@ def csvToDf(path): # lager en df på riktig format fra en csv-fil
         for i in range(len(df[columns[n]])):
             df[columns[n]][i] = ast.literal_eval(df[columns[n]][i]) # konverterer "[]" til [] eller "[1,2,3]" til [1,2,3]
     return df
+
+def website_booking(df, resident, room_num, start_time, end_time): # tar inn en kode på riktig format og booker tilhørende rom
+    #booking_code = str(booking_code)
+
+    #resident = resident
+    #room_num = room_num
+    #start_hour = booking_code[2:4]
+    #start_minute = booking_code[4:6]
+    #duration = int(booking_code[6:9])
+
+    #start_time = start_time#start_hour + ":" + start_minute
+
+    rooms = ["Bathroom", "Livingroom", "Kitchen"] # Bathroom = rom nr. 0, Livingroom = rom nr. 1, Kitchen = rom nr. 2
+    maxCapacity = [1, 4, 3] # max antall personer i rommene. samme rekkefølge som over ^^
+    
+    room_booked = rooms[room_num]
+    room_capacity = maxCapacity[room_num] # max antall personer i et rom
+
+    booking_start_index = df.loc[df["Time"] == start_time].index[0]
+    booking_end_index = df.loc[df["Time"] == end_time].index[0]
+    # if(booking_start_index + int(duration / 5) < df.index[-1]):
+    #     booking_end_index = booking_start_index + int(duration / 5)
+    # else:
+    #     booking_end_index = df.index[-1] #last index in df
+    
+    # håndterer feil
+    fullyBooked = False
+    alreadyBooked = False
+
+    fullyBookedTimes = []
+    alreadyBookedTimes = []
+    
+
+    for row in range(booking_start_index, booking_end_index): # går gjennom radene som ønskes å bookes og legger til beboeren som booker i listen over hvem som har booket rommet. (Kjører kun dersom personen ikke allerede har booket rommet)
+        if((resident in df[room_booked][row]) == False): # sjekker om beboeren allerede har booket rommet
+            if (len(df[room_booked][row]) < room_capacity): # sjekker om rommet har ledig kapasitet
+                df[room_booked][row].append(resident)
+                print("Room booked")
+            else:
+                fullyBooked = True
+                fullyBookedTimes.append(df["Time"][row])
+                #print("This room is fully booked")
+
+        else:
+            alreadyBooked = True
+            alreadyBookedTimes.append(df["Time"][row])
+            #print("You have already booked this room")
+        
+    if(fullyBooked):
+        print("This room is fully booked between", fullyBookedTimes[0], "and", fullyBookedTimes[-1])
+    if(alreadyBooked):
+        print("You have already booked this room between", alreadyBookedTimes[0], "and", alreadyBookedTimes[-1])
+            #break
