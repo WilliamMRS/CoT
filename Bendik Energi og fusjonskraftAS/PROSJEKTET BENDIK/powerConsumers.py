@@ -21,11 +21,16 @@ class powerConsumer: # Klassen til alle strømforbrukennde apparater i leilighet
         self.currentState = 0
         self.previousState = 0
 
-    def status(self) : # Henter AV/PÅ status fra CoT
-        response = requests.get("https://circusofthings.com/ReadValue", params = self.payload)
-        self.previousState = self.currentState        
-        self.currentState = json.loads(response.content)["Value"]
-        return json.loads(response.content)
+    def status(self) : 
+        """ 
+            Henter AV/PÅ status fra CoT 
+            Oppdaterer forrige status for å sjekke antall bruk
+            Returnerer value fra CoT-respons
+        """
+        response = requests.get("https://circusofthings.com/ReadValue", params = self.payload) # Body for request
+        self.previousState = self.currentState # Oppdaterer forrige status     
+        self.currentState = json.loads(response.content)["Value"] # Leser verdi fra CoT respons
+        return json.loads(response.content) # returnerer 
 
     def powerOn(self): # Sjekker hvor mange ganger apparatet er blitt brukt, og om det skal registreres som aktivt. 
         power = 0
@@ -162,7 +167,7 @@ def consumptionLogger(roomList, kWhcompensation) : #skriver forbruket til csv.fi
 def randomizeStatus(roomlist) : # RANDOMIZE COT STATUSES.
     for key in roomlist.keys():   
         newValue = random.randint(0,1)
-        print("object is number " + str(key) + " and randomNum is: " + str(newValue))
+        # print("object is number " + str(key) + " and randomNum is: " + str(newValue))
         roomlist[key].updateState(newValue)
 
 
