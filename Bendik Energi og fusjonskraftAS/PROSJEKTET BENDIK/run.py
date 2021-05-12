@@ -1,8 +1,9 @@
 import powerConsumers
 import time 
 
-timeInterval = 40
-
+timeInterval = 10
+startTime = "20210413"
+endTime = "20210414"
 
 def timePassed(oldTime, interval) :
     if time.time() - oldTime >= interval:
@@ -10,14 +11,16 @@ def timePassed(oldTime, interval) :
     else:
         return False
 
-powerConsumers.putObjectsInRooms(powerConsumers.consumers, powerConsumers.rooms)
+powerConsumers.placeObjectsInRooms(powerConsumers.consumers, powerConsumers.rooms)
 oldTime = time.time()
 n = 0
 while (n < 50) :  # Enkel løkke for å generere 50 linjer med data 
     if timePassed(oldTime, timeInterval) == True :
         oldTime = time.time()
         n += 1
-        powerConsumers.randomizeStatus(powerConsumers.consumers) # Gir tilfeldig verdi til CoT objektene 
+        #powerConsumers.randomizeStatus(powerConsumers.consumers) # Gir tilfeldig verdi til CoT objektene 
         powerConsumers.updateConsumerStatus(powerConsumers.consumers) # Henter inn ny status 
-        powerConsumers.consumptionLogger(powerConsumers.rooms, timeInterval) # SKriver til CSV fil 
-        print(n)  #Sjekker iterasjonn i løkka 
+        powerConsumers.consumptionLogger(powerConsumers.rooms, timeInterval, startTime, endTime) # SKriver til CSV fil 
+
+        
+        print(n)  #Sjekker iterasjon i løkka 

@@ -1,5 +1,5 @@
-from pvlib import location
 from pvlib import irradiance
+from pvlib import location
 import pandas as pd
 from matplotlib import pyplot as plt
 

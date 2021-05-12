@@ -5,14 +5,41 @@ import pandas as pd
 import csv
 import key as key #Personlige tokens
 import random # MIDLERTIDIG
+import currency
 
 
 token = key.token # Henter CoT Token fra key.py fil
 api_key = key.api_key # Token til ENTSOE fra key.py
 
 
-class powerConsumer: # Klassen til alle strømforbrukennde apparater i leiligheten. 
-    def __init__(self, room, effect, numOfUses, payload ) :# Rom, forbruk i watt, antall bruk før kjøring, kommunikasjonsnøkkel
+class rooms:
+    def __init__(self, area, height,) :
+        self.area = area
+        self.height = height
+
+    def volume(self):
+        return (self.area * self.height)
+
+###___ Angir størrelsen til rommene ___###
+
+livingroom = rooms(25, 3)
+kitchen =  rooms(15, 3)
+bathroom = rooms(12, 3)
+bedroom_1 = rooms(10, 3)
+bedroom_2 = rooms(10, 3)
+bedroom_3 = rooms(10, 3)
+bedroom_4 = rooms(10, 3)
+bedroom_5 = rooms(10, 3)
+bedroom_6 = rooms(10, 3)
+
+
+class powerConsumer:
+    """ 
+    Klassen til alle strømforbrukennde apparater i leiligheten.
+    Initialiseres med Rom, forbruk (i watt), antall bruk før kjøring, kommunikasjonsnøkkel til CoT
+
+    """ 
+    def __init__(self, room, effect, numOfUses, payload ) :
         self.room = room
         self.effect = effect
         self.numOfUses = numOfUses
@@ -20,6 +47,8 @@ class powerConsumer: # Klassen til alle strømforbrukennde apparater i leilighet
         self.timesUsed = 0
         self.currentState = 0
         self.previousState = 0
+        self.currentTemp = 0
+        self.previousTemp = 0
 
     def status(self) : 
         """ 
@@ -32,33 +61,59 @@ class powerConsumer: # Klassen til alle strømforbrukennde apparater i leilighet
         self.currentState = json.loads(response.content)["Value"] # Leser verdi fra CoT respons
         return json.loads(response.content) # returnerer 
 
+
+    def adjustConsumption(self) :
+        """ 
+        Endre forbrukt effekt hos enkelte av apparatene, som varmekabler i huset.
+        Sjekker om status i CoT er høyere enn 1, og antar at den gitte verdien er ønsket temperatur.
+
+        Returnerer den prosentvise endringen i temperatur
+
+        """
+        if self.currentState > 1:
+            targetTemp = self.currentState
+            self.currentTemp = self.currentState
+            tempDelta = (self.previousTemp - targetTemp)
+            self.previousTemp = self.currentTemp
+            if tempDelta >= 0:
+                minTemp, maxTemp = 10, 25
+                range = maxTemp - minTemp
+                correctedStartValue = self.currentTemp - minTemp
+                return (correctedStartValue * 100) / range 
+            else:
+                return 1
+
     def powerOn(self): 
         """ 
         Sjekker hvor mange ganger apparatet er blitt brukt
-            og om det skal registreres som aktivt ved oppdatert signal
+        og om det skal registreres som aktivt ved oppdatert signal
         """
         power = 0
         if self.numOfUses > 1:
+            """  For de apparatene som må brukes flere ganger før de kjøres """
             self.timesUsed = self.timesUsed+1
             if self.currentState != self.previousState:
                 if self.timesUsed > self.numOfUses:
                     self.timesUsed = 0   
                 if self.timesUsed == self.numOfUses:
-                    power = self.effect
+                    return (self.effect)
+        if self.currentState > 1:
+            """  
+                For apparater som skal skrus av eller på, 
+                eller få justert effektforbruket prosentvis.  
+            """
+            print (self.adjustConsumption())
+            return (self.effect * self.adjustConsumption()) / 100 # Korrigerer strømforbruk etter ønsket temperatur
         if self.currentState == 1:
-                power = self.effect
+            return power
         return power
 
-    def changeEffect(self) :
-        """ 
-        Endre forbrukt effekt hos enkelte av apparatene som varmekabler i huset. 
-         """
-        self.effect = 1
 
 
     def updateState(self, newState):
         """ 
-        Sender ny status til CoT
+        Sender ny status til CoT.
+        Til bruk ved simulering. 
          """
         dataDict = self.payload
         dataDict["Value"] = newState
@@ -66,10 +121,10 @@ class powerConsumer: # Klassen til alle strømforbrukennde apparater i leilighet
         return json.loads(response.content)
 
 
-
 # Definerer "kontaktinfo" til apparatene i CoT
 info_TV = {'Key':'24411','Value':0,'Token':token}
 info_livingRoomLight = {'Key':'21989','Value':0,'Token':token}
+info_LivingroomTemp = {'Key':'21989','value':0,'Token':token} 
 info_stove = {'Key':'26299','Value':0,'Token':token} 
 info_dishwasher = {'Key':'22562','Value':0,'Token':token} 
 info_coffeeMachine = {'Key':'9242','Value':0,'Token':token} 
@@ -91,6 +146,14 @@ info_heater_3 = {'Key':'3074','Value':0,'Token':token}
 info_light_4 = {'Key':'10550','Value':0,'Token':token}
 info_curtains_4 = {'Key':'8365','Value':0,'Token':token}
 info_heater_4 = {'Key':'19494','Value':0,'Token':token}
+info_light_5 = {'Key':'16956','Value':0,'Token':token}
+info_curtains_5 = {'Key':'8365','Value':0,'Token':token}
+info_heater_5 = {'Key':'18377','Value':0,'Token':token}
+info_light_6 = {'Key':'29556','Value':0,'Token':token}
+info_curtains_6 = {'Key':'8365','Value':0,'Token':token}
+info_heater_6 = {'Key':'14945','Value':0,'Token':token}
+# LEGG TIL KEY for  CURTAINS
+
 
 consumers = { 
 """ 
@@ -98,30 +161,36 @@ Definerer ulike strømforbrukende apparater
 Legg inn nye objekter her:
 """
 
-"livingroomLight" : powerConsumer("livingroom", 40, 1, info_livingRoomLight),
-"TV" : powerConsumer("livingroom", 10, 1, info_TV),
-"LivingroomHeater" : powerConsumer("livingroom", 1000, 1, info_TV), #BYTT UT COT-KODE
-"stove" : powerConsumer("kitchen", 2200, 1, info_stove),
-"dishwasher" : powerConsumer("kitchen",2000, 4, info_dishwasher),
-"coffeeMachine" : powerConsumer("kitchen", 1500, 1, info_coffeeMachine),
-"fridge" : powerConsumer("kitchen", 160, 1, info_fridge),
-"kitchenHeater" : powerConsumer("kitchen", 1000, 1, info_kitchenHeater), #Sjekk i COT
-"kitchenLight" : powerConsumer("kitchen", 40, 1, info_kitchenLight),
-"washingMachine" : powerConsumer("bathroom", 2500, 4, info_washingMachine),
-"shower" : powerConsumer("bathroom", 1000, 1, info_shower),
-"heatingCable" : powerConsumer("bathroom", 1500, 1, info_heatingCable),#Sjekk i COT
-"light_1" : powerConsumer("bedroom_1", 40, 1, info_light_1),
-"curtains_1" : powerConsumer("bedroom_1", 10, 1, info_curtains_1),
-"heater_1" : powerConsumer("bedroom_1", 1000, 1, info_heater_1),
-"light_2" : powerConsumer("bedroom_2", 40, 1, info_light_2),
-"curtains_2" : powerConsumer("bedroom_2", 10, 1, info_curtains_2),
-"heater_2" : powerConsumer("bedroom_2", 1000, 1, info_heater_2),
-"light_3" : powerConsumer("bedroom_3", 40, 1, info_light_3),
-"curtains_3" : powerConsumer("bedroom_3", 10, 1, info_curtains_3),
-"heater_3" : powerConsumer("bedroom_3", 1000, 1, info_heater_3),
-"light_4" : powerConsumer("bedroom_4", 40, 1, info_light_4),
-"curtains_4" : powerConsumer("bedroom_4", 10, 1, info_curtains_4),
-"heater_4" : powerConsumer("bedroom_4", 1000, 1, info_heater_4),
+"livingroomLight" : powerConsumer(livingroom, 40, 1, info_livingRoomLight),
+"TV" : powerConsumer(livingroom, 10, 1, info_TV),
+"LivingroomTemp" : powerConsumer(livingroom, 1500, 1, info_TV), #BYTT UT COT-KODE
+"stove" : powerConsumer(kitchen, 2200, 1, info_stove),
+"dishwasher" : powerConsumer(kitchen,2000, 4, info_dishwasher),
+"coffeeMachine" : powerConsumer(kitchen, 1500, 1, info_coffeeMachine),
+"fridge" : powerConsumer(kitchen, 160, 1, info_fridge),
+"kitchenTemp" : powerConsumer(kitchen, 1500, 1, info_kitchenHeater), #Sjekk i COT
+"kitchenLight" : powerConsumer(kitchen, 40, 1, info_kitchenLight),
+"washingMachine" : powerConsumer(bathroom, 2500, 4, info_washingMachine),
+"shower" : powerConsumer(bathroom, 1000, 1, info_shower),
+"bathroomTemp" : powerConsumer(bathroom, 1500, 1, info_heatingCable),#Sjekk i COT
+"light_1" : powerConsumer(bedroom_1, 40, 1, info_light_1),
+"curtains_1" : powerConsumer(bedroom_1, 10, 1, info_curtains_1),
+"bedroom_1Temp" : powerConsumer(bedroom_1, 1000, 1, info_heater_1),
+"light_2" : powerConsumer(bedroom_2, 40, 1, info_light_2),
+"curtains_2" : powerConsumer(bedroom_2, 10, 1, info_curtains_2),
+"bedroom_2Temp" : powerConsumer(bedroom_2, 1000, 1, info_heater_2),
+"light_3" : powerConsumer(bedroom_3, 40, 1, info_light_3),
+"curtains_3" : powerConsumer(bedroom_3, 10, 1, info_curtains_3),
+"bedroom_3Temp" : powerConsumer(bedroom_3, 1000, 1, info_heater_3),
+"light_4" : powerConsumer(bedroom_4, 40, 1, info_light_4),
+"curtains_4" : powerConsumer(bedroom_4, 10, 1, info_curtains_4),
+"bedroom_4Temp" : powerConsumer(bedroom_4, 1000, 1, info_heater_4),
+"light_5" : powerConsumer(bedroom_5, 40, 1, info_light_4),
+"curtains_5" : powerConsumer(bedroom_5, 10, 1, info_curtains_4),
+"bedroom_5Temp" : powerConsumer(bedroom_5, 1000, 1, info_heater_4),
+"light_6" : powerConsumer(bedroom_6, 40, 1, info_light_4),
+"curtains_6" : powerConsumer(bedroom_6, 10, 1, info_curtains_4),
+"bedroom_6Temp" : powerConsumer(bedroom_6, 1000, 1, info_heater_4),
 }
 
 rooms = {
@@ -133,13 +202,17 @@ rooms = {
 "bedroom_2" : {},
 "bedroom_3" : {},
 "bedroom_4" : {},
-"CostOfPower" : {},
+"bedroom_5" : {},
+"bedroom_6" : {},
+"CostOfPower" : {}, # Price per kWh
 "solarPanels" : {}, # kwH power generated 
 "solarSavings" : {}, # kwh converted to money saved
 }
 
+###___ Funksjoner knyttet til dictionaries ____###
 
-def putObjectsInRooms(consumerList, roomList) :
+
+def placeObjectsInRooms(consumerList, roomList) :
     """ 
     Funksjon for å sortere alle apparatene inn i riktig rom basert på hvilket rom de ble innitsialisert med. 
     """
@@ -156,46 +229,62 @@ def updateConsumerStatus(dictionary):
         dictionary[i].status()
 
 def setConsumerStatus(newValue, roomlist) :
+    """ 
+    Oppdaterer alle objektene i romlisten med identisk, ny verdi. 
+    Må ta inn dictionary med powerConsumer objekter. 
+    """
     for key in roomlist.keys() :
         for i in roomlist[key] :
             roomlist[key][i].updateState(newValue)
 
+###___ Funksjoner for logging av strømforbruk ___###
 
 
-def initCsv(roomlist) :     #Sjekke for, og legge til header i CSV fil basert på hva som finnens i roomList
-    # Work in Progress. Help ? 
+def initCsv(roomlist) :    
+    """
+    Legger til header i CSV fil basert på hva som finnens i roomList. 
+    Obs! Sjekker ikke om header eksisterer fra før. 
+    """
     listOfCSVHeaders = ["Time"]
     for key in roomlist :
         listOfCSVHeaders.append(key) # Lager liste med alle navnene i roomlist
     df = pd.read_csv("powerUsage.csv", header=None)
     df.to_csv("powerUsage.csv", header = listOfCSVHeaders, index=False)
 
-def logThis(consumptionDict,): 
+def logThis(df): 
     """ 
     Funksjon for å skrive til en .csv fil
-    Tar inn dictionary med {rom : verdi}
+    Tar inn en pandas dataframe
     """
-    df = pd.DataFrame().from_records([consumptionDict], index =[0])
     df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
     df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
 
-def consumptionLogger(roomList, kWhcompensation) : 
+def toDF(dict) :
+    df = pd.DataFrame().from_records([dict], index =[0])
+    return df
+
+def consumptionLogger(roomList, kWhcompensation, start, end) : 
     """ 
-    skriver forbruket til csv.fil
-    Tar inn dictionary med key : rom, og verdi til strømforbrukende objekt.
+    Henter forbruket fra alle apparater
+    Tar inn dictionary med key : rom, en tidskonstant for kWh beregning, start og sluttid.
     """
     
     consumptionDict = {}
     for key in roomList.keys() :
         consumption = 0
         for i in roomList[key] :
-            if roomList[key][i].currentState == 1 :
-                consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt
+            consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt
         consumptionDict.update({key : consumption})
-    logThis(consumptionDict)
+
+    consumptionDict.update({"costOfPower" : currency.powerPriceInNok(start, end)})  
+    consumptionDict.update({"solarPanels" : 1 })   #PLACEHOLDER
+    consumptionDict.update({"solarSavings" : 1 })  #PLACEHOLDER
+    DF = toDF(consumptionDict)
+    logThis(DF)
 
 
-def randomizeStatus(roomlist) : # RANDOMIZE COT STATUSES.
+def randomizeStatus(roomlist) :
+     # RANDOMIZE COT STATUSES.
     for key in roomlist.keys():   
         newValue = random.randint(0,1)
         # print("object is number " + str(key) + " and randomNum is: " + str(newValue))
@@ -203,8 +292,7 @@ def randomizeStatus(roomlist) : # RANDOMIZE COT STATUSES.
 
 
 
-# CSV file layout:
-# TIME, TOTAlConsumption, livingroom, Kitchen, Bathroom, bedroom_1, bedroom_2, bedroom_3, bedroom_4, solarPanel, TotalCost, SolarPanel
+
 
 
 """ 
@@ -220,3 +308,10 @@ Oppvaskmaskinen:Én frokost fyller 10%, én lunsj 15%og én middag 25%. Forbruke
 Solcellepanelet:produksjonenavhenger av solcelletypen (plukk et konkret panel og sjekk databladet), virkningsgraden, solens posisjon, skydekke, lufttemperatur,etc.RPienhenter inn værdata.
 
 """
+
+
+""" C = 1.006 # dry air specific heat, J/g K
+                p = 1275 # dry air density. g/m3
+                v = self.room.volume()
+                U = C * p * v * tempDelta # requered effect in KiloJoule to change temperature
+                kwH = U/0.277777778 # Covnert from Kilo Joule to Kilo Watt  """
