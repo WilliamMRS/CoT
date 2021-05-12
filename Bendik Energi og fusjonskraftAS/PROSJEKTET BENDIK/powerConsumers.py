@@ -21,7 +21,7 @@ class rooms:
         return (self.area * self.height)
 
 ###___ Angir størrelsen til rommene ___###
-
+### Areal * høyde
 livingroom = rooms(25, 3)
 kitchen =  rooms(15, 3)
 bathroom = rooms(12, 3)
@@ -102,7 +102,7 @@ class powerConsumer:
                 For apparater som skal skrus av eller på, 
                 eller få justert effektforbruket prosentvis.  
             """
-            print (self.adjustConsumption())
+            #print (self.adjustConsumption())
             return (self.effect * self.adjustConsumption()) / 100 # Korrigerer strømforbruk etter ønsket temperatur
         if self.currentState == 1:
             return power
@@ -161,36 +161,36 @@ Definerer ulike strømforbrukende apparater
 Legg inn nye objekter her:
 """
 
-"livingroomLight" : powerConsumer(livingroom, 40, 1, info_livingRoomLight),
-"TV" : powerConsumer(livingroom, 10, 1, info_TV),
-"LivingroomTemp" : powerConsumer(livingroom, 1500, 1, info_TV), #BYTT UT COT-KODE
-"stove" : powerConsumer(kitchen, 2200, 1, info_stove),
-"dishwasher" : powerConsumer(kitchen,2000, 4, info_dishwasher),
-"coffeeMachine" : powerConsumer(kitchen, 1500, 1, info_coffeeMachine),
-"fridge" : powerConsumer(kitchen, 160, 1, info_fridge),
-"kitchenTemp" : powerConsumer(kitchen, 1500, 1, info_kitchenHeater), #Sjekk i COT
-"kitchenLight" : powerConsumer(kitchen, 40, 1, info_kitchenLight),
-"washingMachine" : powerConsumer(bathroom, 2500, 4, info_washingMachine),
-"shower" : powerConsumer(bathroom, 1000, 1, info_shower),
-"bathroomTemp" : powerConsumer(bathroom, 1500, 1, info_heatingCable),#Sjekk i COT
-"light_1" : powerConsumer(bedroom_1, 40, 1, info_light_1),
-"curtains_1" : powerConsumer(bedroom_1, 10, 1, info_curtains_1),
-"bedroom_1Temp" : powerConsumer(bedroom_1, 1000, 1, info_heater_1),
-"light_2" : powerConsumer(bedroom_2, 40, 1, info_light_2),
-"curtains_2" : powerConsumer(bedroom_2, 10, 1, info_curtains_2),
-"bedroom_2Temp" : powerConsumer(bedroom_2, 1000, 1, info_heater_2),
-"light_3" : powerConsumer(bedroom_3, 40, 1, info_light_3),
-"curtains_3" : powerConsumer(bedroom_3, 10, 1, info_curtains_3),
-"bedroom_3Temp" : powerConsumer(bedroom_3, 1000, 1, info_heater_3),
-"light_4" : powerConsumer(bedroom_4, 40, 1, info_light_4),
-"curtains_4" : powerConsumer(bedroom_4, 10, 1, info_curtains_4),
-"bedroom_4Temp" : powerConsumer(bedroom_4, 1000, 1, info_heater_4),
-"light_5" : powerConsumer(bedroom_5, 40, 1, info_light_4),
-"curtains_5" : powerConsumer(bedroom_5, 10, 1, info_curtains_4),
-"bedroom_5Temp" : powerConsumer(bedroom_5, 1000, 1, info_heater_4),
-"light_6" : powerConsumer(bedroom_6, 40, 1, info_light_4),
-"curtains_6" : powerConsumer(bedroom_6, 10, 1, info_curtains_4),
-"bedroom_6Temp" : powerConsumer(bedroom_6, 1000, 1, info_heater_4),
+"livingroomLight" : powerConsumer("livingroom", 40, 1, info_livingRoomLight),
+"TV" : powerConsumer("livingroom", 150, 1, info_TV),
+"LivingroomTemp" : powerConsumer("livingroom", 1500, 1, info_TV), #BYTT UT COT-KODE
+"stove" : powerConsumer("kitchen", 2200, 1, info_stove),
+"dishwasher" : powerConsumer("kitchen",2000, 4, info_dishwasher),
+"coffeeMachine" : powerConsumer("kitchen", 1500, 1, info_coffeeMachine),
+"fridge" : powerConsumer("kitchen", 160, 1, info_fridge),
+"kitchenTemp" : powerConsumer("kitchen", 1500, 1, info_kitchenHeater), #Sjekk i COT
+"kitchenLight" : powerConsumer("kitchen", 40, 1, info_kitchenLight),
+"washingMachine" : powerConsumer("bathroom", 2500, 4, info_washingMachine),
+"shower" : powerConsumer("bathroom", 1000, 1, info_shower),
+"bathroomTemp" : powerConsumer("bathroom", 1500, 1, info_heatingCable),#Sjekk i COT
+"light_1" : powerConsumer("bedroom_1", 40, 1, info_light_1),
+"curtains_1" : powerConsumer("bedroom_1", 10, 1, info_curtains_1),
+"bedroom_1Temp" : powerConsumer("bedroom_1", 1500, 1, info_heater_1),
+"light_2" : powerConsumer("bedroom_2", 40, 1, info_light_2),
+"curtains_2" : powerConsumer("bedroom_2", 10, 1, info_curtains_2),
+"bedroom_2Temp" : powerConsumer("bedroom_2", 1500, 1, info_heater_2),
+"light_3" : powerConsumer("bedroom_3", 40, 1, info_light_3),
+"curtains_3" : powerConsumer("bedroom_3", 10, 1, info_curtains_3),
+"bedroom_3Temp" : powerConsumer("bedroom_3", 1500, 1, info_heater_3),
+"light_4" : powerConsumer("bedroom_4", 40, 1, info_light_4),
+"curtains_4" : powerConsumer("bedroom_4", 10, 1, info_curtains_4),
+"bedroom_4Temp" : powerConsumer("bedroom_4", 1500, 1, info_heater_4),
+"light_5" : powerConsumer("bedroom_5", 40, 1, info_light_4),
+"curtains_5" : powerConsumer("bedroom_5", 10, 1, info_curtains_4),
+"bedroom_5Temp" : powerConsumer("bedroom_5", 1500, 1, info_heater_4),
+"light_6" : powerConsumer("bedroom_6", 40, 1, info_light_4),
+"curtains_6" : powerConsumer("bedroom_6", 10, 1, info_curtains_4),
+"bedroom_6Temp" : powerConsumer("bedroom_6", 1500, 1, info_heater_4),
 }
 
 rooms = {
@@ -204,7 +204,7 @@ rooms = {
 "bedroom_4" : {},
 "bedroom_5" : {},
 "bedroom_6" : {},
-"CostOfPower" : {}, # Price per kWh
+"costOfPower" : {}, # Price per kWh
 "solarPanels" : {}, # kwH power generated 
 "solarSavings" : {}, # kwh converted to money saved
 }
@@ -274,6 +274,8 @@ def consumptionLogger(roomList, kWhcompensation, start, end) :
         consumption = 0
         for i in roomList[key] :
             consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt
+            print("consumption is")
+            print(consumption)
         consumptionDict.update({key : consumption})
 
     consumptionDict.update({"costOfPower" : currency.powerPriceInNok(start, end)})  
