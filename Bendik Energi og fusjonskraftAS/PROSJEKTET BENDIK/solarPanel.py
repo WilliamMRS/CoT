@@ -1,4 +1,3 @@
-
 import pandas as pd
 import numpy as np
 import pvlib
@@ -26,12 +25,12 @@ cec_inverter = cec_inverters['ABB__MICRO_0_25_I_OUTD_US_208__208V_']
 
 location = Location(latitude=63.42024, longitude=10.40122) # Bredd/lengde-grad for Trondheim
 
-# PUTT INN VERDI FRA JENS HER
+""" # PUTT INN VERDI FRA JENS HER
 pressure = 101325.0 
 apparent_elevation = 90 
 solarIrradiance = pvlib.clearsky.simplified_solis(apparent_elevation, aod700=0.1,
                         precipitable_water=1.0, pressure=101325.0, dni_extra=1364.0 )
-                        # Returns GHI, DNI, DHI VALUES
+                        # Returns GHI, DNI, DHI VALUES """
 
 
 system = PVSystem(surface_tilt=20, surface_azimuth=180, # vinkel og vridning for panel. Sør = 180
@@ -39,11 +38,26 @@ system = PVSystem(surface_tilt=20, surface_azimuth=180, # vinkel og vridning for
         inverter_parameters=cec_inverter,
         temperature_model_parameters=temperature_model_parameters)
 
+times = pd.date_range(start, freq='10min', periods=6*24,
+                 tz = 'Europe/Oslo')
+
+solarRadDF = location.get_clearsky(times)
+
+print(solarRadDF)
+
+weather = pd.DataFrame([solarRadDF,30, 5],
+                         columns=['ghi', 'dni', 'dhi', 'temp_air', 'wind_speed'],
+                         index=[pd.Timestamp('20210401 1200', tz='Europe/Oslo')])
+
 mc = ModelChain(system, location)
 
-weather = pd.DataFrame([[1050, 1000, 100, 30, 5]],  #TA INN VÆRDATA HER! 
-        columns=['ghi', 'dni', 'dhi', 'temp_air', 'wind_speed'],
-        index=[pd.Timestamp('20210401 1200', tz='Europe/Oslo')])
+
+
+
+weather = pd.DataFrame([location.get_clearsky(times),[30, 5]],
+                         columns=['ghi', 'dni', 'dhi', 'temp_air', 'wind_speed'],
+                         index=[pd.Timestamp('20210401 1200', tz='Europe/Oslo')])
+
 
 mc.run_model(weather)
 print(mc.ac)

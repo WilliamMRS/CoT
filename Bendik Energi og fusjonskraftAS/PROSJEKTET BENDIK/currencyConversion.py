@@ -10,12 +10,6 @@ api_key = key.api_key # Token til ENTSOE fra key.py
 
 # def fetchCurrencyDynamic() : # Henter oppdatert valuttakurs
 
-""" def fetchCurrency() : # Henter oppdatert valuttakurs
-    response = requests.get("https://data.norges-bank.no/api/data/EXR/B.EUR.NOK.SP?format=sdmx-json&lastNObservations=1&locale=no")
-    #Endre på lastNObservations= for å få flere tidsenheter med kurser
-    return json.loads(response.content)["data"]["dataSets"][0]["series"]["0:0:0:0"]["observations"]["0"][0] """
-
-
 
 
 def fetchCurrency(startPeriod, endPeriod) : # Y/M/D
@@ -23,7 +17,7 @@ def fetchCurrency(startPeriod, endPeriod) : # Y/M/D
     response = requests.get("https://data.norges-bank.no/api/data/EXR/B.GBP.NOK.SP?format=sdmx-json&", data = json.dumps(payload))
     return json.loads(response.content)["data"]["dataSets"][0]["series"]["0:0:0:0"]["observations"]["0"][0]
 
-def powerPriceFetch(api_key) : # Funksjon for å hente inn strømpriser fra Entsoe
+def powerPriceFetch(api_key) : # Funksjon for å hente inn strømpriser fra Entsoe. Benytter Entsoe Raw Client
     client = EntsoeRawClient(api_key)
     start = pd.Timestamp('20210413', tz="Europe/Oslo")
     end = pd.Timestamp('20210414', tz="Europe/Oslo")
@@ -31,11 +25,11 @@ def powerPriceFetch(api_key) : # Funksjon for å hente inn strømpriser fra Ents
     response = client.query_day_ahead_prices(country_code, start, end)
     return response # SPESIFISERE HVILKEN DATA SOM SKAL RETURNERES???
 
-def powerPriceFetch2(api_key, start, end) : 
+def powerPriceRequest(api_key, start, end) : 
     url = "https://transparency.entsoe.eu/api"
     documentType = "A44" # specifying we want the price document
     processType = "A01" #specifying we want Day Ahead
-    zone = "NO_3" # Code for Norway 
+    zone = "10YNO-0--------C" # Code for Norway 
     startPeriod = start
     endPeriod = end
     token = api_key
@@ -56,7 +50,7 @@ https://transparency.entsoe.eu/api?securityToken=fa3385eb-bcee-4913-8673-824d6e8
 periodStart = "20210401"
 periodEnd = "20210402"
 
-print(powerPriceFetch2(api_key, periodStart, periodEnd))
+print(powerPriceRequest(api_key, periodStart, periodEnd))
 
 
 def powerPriceNok(periodStart, periodEnd, api_key) : 
