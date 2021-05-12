@@ -70,6 +70,12 @@ def bookRoom():
     else:
         return render_template('dashboard.html')
 
+def returnUserIds(userList):
+    for ids in userList:
+        print(ids)
+    return 0
+
+
 # TODO: show current bookings as a list in the dashboard
 @app.route('/api/getBookings', methods=['POST', 'GET'])
 def readRooms():
@@ -78,12 +84,52 @@ def readRooms():
     booking_functions.updateTime(df)
     print(df)
 
-    # read dataframe for bookings and add them to bookings{} as a list
+    # read dataframe for bookings and add them to bookings{} as a list of all registered bookings.
+    # Store id of a user, and start time. Also store endtime using 'previous time' variable.
+    cachedData = [0,{},{},{},{},{},{}] # where index 0 is empty, 1-6 is userdata in form of 
+    startKey = "startTime"
+    # {
+    #   startTime: "",
+    #   lastTime: ""   //This means last stored time
+    # }
+    
+    # TODO: Account for multiple bookings. This method only accounts for one booking in a 24 hour span.
+
     for index, row in df.iterrows():
-        print(row[index])
+        print(index)
+        # ID's: 1-6
+        if len(row[1]):
+            for userid in row[1]:
+                if startKey in cachedData[userid]:
+                    cachedData[userid]['lastTime'] =  row[0]
+                else:
+                    cachedData[userid] = {
+                        'startTime': row[0],
+                        'room': 'Bad'
+                    }
+        if len(row[2]):
+            for userid in row[2]:
+                if startKey in cachedData[userid]:
+                    cachedData[userid]['lastTime'] =  row[0]
+                else:
+                    cachedData[userid] = {
+                        'startTime': row[0],
+                        'room': 'Stue'
+                    }
+        if len(row[3]):
+            for userid in row[3]:
+                if startKey in cachedData[userid]:
+                    cachedData[userid]['lastTime'] = row[0]
+                else:
+                    cachedData[userid] = {
+                        'startTime': row[0],
+                        'room': 'Kjøkken'
+                    }
+
+    print(cachedData)
 
     response = app.response_class(
-        response=json.dumps(bookings.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
+        response=json.dumps(bookings, indent=4, sort_keys=True, default=str),
         status=200,
         mimetype='application/json'
     )
@@ -91,7 +137,11 @@ def readRooms():
 
 # TODO: Implement powerusage api and read/write to csv
 
-# TODO: Implement feedback. stop redirect.
+@app.route('/api/getPowerUsage', methods=['GET'])
+def getPowerUsage():
+    return {}
+
+# TODO: Implement feedback. stop redirect. When booking
 
 # TODO: LIVE CHARTS:
 # https://nagix.github.io/chartjs-plugin-streaming/
