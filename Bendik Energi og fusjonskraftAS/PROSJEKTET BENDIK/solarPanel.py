@@ -2,62 +2,78 @@ import pandas as pd
 import numpy as np
 import pvlib
 import datetime
+from pvlib import irradiance
+from pvlib import location
 from pvlib.pvsystem import PVSystem
-from pvlib.location import Location
+#from pvlib.location import Location
 from pvlib.modelchain import ModelChain
 from pvlib.temperature import TEMPERATURE_MODEL_PARAMETERS
-#from pvlib.forecast import GFS, NAM, NDFD, HRRR, RAP
 
 
 latitude, longitude, tz = 63.42024, 10.40122, 'Europe/Oslo' # specify location 
 start = pd.Timestamp(datetime.date.today(), tz=tz)
-end = start + pd.Timedelta(days=7)
+end = start + pd.Timedelta(days=1)
 irrad_vars = ['ghi', 'dni', 'dhi']
 
+# Create location object to store lat, lon, timezone
+#location = Location(latitude=63.42024, longitude=10.40122) # Bredd/lengde-grad for Trondheim
+site = location.Location(latitude, longitude, tz=tz)
 
 temperature_model_parameters = TEMPERATURE_MODEL_PARAMETERS['sapm']['open_rack_glass_glass']
-# load some module and inverter specifications
+# Bestemmer hvilke moduler og invertere vi ønsker å modelere. 
 sandia_modules = pvlib.pvsystem.retrieve_sam('SandiaMod')
-print (sandia_modules)
 cec_inverters = pvlib.pvsystem.retrieve_sam('cecinverter')
 sandia_module = sandia_modules['Canadian_Solar_CS5P_220M___2009_'] 
 cec_inverter = cec_inverters['ABB__MICRO_0_25_I_OUTD_US_208__208V_'] 
 
-location = Location(latitude=63.42024, longitude=10.40122) # Bredd/lengde-grad for Trondheim
 
-""" # PUTT INN VERDI FRA JENS HER
-pressure = 101325.0 
-apparent_elevation = 90 
-solarIrradiance = pvlib.clearsky.simplified_solis(apparent_elevation, aod700=0.1,
-                        precipitable_water=1.0, pressure=101325.0, dni_extra=1364.0 )
-                        # Returns GHI, DNI, DHI VALUES """
-
+# Calculate clear-sky GHI and transpose to plane of array
+def get_irradiance(site_location, date, tilt, surface_azimuth):
+    # Creates one day's worth of 10 min intervals
+    times = pd.date_range(date, freq='10min', periods=6*24,
+                          tz=site_location.tz)
+    # Generate clearsky data using the Ineichen model, which is the default
+    # The get_clearsky method returns a dataframe with values for GHI, DNI,
+    # and DHI
+    clearsky = site_location.get_clearsky(times)
+    # Get solar azimuth and zenith to pass to the transposition function
+    solar_position = site_location.get_solarposition(times=times)
+    # Use the get_total_irradiance function to transpose the GHI to POA
+    POA_irradiance = irradiance.get_total_irradiance(
+        surface_tilt=tilt,
+        surface_azimuth=surface_azimuth,
+        dni=clearsky['dni'],
+        ghi=clearsky['ghi'],
+        dhi=clearsky['dhi'],
+        solar_zenith=solar_position['apparent_zenith'],
+        solar_azimuth=solar_position['azimuth'])
+    # Return DataFrame with only GHI and POA
+    return pd.DataFrame({'GHI': clearsky['ghi'],
+                         'DNI' : clearsky['dni'],
+                         'DHI' : clearsky['dhi'],
+                         'POA': POA_irradiance['poa_global']})
 
 system = PVSystem(surface_tilt=20, surface_azimuth=180, # vinkel og vridning for panel. Sør = 180
-        module_parameters=sandia_module,
-        inverter_parameters=cec_inverter,
-        temperature_model_parameters=temperature_model_parameters)
+        module_parameters = sandia_module,
+        inverter_parameters = cec_inverter,
+        temperature_model_parameters = temperature_model_parameters)
 
-times = pd.date_range(start, freq='10min', periods=6*24,
-                 tz = 'Europe/Oslo')
 
-solarRadDF = location.get_clearsky(times)
+###____ Kjør ____ ### 
 
-print(solarRadDF)
+irradiance = get_irradiance(site, '05-12-2021', 20, 180)
+#print (irradiance["GHI"])
+weatherList = [irradiance["GHI"], irradiance["DHI"], irradiance["DNI"], 30, 5]
 
-weather = pd.DataFrame([solarRadDF,30, 5],
+#print(weatherList)
+weather = pd.DataFrame([[irradiance["GHI"], irradiance["DHI"], irradiance["DNI"], 30, 5]],
                          columns=['ghi', 'dni', 'dhi', 'temp_air', 'wind_speed'],
                          index=[pd.Timestamp('20210401 1200', tz='Europe/Oslo')])
 
-mc = ModelChain(system, location)
+print(weather)
 
-
-
-
-weather = pd.DataFrame([location.get_clearsky(times),[30, 5]],
-                         columns=['ghi', 'dni', 'dhi', 'temp_air', 'wind_speed'],
-                         index=[pd.Timestamp('20210401 1200', tz='Europe/Oslo')])
-
+#MÅ FIKSES MER PÅ. Må få tatt innn riktige verdier i weather DF og ikke arrays.
+mc = ModelChain(system, site)
 
 mc.run_model(weather)
 print(mc.ac)
