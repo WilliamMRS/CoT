@@ -62,7 +62,7 @@ def bookRoom():
         booking_functions.updateTime(df)
         feedback = booking_functions.website_booking(df, resident_id, room_id, start_time, end_time)
         booking_functions.saveDf(df, "booking.csv")
-        
+        booking_functions.saveBookingData(resident_id, room_id, start_time, end_time)
         print(feedback)
         print(df)
 

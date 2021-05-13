@@ -161,6 +161,12 @@ def csvToDf(path): # lager en df på riktig format fra en csv-fil
             df[columns[n]][i] = ast.literal_eval(df[columns[n]][i]) # konverterer "[]" til [] eller "[1,2,3]" til [1,2,3]
     return df
 
+def saveBookingData(resident, room, startTime, endTime):
+    date = str(datetime.date.today())
+    with open('smittesporing.txt', 'a') as smittesporing:
+        smittesporing.write(date + " beboer nr " + str(resident) + " booket " + room + " fra " + startTime + " til " + endTime + "\n")
+
+
 def website_booking(df, resident, room_num, start_time, end_time): # tar inn en kode på riktig format og booker tilhørende rom
     #booking_code = str(booking_code)
 
@@ -217,5 +223,7 @@ def website_booking(df, resident, room_num, start_time, end_time): # tar inn en 
     elif(alreadyBooked):
         feedback = "Du har allerede booket " +  rooms_for_feedback[room_num] + " i dette tidsrommet."
             #break
+    else{
 
+    }
     return feedback
