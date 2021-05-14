@@ -56,21 +56,15 @@ kitchenUses, bathroomUses, livingroomUses = 0, 0, 0 # For keeping track of num o
 
 # Booking og bruksmønster
 
-# VIKTIG!!!
-            # KUN BOOK MED 10 MINUTTERS INTERVAL
-# VIKTIG!!!
 
 
 
-# Clear all bookings?
-
-# add all bookings planned for today
 
 # ----------------
     #Bookings
 # ----------------
-
-
+            # add all bookings planned for today
+            # Gjnnomføres i egen fil
 
 # ----------------
     # USAGE CONDITIONS
@@ -81,12 +75,12 @@ for index in range (0, 143) : # index = timeIntervall 1-144
         "livingroom" : {},
         "kitchen" : {},
         "bathroom" : {},
-        "bedroom_1" : {[1]},
-        "bedroom_2" : {[2]},
-        "bedroom_3" : {[3]},
-        "bedroom_4" : {[4]},
-        "bedroom_5" : {[5]},
-        "bedroom_6" : {[6]},
+        "bedroom_1" : {"[1]"},
+        "bedroom_2" : {"[2]"},
+        "bedroom_3" : {"[3]"},
+        "bedroom_4" : {"[4]"},
+        "bedroom_5" : {"[5]"},
+        "bedroom_6" : {"[6]"},
 }
     pc.setConsumerStatus(0, pc.consumers) #Forces all objects to off state before checking who need to be turned on
     for room in bookingRooms:
@@ -95,10 +89,12 @@ for index in range (0, 143) : # index = timeIntervall 1-144
 
     for room in bookingRooms:
         # Sjekker hvem som befinner seg hvor 
-        users = defunc.getRoomOccupants(index, bookingRooms) 
+        users = defunc.getRoomOccupants(index, bookingRooms)
+        print (users)
         for i in users :
             # plasserer personer i rommene de befinner seg i. 
             print(i)
+            # if user in room change. Else ignore. 
             userLocation.update ({bookingRooms : users}) 
 
 
@@ -171,10 +167,10 @@ for index in range (0, 143) : # index = timeIntervall 1-144
                     pc.consumers["bedroom_6Temp"].updateState(useTemp)      
     pc.consumers["fridge"].updateState(1) # Checks that Fridge always will be on
 
-# ----------------
-    # CHECKS COT STATUS & LOG
-# ----------------
 
+# ----------------
+    # CHECKS COT STATUS & LOGS
+# ----------------
 
     if defunc.timePassed(oldTime, timeInterval) == True :
         oldTime = time.time()

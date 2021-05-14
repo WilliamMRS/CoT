@@ -1,5 +1,11 @@
 import demo_functions as defunc
 
+
+# VIKTIG!!!
+            # KUN BOOK MED 10 MINUTTERS INTERVAL
+# VIKTIG!!!
+
+
 def bookAllTheRooms() :
     # alle booker badet fra 07:30 til 09:00, 15 minutter hver.
     defunc.bookRoom(0, "07:30", "07:45", 0)
@@ -58,4 +64,4 @@ def bookAllTheRooms() :
     defunc.bookRoom(0, "22:50", "23:00", 5)
 
 
-bookAllTheRooms() # Books rooms according to the specified pattern in demoBooking.py file 
+#bookAllTheRooms() # Books rooms according to the specified pattern in demoBooking.py file 
