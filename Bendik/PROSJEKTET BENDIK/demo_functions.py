@@ -1,5 +1,6 @@
 import requests
 import time
+import datetime
 
 def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 0-6    // Dette er eksempel inputs
     url = 'http://localhost:5000/api/bookRoom'
@@ -21,3 +22,16 @@ def timePassed(oldTime, interval) :
         return False
 
 
+def getIndexIntoDay():
+    now = datetime.datetime.now()
+    start = datetime.datetime(now.year, now.month, now.day)
+    diff = now - start
+    seconds_in_day = 24 * 60 * 60
+    return int((144 / seconds_in_day) * diff.seconds)
+
+""" 
+def toTimestep(time)
+    # convert 24 hours into 10 min intervall. AKA 144 Timesteps. 
+
+    return step
+ """

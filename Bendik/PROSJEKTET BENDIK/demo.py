@@ -17,11 +17,11 @@ for å skru på ovn. 1 er ny tilstand. Kan være 0 for av, 22 for temperatur.
 # Kitchen: 
     "stove" , "dishwasher" , "coffeeMachine", "fridge", "kitchenTemp",
     "kitchenLight" 
-# Bad:      
+# Bad:
     "washingMachine", "shower", "bathroomTemp", "bathroomLight"
 #Sov1:
     "light_1" , "curtains_1", "bedroom_1Temp" 
-#Sov2 : 
+#Sov2: 
     "light_2" , "curtains_2" , "bedroom_2Temp" 
 # Sov 3:
     "light_3", "curtains_3" , "bedroom_3Temp" 
@@ -69,9 +69,18 @@ while () :  # Kondisjon for å skru av og på?
 
 
 
+# def activateRoom(room) 
+#   If one or more is in room. activate
+#   return True
+
+
+
 # Strømforbruk følger booking. 
 
 # Dersom brukerID ikke er på ett annet rom antar vi at ID er på eget rom 
+# Skru av funksjoner på eget rom dersom vedkommende befinnner seg i ett annet rom. 
+
+
 
 # Ting skrur seg av å på etter hvor folk er. 
 
