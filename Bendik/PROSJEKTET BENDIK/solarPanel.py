@@ -70,6 +70,10 @@ def getIndexIntoDay():
     return int((144 / seconds_in_day) * diff.seconds) # converts seconds to intervals of 144 (10 min) and throws away decimal.
 
 def solarPanelPower(date, index):
+    """ 
+    Returns solarPower generationn in Watt
+     """   
+
     irradiance = get_irradiance(site, date, 20, 180) # irradiance i Trondheim, i dag
     wattPerSquareMeter = irradiance["POA"][index]
     solarPanelArrayPower = wattPerSquareMeter * 150 * 0.19 # times square meters * solar panel efficiency.
@@ -80,6 +84,8 @@ def solarPanelPower(date, index):
     
 #power = solarPanelPower('14-05-2021', getIndexIntoDay())
 #print(power)
+
+
 
 """
 weatherList = [irradiance["GHI"], irradiance["DHI"], irradiance["DNI"], 30, 5]

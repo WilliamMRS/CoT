@@ -76,7 +76,7 @@ class powerConsumer:
             self.currentTemp = self.currentState
             tempDelta = (self.previousTemp - targetTemp)
             self.previousTemp = self.currentTemp
-            outsideTemp = 20 #WD.getTemperature() # Henter værdata fra weatherStation pakken som ble bygd for prosjektet. 
+            outsideTemp = WD.getTemperature() # Henter værdata fra weatherStation pakken som ble bygd for prosjektet. 
             if  outsideTemp > targetTemp: 
                 return 0.05 # Varmekabler slås ikke helt av, men forbruker mindre strøm når det er varmt ute. 
             if outsideTemp < targetTemp:      
@@ -102,7 +102,7 @@ class powerConsumer:
                     self.timesUsed = 0   
                 if self.timesUsed == self.numOfUses:
                     return (self.effect)
-        if self.currentState > 1:
+        if self.currentState >= 2:
             """  
                 For apparater som skal skrus av eller på, 
                 eller få justert effektforbruket prosentvis.  
@@ -110,7 +110,7 @@ class powerConsumer:
             #print (self.adjustConsumption())
             return (self.effect * self.adjustConsumption()) / 100 # Korrigerer strømforbruk etter ønsket temperatur
         if self.currentState == 1:
-            return power
+            power = self.effect
         return power
 
 
@@ -129,7 +129,7 @@ class powerConsumer:
 # Definerer "kontaktinfo" til apparatene i CoT
 info_TV = {'Key':'24411','Value':0,'Token':token}
 info_livingRoomLight = {'Key':'21989','Value':0,'Token':token}
-info_LivingroomTemp = {'Key':'21989','value':0,'Token':token} 
+info_LivingroomTemp = {'Key':'21771','value':0,'Token':token} 
 info_stove = {'Key':'26299','Value':0,'Token':token} 
 info_dishwasher = {'Key':'22562','Value':0,'Token':token} 
 info_coffeeMachine = {'Key':'9242','Value':0,'Token':token} 
@@ -225,6 +225,8 @@ def placeObjectsInRooms(consumerList, roomList) :
     for key in roomList.keys() :
         for i in consumerList :
             if consumerList[i].room == key :
+                """ print(consumerList[i].room)
+                print(key) """
                 roomList[key].update({i : consumerList[i]})
 
 
@@ -281,18 +283,27 @@ def consumptionLogger(roomList, kWhcompensation, start, end) :
     
     consumptionDict = {}
     date = '14-05-2021'
-    solarPanels = SP.solarPanelPower(date, SP.getIndexIntoDay())
-    consumptionDict.update({"costOfPower" : currency.powerPriceInNok(start, end)})  
-    consumptionDict.update({"solarPanels" : solarPanels})   #PLACEHOLDER
-    consumptionDict.update({"solarSavings" : (solarPanels * currency.powerPriceInNok(start, end))})  #PLACEHOLDER
-    consumptionDict.update({"Total" : -(solarPanels) }) 
+
     for key in roomList.keys() :
         consumption = 0
+        print(key)
         for i in roomList[key] :
-            consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt
-            print("consumption is")
+            print(i)
+            consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt           
             print(consumption)
+        print(key)
+        print(consumption)
         consumptionDict.update({key : consumption})
+
+    solarPanels = (SP.solarPanelPower(date, SP.getIndexIntoDay())/1000) # Converts into KiloWatt
+    powerPrice = currency.powerPriceInNok(start, end)
+    solarSavingns = (solarPanels * powerPrice)
+    calculatedTotal = (consumptionDict["Total"] - solarPanels)
+
+    consumptionDict.update({"costOfPower" : powerPrice})  
+    consumptionDict.update({"solarPanels" : solarPanels}) 
+    consumptionDict.update({"solarSavings" : solarSavingns}) 
+    consumptionDict.update({"Total" : calculatedTotal }) 
 
     DF = toDF(consumptionDict)
     logThis(DF)

@@ -1,6 +1,5 @@
 import powerConsumers
 import time 
-import solarPanel
 
 
 
@@ -25,5 +24,5 @@ while (n < 50) :  # Enkel løkke for å generere 50 linjer med data
         powerConsumers.updateConsumerStatus(powerConsumers.consumers) # Henter inn ny status 
         powerConsumers.consumptionLogger(powerConsumers.rooms, timeInterval, startTime, endTime) # SKriver til CSV fil 
 
-        
-        print(n)  #Sjekker iterasjon i løkka 
+        print ("num of times loop: ")
+        print(n)  #printer iterasjon i løkka 
