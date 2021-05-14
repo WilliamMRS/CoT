@@ -1,4 +1,4 @@
-import time 
+from time import * 
 import requests
 import json
 import pandas as pd
@@ -78,7 +78,7 @@ class powerConsumer:
             self.previousTemp = self.currentTemp
             outsideTemp = WD.getTemperature() # Henter værdata fra weatherStation pakken som ble bygd for prosjektet. 
             if  outsideTemp > targetTemp: 
-                return 0.05 # Varmekabler slås ikke helt av, men forbruker mindre strøm når det er varmt ute. 
+                return 0.1 # Varmekabler slås ikke helt av, men forbruker mindre strøm når det er varmt ute. 
             if outsideTemp < targetTemp:      
                 if tempDelta >= 0:
                     minTemp, maxTemp = 10, 25
@@ -87,7 +87,10 @@ class powerConsumer:
                     return (correctedStartValue * 100) / range 
                 else:
                     return 1
-
+        else:
+            return 1
+        
+    
     def powerOn(self): 
         """ 
         Sjekker hvor mange ganger apparatet er blitt brukt
@@ -117,13 +120,15 @@ class powerConsumer:
 
     def updateState(self, newState):
         """ 
-        Sender ny status til CoT.
+        Sender ny status til CoT dersom det er en endring i egen tilstand 
         Til bruk ved simulering. 
          """
-        dataDict = self.payload
-        dataDict["Value"] = newState
-        response = requests.put("https://circusofthings.com/WriteValue", data=json.dumps(dataDict),headers={'Content-Type':'application/json'} )
-        return json.loads(response.content)
+        self.currentState = newState # Sikrer at ett objekt aldri står på i mer enn en tidsenhet minutter(Dusj, kaffetrakter etc)
+        if newState != self.previoustState : # Avoids unneccesary updates to CoT
+            dataDict = self.payload
+            dataDict["Value"] = newState
+            response = requests.put("https://circusofthings.com/WriteValue", data=json.dumps(dataDict),headers={'Content-Type':'application/json'} )
+            #return json.loads(response.content) # For feilsøking
 
 
 # Definerer "kontaktinfo" til apparatene i CoT
