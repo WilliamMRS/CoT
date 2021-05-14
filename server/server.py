@@ -71,7 +71,6 @@ def returnUserIds(userList):
         print(ids)
     return 0
 
-
 # TODO: show current bookings as a list in the dashboard
 @app.route('/api/getBookings', methods=['POST', 'GET'])
 def readRooms():
@@ -133,6 +132,8 @@ def readRooms():
 
 @app.route('/api/getPowerUsage', methods=['GET'])
 def getPowerUsage():
+    df = pd.read_csv('../powerUsage.csv')
+    print(df)
     return {}
 
 # TODO: Implement powerusage api and read/write to csv
