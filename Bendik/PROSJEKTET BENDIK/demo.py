@@ -4,6 +4,7 @@ import powerConsumers as pc
 import time
 
 """ Alle tilgjengelige apparater: 
+
 Oppdater tilstand med pc.consumers["apparatnavn"].updateState(NewState)
 
 ex. pc.consumers["stove"].updateState(1) for å skru på ovn. 
@@ -38,8 +39,9 @@ timeInterval = 30 # Endre hyppighet for logging i sekunder
 
 pc.placeObjectsInRooms(pc.consumers, pc.rooms) # Initialiserer alle objektene. 
 oldTime = time.time()
-startTime = "20210513"
-endTime = "20210514"
+
+startTime = "20210513" # For strømpris og valuttakurs
+endTime = "20210514" # For strømpris og valuttakurs
 
 ###___ Løkke___###
 
