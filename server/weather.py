@@ -1,13 +1,13 @@
 import json
 from metno_locationforecast import Place, Forecast
 
-def forecast():
+def get_forecast():
     USER_AGENT = "metno-locationforecast/1.0 jenstho@stud.ntnu.no"
     Trondheim = Place("Trondheim", 63.42024, 10.40122)
     Trondheim_forecast = Forecast(Trondheim, USER_AGENT)
-    #Trondheim_forecast.update()
+    Trondheim_forecast.update()
     return(Trondheim_forecast)
-print(forecast())
+print(get_forecast())
 
 def liveForecast():
     forecast = Future_forecast()
