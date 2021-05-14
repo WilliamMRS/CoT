@@ -8,7 +8,7 @@ def Future_forecast():
     Trondheim_forecast = Forecast(Trondheim, USER_AGENT)
     Trondheim_forecast.update()
     return(Trondheim_forecast)
-print(Future_forecast())
+#print(Future_forecast())
 
 def Get_data_now():
     forecast = Future_forecast()
@@ -19,13 +19,3 @@ def getTemperature():
     data = str(Get_data_now().variables["air_temperature"]).split()[1].split("c")[0]
     return float(data)
 #print(getTemperature())
-
-def get_Cloud_area_fraction():
-    Cloud_data = Future_forecast().variables["cloud_area_fraction"]
-    return Cloud_data
-#print(get_Cloud_area_fraction())
-
-def get_air_pressure():
-    pressure_data = Future_forecast().variables["air_pressure_at_sea_level"]
-    return pressure_data
-#print(get_air_pressure())

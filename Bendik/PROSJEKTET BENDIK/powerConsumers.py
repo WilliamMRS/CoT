@@ -261,6 +261,7 @@ def initCsv(roomlist) :
     df.to_csv("powerUsage.csv", header = listOfCSVHeaders, index=False)
 
 
+
 def logThis(df): 
     """ 
     Funksjon for å skrive til en .csv fil

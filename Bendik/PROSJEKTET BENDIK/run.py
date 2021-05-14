@@ -3,7 +3,7 @@ import time
 
 
 
-timeInterval = 10
+timeInterval = 60
 startTime = "20210413"
 endTime = "20210414"
 
@@ -18,6 +18,7 @@ oldTime = time.time()
 n = 0
 
 
+# powerConsumers.initCsv(powerConsumers.rooms) # For setting header in .csv file
 
 while (n < 50) :  # Enkel løkke for å generere 50 linjer med data 
     if timePassed(oldTime, timeInterval) == True :
