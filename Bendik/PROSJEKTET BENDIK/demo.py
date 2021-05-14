@@ -1,4 +1,5 @@
 ## DEMOSKRIPT
+import requests
 
 import powerConsumers as pc
 import time
@@ -47,10 +48,22 @@ while () :  # Kondisjon for å skru av og på?
     if pc.timePassed(oldTime, timeInterval) == True :
         oldTime = time.time()
         pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
-        pc.consumptionLogger(pc.rooms, timeInterval, startTime, endTime) # SKriver til CSV fil 
+        pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # SKriver til CSV fil 
 
 
 # Booking
+def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 0-6    // Dette er eksempel inputs
+    url = 'http://localhost:5000/api/bookRoom'
+    myobj = {
+        'room_form': rom, # id: 0 er bad, 1 er stue, 2 er kjøkken
+        'time_start': start, # start time
+        'time_end': slutt, # end time
+        'user_name': bruker # id of user
+    }
+    x = requests.post(url, data = myobj)
+    print(x.text)
+# Start tid 00:00 AM
+# Book alle rommene som skal brukes av folk
 
 # Strømforbruk følger booking. 
 
