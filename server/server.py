@@ -3,7 +3,7 @@ from flask import Flask, url_for, request, render_template
 from markupsafe import escape
 # Private modules
 import cot
-import weatherData
+import weather
 import json
 import booking_functions
 import key
@@ -33,20 +33,16 @@ def dashboard():
 
 # Routing - Secured API
 @app.route('/api/forecast', methods=['GET', 'POST'])
-def login():
+def forecast():
     if request.method == 'GET':
         response = app.response_class(
-            response=json.dumps(weatherData.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
+            response=json.dumps(weather.liveForecast().__dict__, indent=4, sort_keys=True, default=str),
             status=200,
             mimetype='application/json'
         )
         return response
     else:
         return "POST Not ready yet"
-
-@app.route('/lol')
-def responsefunc():
-    return 'lmao'
 
 @app.route('/api/bookRoom', methods=['POST', 'GET'])
 def bookRoom():
@@ -135,11 +131,11 @@ def readRooms():
     )
     return response
 
-# TODO: Implement powerusage api and read/write to csv
-
 @app.route('/api/getPowerUsage', methods=['GET'])
 def getPowerUsage():
     return {}
+
+# TODO: Implement powerusage api and read/write to csv
 
 # TODO: Implement feedback. stop redirect. When booking
 

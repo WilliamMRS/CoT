@@ -1,7 +1,9 @@
 import powerConsumers
 import time 
 
-timeInterval = 10
+
+
+timeInterval = 60
 startTime = "20210413"
 endTime = "20210414"
 
@@ -14,6 +16,10 @@ def timePassed(oldTime, interval) :
 powerConsumers.placeObjectsInRooms(powerConsumers.consumers, powerConsumers.rooms)
 oldTime = time.time()
 n = 0
+
+
+# powerConsumers.initCsv(powerConsumers.rooms) # For setting header in .csv file
+
 while (n < 50) :  # Enkel løkke for å generere 50 linjer med data 
     if timePassed(oldTime, timeInterval) == True :
         oldTime = time.time()
@@ -22,5 +28,5 @@ while (n < 50) :  # Enkel løkke for å generere 50 linjer med data
         powerConsumers.updateConsumerStatus(powerConsumers.consumers) # Henter inn ny status 
         powerConsumers.consumptionLogger(powerConsumers.rooms, timeInterval, startTime, endTime) # SKriver til CSV fil 
 
-        
-        print(n)  #Sjekker iterasjon i løkka 
+        print ("num of times loop: ")
+        print(n)  #printer iterasjon i løkka 
