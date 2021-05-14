@@ -35,13 +35,12 @@ def dashboard():
 @app.route('/api/forecast', methods=['GET', 'POST'])
 def forecast():
     if request.method == 'GET':
-        print(weather.Get_data_now())
-        #response = app.response_class(
-        #    response=json.dumps(weatherData.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
-        #    status=200,
-        #    mimetype='application/json'
-        #)
-        return 0 #response
+        response = app.response_class(
+            response=json.dumps(weather.liveForecast().__dict__, indent=4, sort_keys=True, default=str),
+            status=200,
+            mimetype='application/json'
+        )
+        return response
     else:
         return "POST Not ready yet"
 
