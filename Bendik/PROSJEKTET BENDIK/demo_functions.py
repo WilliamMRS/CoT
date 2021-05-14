@@ -1,4 +1,5 @@
 import requests
+import time
 
 def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 0-6    // Dette er eksempel inputs
     url = 'http://localhost:5000/api/bookRoom'
@@ -12,3 +13,11 @@ def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 0-6    // Dette er
     print(x.text)
 # Start tid 00:00 AM
 # Book alle rommene som skal brukes av folk
+
+def timePassed(oldTime, interval) :
+    if time.time() - oldTime >= interval:
+        return True
+    else:
+        return False
+
+

@@ -324,11 +324,7 @@ def randomizeStatus(roomlist) :
         roomlist[key].updateState(newValue)
 
 
-def timePassed(oldTime, interval) :
-    if time.time() - oldTime >= interval:
-        return True
-    else:
-        return False
+
 
 
 

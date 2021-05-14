@@ -1,9 +1,7 @@
 ## DEMOSKRIPT
-
-
 import powerConsumers as pc
 import time
-import demo_functions as demo
+import demo_functions as defunc
 
 
 """ Alle tilgjengelige apparater: Flytt til README?
@@ -52,7 +50,7 @@ endTime = "20210514" # For strømpris og valuttakurs
 ###___ Løkke___###
 
 while () :  # Kondisjon for å skru av og på?
-    if pc.timePassed(oldTime, timeInterval) == True :
+    if defunc.timePassed(oldTime, timeInterval) == True :
         oldTime = time.time()
         pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
         pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # SKriver til CSV fil 
@@ -72,9 +70,14 @@ while () :  # Kondisjon for å skru av og på?
         # Skrus ned til 18 når det ikke er noen der. 
 
     # Bad
-        # hver tredje gang noen er på badet brukes dusjen i 10 minutter
         # Temperatur satt til 23 grader på dagtid
         # Temperatur satt til 17 grader på natt. 
+        # pc.consumers["bathroomTemp"].updateState(23)
+        # pc.consumers["bathroomTemp"].updateState(17)
+        # hver tredje gang noen er på badet brukes dusjen i 10 minutter
+        # if defunc.timePassed(oldTime, 10) == True :
+            #pc.consumers["shower"].updateState(0)
+
 
     # Kjøkken
         # Hver gang noen er på kjøkkenet brukes vaskemaskinen. 
@@ -90,14 +93,5 @@ while () :  # Kondisjon for å skru av og på?
             # Sett disse til å heve senke ved legge- / våknetid? Evt. bare dropp de. 
     # Stue
         # TV skrus på når noen er i stua
-
-
-
-
-
-
-
-
-
 
 
