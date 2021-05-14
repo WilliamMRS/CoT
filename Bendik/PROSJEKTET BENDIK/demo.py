@@ -3,6 +3,7 @@ import powerConsumers as pc
 import time
 import demo_functions as defunc
 import demoBooking as debok
+import csv
 
 """ Alle tilgjengelige apparater: Flytt til README?
 
@@ -81,7 +82,7 @@ for index in range (0, 143) : # index = timeIntervall 1-144
         "bedroom_4" : {"[4]"},
         "bedroom_5" : {"[5]"},
         "bedroom_6" : {"[6]"},
-}
+    }
     pc.setConsumerStatus(0, pc.consumers) #Forces all objects to off state before checking who need to be turned on
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
@@ -176,6 +177,12 @@ for index in range (0, 143) : # index = timeIntervall 1-144
         oldTime = time.time()
         pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
         pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil 
+        
+    with open('eggs.csv', 'w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=' ',
+                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        spamwriter.writerow(['Spam'] * 5 + ['Baked Beans'])
+        spamwriter.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
 
 
 
