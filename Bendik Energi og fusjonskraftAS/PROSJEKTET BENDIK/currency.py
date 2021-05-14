@@ -1,4 +1,3 @@
-from entsoe import EntsoeRawClient
 from entsoe import EntsoePandasClient
 import requests
 import json
@@ -12,15 +11,16 @@ api_key = key.api_key # Token til ENTSOE fra key.py
 
 def fetchCurrency(startPeriod, endPeriod) : # Y/M/D
     """ 
-    Henter oppdatert valuttakurs fra den norske bank. 
+    Henter valuttakurs fra Norges bank. 
     """
     payload = {"startPeriod" : str(startPeriod), "endPeriod" : str(endPeriod), "locale" : "no"}
-    response = requests.get("https://data.norges-bank.no/api/data/EXR/B.GBP.NOK.SP?format=sdmx-json&", data = json.dumps(payload))
+    response = requests.get("https://data.norges-bank.no/api/data/EXR/B.GBP.NOK.SP?format=sdmx-json&", 
+                                data = json.dumps(payload))
     return json.loads(response.content)["data"]["dataSets"][0]["series"]["0:0:0:0"]["observations"]["0"][0]
 
-def powerPriceFetch(api_key, start, end) : # Funksjon for å hente inn strømpriser fra Entsoe. Benytter Entsoe Raw Client
+def powerPriceFetch(api_key, start, end) : 
     """ 
-    Henter strømpris fra et gitt tidsrom fra ENTSO sin strømprisdatabase.  
+    Henter strømpris fra et gitt tidsrom fra ENTSO E sin strømprisdatabase.  
     I EUR/MWh
     """
     client = EntsoePandasClient(api_key)
@@ -38,7 +38,7 @@ def powerPriceInNok(start, end) :
     endPD = pd.Timestamp(str(end), tz="Europe/Oslo")
     rate = float(fetchCurrency(start, end))
     price = int(powerPriceFetch(key.api_key, startPD, endPD))
-    return (rate * price) 
+    return ((rate * price)/1000)  # NOK/KWh
 
 
 

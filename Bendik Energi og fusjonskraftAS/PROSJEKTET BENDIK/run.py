@@ -1,5 +1,9 @@
 import powerConsumers
 import time 
+import solarPanel
+import weatherStation_Trondheim
+
+
 
 timeInterval = 10
 startTime = "20210413"
