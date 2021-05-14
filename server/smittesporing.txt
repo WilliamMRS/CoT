@@ -6,3 +6,4 @@
 2021-05-14 20:07:00.224847 beboer nr 1 booket 1 fra 11:45 til 12:30
 2021-05-14 20:07:14.278260 beboer nr 1 booket 1 fra 12:45 til 13:30
 2021-05-14 20:07:19.214821 beboer nr 1 booket 0 fra 15:30 til 16:30
+2021-05-14 20:55:15.526947 beboer nr 1 booket 0 fra 14:30 til 14:45

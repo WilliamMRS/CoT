@@ -58,6 +58,10 @@ while () :  # Kondisjon for å skru av og på?
 
 # Booking
 
+# VIKTIG!!!
+            # KUN BOOK MED 10 MINUTTERS INTERVAL
+# VIKTIG!!!
+
 # alle booker badet fra 07:30 til 09:00, 15 minutter hver.
 # folk booker kjøkkenet for en halvtime etter de har vært på badet hver. Det er da alltid bare 2 stk der samtidig. Fra 07:45 til 09:30
 # folk booker kjøkkenet for 15 minutter hver, to og to til lunsj. 12:00 til 13:00
@@ -67,7 +71,12 @@ while () :  # Kondisjon for å skru av og på?
 # 1,2,4 og 5 bruker stua fra 18:00 til 22:00
 # alle booker toalettet for 10 minutter før de legger seg, en og en. Mellom 22:00 og 23:00
 
+# Clear all bookings
 
+# add all bookings planned for today
+# ----------------
+    #Bookings
+# ----------------
 
 # Strømforbruk følger booking. 
 

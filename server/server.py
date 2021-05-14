@@ -84,17 +84,11 @@ def readRooms():
     # Store id of a user, and start time. Also store endtime using 'previous time' variable.
     cachedData = [0,[],[],[],[],[],[]] # where index 0 is empty, 1-6 is userdata in form of 
     startKey = "startTime"
-    # {
-    #   startTime: "",
-    #   lastTime: ""   //This means last stored time
-    # }
     
     # TODO: Account for multiple bookings. This method only accounts for one booking in a 24 hour span.
-
     for index, row in df.iterrows():
         print(index)
         # ID's: 1-6
-
         if len(row[1]):
             for userid in row[1]: # userID's that have booked this room at this time.
                 for booking in cachedData[userid]:  # if this userID's been already checked for this time, skip it.
@@ -107,27 +101,6 @@ def readRooms():
                     'endTime': 0,
                     'room': 'Bad'
                 }
-
-
-        if len(row[2]):
-            for userid in row[2]:
-                if startKey in cachedData[userid]:
-                    cachedData[userid]['lastTime'] =  row[0]
-                else:
-                    cachedData[userid] = {
-                        'startTime': row[0],
-                        'room': 'Stue'
-                    }
-        if len(row[3]):
-            for userid in row[3]:
-                if startKey in cachedData[userid]:
-                    cachedData[userid]['lastTime'] = row[0]
-                else:
-                    cachedData[userid] = {
-                        'startTime': row[0],
-                        'room': 'Kjøkken'
-                    }
-
     print(cachedData)
 
     response = app.response_class(

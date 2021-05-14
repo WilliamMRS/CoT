@@ -1,5 +1,6 @@
 import requests
 import time
+import pandas as pd
 
 def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 0-6    // Dette er eksempel inputs
     url = 'http://localhost:5000/api/bookRoom'
@@ -20,4 +21,23 @@ def timePassed(oldTime, interval) :
     else:
         return False
 
+def getRoomOccupants(index, room): # Takes index between 0 and 143, 10 minute intervals in 24hrs ---- 0: bad, 1: stue, 2: kjøkkenet
+    index = index*2
+    df =  pd.read_csv("../../server/booking.csv")
+    print(df["Bathroom"])
+    users = []
+    if room == 0:
+        for userid in df["Bathroom"][index]:
+            if userid != "[" and userid != "]":
+                users.append(userid)
+    elif room == 1:
+        for userid in df["Livingroom"][index]:
+            if userid != "[" and userid != "]":
+                users.append(userid)
+    elif room == 2:
+        for userid in df["Kitchen"][index]:
+            if userid != "[" and userid != "]":
+                users.append(userid)
+    return users
 
+#getRoomOccupants(90, 0) # Takes index and roomID
