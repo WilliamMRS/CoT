@@ -94,15 +94,21 @@ def readRooms():
     for index, row in df.iterrows():
         print(index)
         # ID's: 1-6
+
         if len(row[1]):
-            for userid in row[1]:
-                if startKey in cachedData[userid]: # and previous row also has your ID
-                    cachedData[userid]['lastTime'] =  row[0]
-                else: # if previous row doesn't have your ID, or the startkey isn't there, create a new 
-                    cachedData[userid] = {
-                        'startTime': row[0],
-                        'room': 'Bad'
-                    }
+            for userid in row[1]: # userID's that have booked this room at this time.
+                for booking in cachedData[userid]:  # if this userID's been already checked for this time, skip it.
+                    startTime = booking["startTime"].split(":")
+                    startTime = int(startTime[0]*60) + startTime[1]
+                    print(startTime)
+
+                cachedData[userid] = {
+                    'startTime': row[0],
+                    'endTime': 0,
+                    'room': 'Bad'
+                }
+
+
         if len(row[2]):
             for userid in row[2]:
                 if startKey in cachedData[userid]:
