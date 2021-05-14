@@ -8,6 +8,7 @@ Created on Wed Apr 14 12:57:36 2021
 from metno_locationforecast import Place, Forecast
 import datetime as dt
 import pandas as pd
+
 def værdata():
     USER_AGENT = "metno_locationforecast/1.0 jenstho@stud.ntnu.no"
     

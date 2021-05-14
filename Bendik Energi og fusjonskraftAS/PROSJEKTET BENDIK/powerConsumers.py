@@ -6,7 +6,8 @@ import csv
 import key as key #Personlige tokens
 import random # MIDLERTIDIG
 import currency
-
+import weatherData as WD
+import solarPanel as SP
 
 token = key.token # Henter CoT Token fra key.py fil
 api_key = key.api_key # Token til ENTSOE fra key.py
@@ -75,13 +76,17 @@ class powerConsumer:
             self.currentTemp = self.currentState
             tempDelta = (self.previousTemp - targetTemp)
             self.previousTemp = self.currentTemp
-            if tempDelta >= 0:
-                minTemp, maxTemp = 10, 25
-                range = maxTemp - minTemp
-                correctedStartValue = self.currentTemp - minTemp
-                return (correctedStartValue * 100) / range 
-            else:
-                return 1
+            outsideTemp = 20 #WD.getTemperature() # Henter værdata fra weatherStation pakken som ble bygd for prosjektet. 
+            if  outsideTemp > targetTemp: 
+                return 0.05 # Varmekabler slås ikke helt av, men forbruker mindre strøm når det er varmt ute. 
+            if outsideTemp < targetTemp:      
+                if tempDelta >= 0:
+                    minTemp, maxTemp = 10, 25
+                    range = maxTemp - minTemp
+                    correctedStartValue = self.currentTemp - minTemp
+                    return (correctedStartValue * 100) / range 
+                else:
+                    return 1
 
     def powerOn(self): 
         """ 
@@ -207,6 +212,7 @@ rooms = {
 "costOfPower" : {}, # Price per kWh
 "solarPanels" : {}, # kwH power generated 
 "solarSavings" : {}, # kwh converted to money saved
+"TotalExSolar" : consumers,
 }
 
 ###___ Funksjoner knyttet til dictionaries ____###
@@ -220,6 +226,7 @@ def placeObjectsInRooms(consumerList, roomList) :
         for i in consumerList :
             if consumerList[i].room == key :
                 roomList[key].update({i : consumerList[i]})
+
 
 def updateConsumerStatus(dictionary): 
     """ 
@@ -251,6 +258,7 @@ def initCsv(roomlist) :
     df = pd.read_csv("powerUsage.csv", header=None)
     df.to_csv("powerUsage.csv", header = listOfCSVHeaders, index=False)
 
+
 def logThis(df): 
     """ 
     Funksjon for å skrive til en .csv fil
@@ -259,9 +267,11 @@ def logThis(df):
     df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
     df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
 
+
 def toDF(dict) :
     df = pd.DataFrame().from_records([dict], index =[0])
     return df
+
 
 def consumptionLogger(roomList, kWhcompensation, start, end) : 
     """ 
@@ -270,6 +280,12 @@ def consumptionLogger(roomList, kWhcompensation, start, end) :
     """
     
     consumptionDict = {}
+    date = '14-05-2021'
+    solarPanels = SP.solarPanelPower(date, SP.getIndexIntoDay())
+    consumptionDict.update({"costOfPower" : currency.powerPriceInNok(start, end)})  
+    consumptionDict.update({"solarPanels" : solarPanels})   #PLACEHOLDER
+    consumptionDict.update({"solarSavings" : (solarPanels * currency.powerPriceInNok(start, end))})  #PLACEHOLDER
+    consumptionDict.update({"Total" : -(solarPanels) }) 
     for key in roomList.keys() :
         consumption = 0
         for i in roomList[key] :
@@ -278,9 +294,6 @@ def consumptionLogger(roomList, kWhcompensation, start, end) :
             print(consumption)
         consumptionDict.update({key : consumption})
 
-    consumptionDict.update({"costOfPower" : currency.powerPriceInNok(start, end)})  
-    consumptionDict.update({"solarPanels" : 1 })   #PLACEHOLDER
-    consumptionDict.update({"solarSavings" : 1 })  #PLACEHOLDER
     DF = toDF(consumptionDict)
     logThis(DF)
 
