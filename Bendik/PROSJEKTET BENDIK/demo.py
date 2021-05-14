@@ -82,7 +82,7 @@ for index in range (0, 143) : # index = timeIntervall 1-144
         "bedroom_5" : {"[5]"},
         "bedroom_6" : {"[6]"},
 }
-    pc.setConsumerStatus(0, pc.consumers) #Forces all objects to off state before checking who need to be turned on
+    pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
             pc.consumers[str(room)+"Temp"].updateState(idleTemp)
