@@ -2,7 +2,7 @@ import requests
 import time
 import pandas as pd
 
-def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 0-6    // Dette er eksempel inputs
+def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 1-6    // Dette er eksempel inputs
     url = 'http://localhost:5000/api/bookRoom'
     myobj = {
         'room_form': rom, # id: 0 er bad, 1 er stue, 2 er kjøkken
