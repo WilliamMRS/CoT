@@ -139,6 +139,7 @@ info_kitchenLight = {'Key':'8485','Value':0,'Token':token}
 info_shower = {'Key':'29262','Value':0,'Token':token} 
 info_washingMachine = {'Key':'28922','Value':0,'Token':token} 
 info_heatingCable = {'Key':'373','Value':0,'Token':token}
+info_bathroomLight = {'key':'29768', 'value':0, 'token':token}
 info_light_1 = {'Key':'21462','Value':0,'Token':token}
 info_curtains_1 = {'Key':'8365','Value':0,'Token':token}
 info_heater_1 = {'Key':'20954','Value':0,'Token':token}
@@ -178,6 +179,7 @@ Legg inn nye objekter her:
 "washingMachine" : powerConsumer("bathroom", 2500, 4, info_washingMachine),
 "shower" : powerConsumer("bathroom", 1000, 1, info_shower),
 "bathroomTemp" : powerConsumer("bathroom", 1500, 1, info_heatingCable),#Sjekk i COT
+"bathroomLight" : powerConsumer("bathroom", 40, 1, info_bathroomLight),
 "light_1" : powerConsumer("bedroom_1", 40, 1, info_light_1),
 "curtains_1" : powerConsumer("bedroom_1", 10, 1, info_curtains_1),
 "bedroom_1Temp" : powerConsumer("bedroom_1", 1500, 1, info_heater_1),

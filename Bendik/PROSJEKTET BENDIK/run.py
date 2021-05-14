@@ -30,3 +30,6 @@ while (n < 50) :  # Enkel løkke for å generere 50 linjer med data
 
         print ("num of times loop: ")
         print(n)  #printer iterasjon i løkka 
+
+
+
