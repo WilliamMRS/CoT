@@ -1,14 +1,18 @@
 ## DEMOSKRIPT
-import requests
+
 
 import powerConsumers as pc
 import time
+import demo_functions as demo
 
-""" Alle tilgjengelige apparater: 
+
+""" Alle tilgjengelige apparater: Flytt til README?
 
 Oppdater tilstand med pc.consumers["apparatnavn"].updateState(NewState)
 
-ex. pc.consumers["stove"].updateState(1) for å skru på ovn. 
+ex. 
+        pc.consumers["stove"].updateState(1) 
+for å skru på ovn. 1 er ny tilstand. Kan være 0 for av, 22 for temperatur. 
 
 # Stue
     "livingroomLight", "TV" , "LivingroomTemp"
@@ -30,6 +34,7 @@ ex. pc.consumers["stove"].updateState(1) for å skru på ovn.
 #Sov6:
     "light_6" , "curtains_6", "bedroom_6Temp" 
 
+Merk: Alle curtains har samme CoT kode og vil justeres samtidig. 
 
 """
 
@@ -54,21 +59,11 @@ while () :  # Kondisjon for å skru av og på?
 
 
 # Booking
-def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 0-6    // Dette er eksempel inputs
-    url = 'http://localhost:5000/api/bookRoom'
-    myobj = {
-        'room_form': rom, # id: 0 er bad, 1 er stue, 2 er kjøkken
-        'time_start': start, # start time
-        'time_end': slutt, # end time
-        'user_name': bruker # id of user
-    }
-    x = requests.post(url, data = myobj)
-    print(x.text)
-# Start tid 00:00 AM
-# Book alle rommene som skal brukes av folk
+
 
 # Strømforbruk følger booking. 
 
+# Dersom brukerID ikke er på ett annet rom antar vi at ID er på eget rom 
 
 # Ting skrur seg av å på etter hvor folk er.     Bruksmønster
 
@@ -95,6 +90,10 @@ def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 0-6    // Dette er
             # Sett disse til å heve senke ved legge- / våknetid? Evt. bare dropp de. 
     # Stue
         # TV skrus på når noen er i stua
+
+
+
+
 
 
 
