@@ -56,14 +56,14 @@ while () :  # Kondisjon for å skru av og på?
         pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # SKriver til CSV fil 
 
 
-# Booking
+# Booking og bruksmønster
 
 
 # Strømforbruk følger booking. 
 
 # Dersom brukerID ikke er på ett annet rom antar vi at ID er på eget rom 
 
-# Ting skrur seg av å på etter hvor folk er.     Bruksmønster
+# Ting skrur seg av å på etter hvor folk er. 
 
     # Lys følger alltid booking
     # Temperatur i stue, kjøkken, bad  settes til 21 grader så lenge det er folk der. 
