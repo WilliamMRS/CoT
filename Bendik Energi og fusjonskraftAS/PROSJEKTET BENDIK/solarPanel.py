@@ -8,6 +8,7 @@ from pvlib.pvsystem import PVSystem
 #from pvlib.location import Location
 from pvlib.modelchain import ModelChain
 from pvlib.temperature import TEMPERATURE_MODEL_PARAMETERS
+import weatherData
 
 
 latitude, longitude, tz = 63.42024, 10.40122, 'Europe/Oslo' # specify location 
@@ -61,11 +62,30 @@ system = PVSystem(surface_tilt=20, surface_azimuth=180, # vinkel og vridning for
 
 ###____ Kjør ____ ### 
 
-irradiance = get_irradiance(site, '05-12-2021', 20, 180)
-#print (irradiance["GHI"])
+def getIndexIntoDay():
+    now = datetime.datetime.now()
+    start = datetime.datetime(now.year, now.month, now.day)
+    diff = now - start
+    seconds_in_day = 24 * 60 * 60
+    return int((144 / seconds_in_day) * diff.seconds) # converts seconds to intervals of 144 (10 min) and throws away decimal.
+
+def solarPanelPower(date, index):
+    irradiance = get_irradiance(site, date, 20, 180) # irradiance i Trondheim, i dag
+    wattPerSquareMeter = irradiance["POA"][index]
+    solarPanelArrayPower = wattPerSquareMeter * 150 * 0.19 # times square meters * solar panel efficiency.
+    cloudCover = weatherData.Get_data_now().variables["cloud_area_fraction"]
+    cloudCover = float(str(cloudCover).split()[1][:-1])/100
+    solarPanelArrayPower = solarPanelArrayPower * (1 - cloudCover) # power * 1 - cloud coverage
+    return solarPanelArrayPower
+    
+#power = solarPanelPower('14-05-2021', getIndexIntoDay())
+#print(power)
+
+"""
 weatherList = [irradiance["GHI"], irradiance["DHI"], irradiance["DNI"], 30, 5]
 
 #print(weatherList)
+
 weather = pd.DataFrame([[irradiance["GHI"], irradiance["DHI"], irradiance["DNI"], 30, 5]],
                          columns=['ghi', 'dni', 'dhi', 'temp_air', 'wind_speed'],
                          index=[pd.Timestamp('20210401 1200', tz='Europe/Oslo')])
@@ -77,3 +97,4 @@ mc = ModelChain(system, site)
 
 mc.run_model(weather)
 print(mc.ac)
+"""
