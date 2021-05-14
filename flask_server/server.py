@@ -33,14 +33,15 @@ def dashboard():
 
 # Routing - Secured API
 @app.route('/api/forecast', methods=['GET', 'POST'])
-def login():
+def forecast():
     if request.method == 'GET':
-        response = app.response_class(
-            response=json.dumps(weatherData.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
-            status=200,
-            mimetype='application/json'
-        )
-        return response
+        print(weatherData.Get_data_now())
+        #response = app.response_class(
+        #    response=json.dumps(weatherData.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
+        #    status=200,
+        #    mimetype='application/json'
+        #)
+        return 0 #response
     else:
         return "POST Not ready yet"
 
@@ -135,11 +136,11 @@ def readRooms():
     )
     return response
 
-# TODO: Implement powerusage api and read/write to csv
-
 @app.route('/api/getPowerUsage', methods=['GET'])
 def getPowerUsage():
     return {}
+
+# TODO: Implement powerusage api and read/write to csv
 
 # TODO: Implement feedback. stop redirect. When booking
 

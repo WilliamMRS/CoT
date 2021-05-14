@@ -223,7 +223,4 @@ def website_booking(df, resident, room_num, start_time, end_time): # tar inn en 
     elif(alreadyBooked):
         feedback = "Du har allerede booket " +  rooms_for_feedback[room_num] + " i dette tidsrommet."
             #break
-    else:
-        print("do nothing")
-
     return feedback
