@@ -1,16 +1,17 @@
 GET STARTED:
 
+---- Ignore if you already have flask installed
 inside flask_server folder in cmd:
 Create venv on mac & linux: 'python3 -m venv venv'
 windows: 'py -3 -m venv venv'
 
-
 in the directory flask_server activate environemnt for development using command:
 mac: '. venv/bin/activate'
 windows: 'venv\Scripts\activate'
+---- Ignore if you already have flask installed
 
 ---------------------------------------------------------------- RUN
-For å kjøre serveren, først i flask_server mappen skriv:
+For å kjøre serveren, først i 'server' mappen skriv:
 'export FLASK_APP=server.py'
 så 'flask run'
 

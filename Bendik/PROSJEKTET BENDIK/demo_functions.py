@@ -1,6 +1,6 @@
 import requests
 import time
-import datetime
+import pandas as pd
 
 def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 0-6    // Dette er eksempel inputs
     url = 'http://localhost:5000/api/bookRoom'
@@ -21,17 +21,23 @@ def timePassed(oldTime, interval) :
     else:
         return False
 
+def getRoomOccupants(index, room): # Takes index between 0 and 143, 10 minute intervals in 24hrs ---- 0: bad, 1: stue, 2: kjøkkenet
+    index = index*2
+    df =  pd.read_csv("../../server/booking.csv")
+    print(df["Bathroom"])
+    users = []
+    if room == 0:
+        for userid in df["Bathroom"][index]:
+            if userid != "[" and userid != "]":
+                users.append(userid)
+    elif room == 1:
+        for userid in df["Livingroom"][index]:
+            if userid != "[" and userid != "]":
+                users.append(userid)
+    elif room == 2:
+        for userid in df["Kitchen"][index]:
+            if userid != "[" and userid != "]":
+                users.append(userid)
+    return users
 
-def getIndexIntoDay():
-    now = datetime.datetime.now()
-    start = datetime.datetime(now.year, now.month, now.day)
-    diff = now - start
-    seconds_in_day = 24 * 60 * 60
-    return int((144 / seconds_in_day) * diff.seconds)
-
-""" 
-def toTimestep(time)
-    # convert 24 hours into 10 min intervall. AKA 144 Timesteps. 
-
-    return step
- """
+#getRoomOccupants(90, 0) # Takes index and roomID
