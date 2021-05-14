@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Apr 14 12:57:36 2021
-@author: Jensn
-"""
+
 import json
 from metno_locationforecast import Place, Forecast
 

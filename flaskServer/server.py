@@ -45,10 +45,6 @@ def forecast():
     else:
         return "POST Not ready yet"
 
-@app.route('/lol')
-def responsefunc():
-    return 'lmao'
-
 @app.route('/api/bookRoom', methods=['POST', 'GET'])
 def bookRoom():
     if request.method == 'POST':
