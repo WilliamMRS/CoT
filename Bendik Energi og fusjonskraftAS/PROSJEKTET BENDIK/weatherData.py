@@ -22,7 +22,7 @@ def Get_data_now():
 def getTemperature():
     data = str(Get_data_now().variables["air_temperature"]).split()[1].split("c")[0]
     return float(data)
-print(getTemperature())
+#print(getTemperature())
 
 def get_Cloud_area_fraction():
     Cloud_data = Future_forecast().variables["cloud_area_fraction"]
