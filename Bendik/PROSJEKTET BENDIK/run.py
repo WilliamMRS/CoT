@@ -16,6 +16,9 @@ def timePassed(oldTime, interval) :
 powerConsumers.placeObjectsInRooms(powerConsumers.consumers, powerConsumers.rooms)
 oldTime = time.time()
 n = 0
+
+
+
 while (n < 50) :  # Enkel løkke for å generere 50 linjer med data 
     if timePassed(oldTime, timeInterval) == True :
         oldTime = time.time()
