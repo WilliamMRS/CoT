@@ -1,7 +1,6 @@
 import powerConsumers
 import time 
 import solarPanel
-import weatherStation_Trondheim
 
 
 
