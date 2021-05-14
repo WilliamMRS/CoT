@@ -287,13 +287,10 @@ def consumptionLogger(roomList, kWhcompensation, start, end) :
 
     for key in roomList.keys() :
         consumption = 0
-        print(key)
         for i in roomList[key] :
             print(i)
             consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt           
             print(consumption)
-        print(key)
-        print(consumption)
         consumptionDict.update({key : consumption})
 
     solarPanels = (SP.solarPanelPower(date, SP.getIndexIntoDay())/1000) # Converts into KiloWatt
