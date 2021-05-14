@@ -8,7 +8,7 @@ def Future_forecast():
     Trondheim_forecast = Forecast(Trondheim, USER_AGENT)
     Trondheim_forecast.update()
     return(Trondheim_forecast)
-#print(Future_forecast())
+print(Future_forecast())
 
 def Get_data_now():
     forecast = Future_forecast()

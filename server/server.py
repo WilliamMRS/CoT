@@ -3,7 +3,7 @@ from flask import Flask, url_for, request, render_template
 from markupsafe import escape
 # Private modules
 import cot
-import weatherData
+import weather
 import json
 import booking_functions
 import key
@@ -35,7 +35,7 @@ def dashboard():
 @app.route('/api/forecast', methods=['GET', 'POST'])
 def forecast():
     if request.method == 'GET':
-        print(weatherData.Get_data_now())
+        print(weather.Get_data_now())
         #response = app.response_class(
         #    response=json.dumps(weatherData.Get_data_now().__dict__, indent=4, sort_keys=True, default=str),
         #    status=200,
