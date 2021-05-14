@@ -4,6 +4,7 @@ import requests
 import json
 import pandas as pd
 import time
+import datetime
 
 #key = 9940
 #token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI1MjI4In0.K58Zp9kRjEWJdlIkNRhD2yrV5EB6DcbDRnHsIVRspps"
@@ -162,7 +163,7 @@ def csvToDf(path): # lager en df på riktig format fra en csv-fil
     return df
 
 def saveBookingData(resident, room, startTime, endTime):
-    date = str(datetime.date.today())
+    date = str(datetime.datetime.now())
     with open('smittesporing.txt', 'a') as smittesporing:
         smittesporing.write(date + " beboer nr " + str(resident) + " booket " + room + " fra " + startTime + " til " + endTime + "\n")
 

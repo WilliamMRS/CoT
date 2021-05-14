@@ -62,7 +62,7 @@ while () :  # Kondisjon for å skru av og på?
         # Skrus ned til 18 når det ikke er noen der. 
 
     # Bad
-        # Tredjehver gang noen er på badet brukes dusjen i 10 minutter
+        # hver tredje gang noen er på badet brukes dusjen i 10 minutter
         # Temperatur satt til 23 grader på dagtid
         # Temperatur satt til 17 grader på natt. 
 

@@ -47,6 +47,7 @@ def forecast():
 @app.route('/api/bookRoom', methods=['POST', 'GET'])
 def bookRoom():
     if request.method == 'POST':
+        print(request.form)
         room_id = request.form.get("room_form") #roomid 0: bad, 1: stue/tvkrok, 2: kjøkken
         start_time = request.form.get("time_start") # 14:30
         end_time = request.form.get("time_end") # 15:30
@@ -62,7 +63,7 @@ def bookRoom():
         print(feedback)
         print(df)
 
-        return render_template('dashboard.html')
+        return "suksess!"
     else:
         return render_template('dashboard.html')
 
@@ -81,7 +82,7 @@ def readRooms():
 
     # read dataframe for bookings and add them to bookings{} as a list of all registered bookings.
     # Store id of a user, and start time. Also store endtime using 'previous time' variable.
-    cachedData = [0,{},{},{},{},{},{}] # where index 0 is empty, 1-6 is userdata in form of 
+    cachedData = [0,[],[],[],[],[],[]] # where index 0 is empty, 1-6 is userdata in form of 
     startKey = "startTime"
     # {
     #   startTime: "",
@@ -95,9 +96,9 @@ def readRooms():
         # ID's: 1-6
         if len(row[1]):
             for userid in row[1]:
-                if startKey in cachedData[userid]:
+                if startKey in cachedData[userid]: # and previous row also has your ID
                     cachedData[userid]['lastTime'] =  row[0]
-                else:
+                else: # if previous row doesn't have your ID, or the startkey isn't there, create a new 
                     cachedData[userid] = {
                         'startTime': row[0],
                         'room': 'Bad'

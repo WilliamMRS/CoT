@@ -1,0 +1,7 @@
+CoT Prosjekt
+
+Må kjøre 3 python filer for å ha full funksjonalitet:
+
+server/server.py (kjøres ved hjelp av flask, se readme)
+server/booking.py (for booking gjennom ESP 32)
+bendik/"prosjektet bendik"/run.py (for strømdata)
