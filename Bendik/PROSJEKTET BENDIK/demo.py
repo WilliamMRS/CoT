@@ -1,6 +1,7 @@
 ## DEMOSKRIPT
 
 import powerConsumers as pc
+import time
 
 """ Alle tilgjengelige apparater: 
 Oppdater tilstand med pc.consumers["apparatnavn"].updateState(NewState)
@@ -30,6 +31,23 @@ ex. pc.consumers["stove"].updateState(1) for å skru på ovn.
 
 """
 
+###___ Initialisering ___ ### 
+
+
+timeInterval = 30 # Endre hyppighet for logging i sekunder
+
+pc.placeObjectsInRooms(pc.consumers, pc.rooms) # Initialiserer alle objektene. 
+oldTime = time.time()
+startTime = "20210513"
+endTime = "20210514"
+
+###___ Løkke___###
+
+while () :  # Kondisjon for å skru av og på?
+    if pc.timePassed(oldTime, timeInterval) == True :
+        oldTime = time.time()
+        pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
+        pc.consumptionLogger(pc.rooms, timeInterval, startTime, endTime) # SKriver til CSV fil 
 
 
 # Booking
@@ -62,6 +80,10 @@ ex. pc.consumers["stove"].updateState(1) for å skru på ovn.
             # Sett disse til å heve senke ved legge- / våknetid? Evt. bare dropp de. 
     # Stue
         # TV skrus på når noen er i stua
+
+
+
+
 
 
 
