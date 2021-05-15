@@ -173,9 +173,9 @@ Definerer ulike strømforbrukende apparater
 Legg inn nye objekter her:
 """
 
-"livingroomLight" : powerConsumer("livingroom", 40, 1, info_livingRoomLight),
+"LivingroomLight" : powerConsumer("livingroom", 40, 1, info_livingRoomLight),
 "TV" : powerConsumer("livingroom", 150, 1, info_TV),
-"LivingroomTemp" : powerConsumer("livingroom", 1500, 1, info_TV), #BYTT UT COT-KODE
+"LivingroomTemp" : powerConsumer("livingroom", 1500, 1, info_LivingroomTemp), #BYTT UT COT-KODE
 "Stove" : powerConsumer("kitchen", 2200, 1, info_stove),
 "Dishwasher" : powerConsumer("kitchen",2000, 4, info_dishwasher),
 "CoffeeMachine" : powerConsumer("kitchen", 1500, 1, info_coffeeMachine),
@@ -212,10 +212,10 @@ rooms = {
 "Kitchen" : {},
 "Bathroom" : {},
 "Bedroom_1" : {},
-"Bbedroom_2" : {},
+"Bedroom_2" : {},
 "Bedroom_3" : {},
 "Bedroom_4" : {},
-"Bbedroom_5" : {},
+"Bedroom_5" : {},
 "Bedroom_6" : {},
 "CostOfPower" : {}, # Price per kWh
 "SolarPanels" : {}, # kwH power generated 
@@ -271,7 +271,7 @@ def initCsv(roomlist) :
     df = pd.read_csv("powerUsage.csv", header=None)
     df.to_csv("powerUsage.csv", header = listOfCSVHeaders, index=False)
 
-initCsv(rooms)
+#initCsv(rooms)
 
 def logThis(df): 
     """ 
