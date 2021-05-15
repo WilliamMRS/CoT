@@ -271,7 +271,7 @@ def initCsv(roomlist) :
     df = pd.read_csv("powerUsage.csv", header=None)
     df.to_csv("powerUsage.csv", header = listOfCSVHeaders, index=False)
 
-#initCsv(rooms)
+initCsv(rooms)
 
 def logThis(df): 
     """ 
