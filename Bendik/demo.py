@@ -86,31 +86,46 @@ for index in range (0, 143) : # index = timeIntervall 1-144
         "Bedroom_5" : {"[5]"},
         "Bedroom_6" : {"[6]"},
     }
-    pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on
+
+    pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on every iteration of the loop
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
+            print("Resetting all temperatures in room: " + str(room))
             pc.consumers[str(room)+"Temp"].updateState(idleTemp)
 
+### ____________  HEI WILLIAM KAN DU PLZ SE LITT PÅ DETTE. SLITER MED Å FÅ LEST FRA USERS
+
     for room in bookingRooms:
+        print("Checking room: " + (str(room)))
         users = defunc.getRoomOccupants(index, bookingRooms) #Function returns a list of people in the given room 
+        print("Who is in this room....? ")
         print (users)
-        for num, in range(0, 5): # 0 - 5 for 6 personer. 
+        for num in range(0, 5): # 0 - 5 for 6 personer. Går gjennom personIDene og sjekker om de befinner seg i det gitte rommet. 
+            print("num is:" + str(num))
             if num in users:
-                    userLocation.pop(room) # Fjerner personer fra rom der de ikke befinner seg lengre.    
+                print("removing someone from a room...")
+                userLocation.pop(room) # Fjerner personer fra rom der de ikke befinner seg lengre.    
         for user in users:
+            print("user: " + (str(user)))
+            print("updating roomlist")
             userLocation.update({room : user}) # Legger til personer i korrekt rom. 
 
 
     for key in userLocation : 
     #______ Sjekker hvilket rom personer er plassert i og om eventuelle apparater skal skrus på ______#
+        print(userLocation)
+        print (key)
+        print(len(userLocation[key]))
         if len(userLocation[key]) > 0 : # Sjekker om det befinner seg personer i rommet. 
-        
+            
             if key == "Livingroom" : 
+                print("someone is in the livingroom")
                 livingroomUses += 1
                 pc.consumers["livingroomTemp"].updateState(useTemp)
                 pc.consumers["TV"].updateState(1)
 
             if key == "Bathroom" :
+                print("someone is in the bathroom")
                 bathroomUses += 1
                 pc.consumers["bathroomTemp"].updateState(23)
                 if index in range(35, 54) or index in range (108, 112) :
@@ -118,6 +133,7 @@ for index in range (0, 143) : # index = timeIntervall 1-144
                     pc.consumers["shower"].updateState(1) 
             
             if key == "Kitchen" :
+                print("someone is in the kitchen")
                 kitchenUses += 1
                 pc.consumers["KitchenTemp"].updateState(useTemp)
                 pc.consumers["Dishwasher"].updateState(1)
@@ -127,6 +143,7 @@ for index in range (0, 143) : # index = timeIntervall 1-144
                     pc.consumers["Stove"].updateState(1)
 
             if key == "Bedroom_1" :
+                print("someone is in their bedroom")
                 if defunc.indexOfDay(index) :
                     pc.consumers[str(key)+"Temp"].updateState(idleTemp)
                     pc.consumers["Curtains_1"].updateState(1)
@@ -141,6 +158,7 @@ for index in range (0, 143) : # index = timeIntervall 1-144
                     pc.consumers[str(key)+"Temp"].updateState(useTemp)
             
             if key == "Bedroom_3" :
+                print("someone is in their bedroom")
                 if defunc.indexOfDay(index) :
                     pc.consumers[str(key)+"Temp"].updateState(idleTemp)
                     pc.consumers["Curtains_3"].updateState(1)
@@ -149,6 +167,7 @@ for index in range (0, 143) : # index = timeIntervall 1-144
                     pc.consumers["Curtains_1"].updateState(1)
            
             if key == "Bedroom_4" :
+                print("someone is in their bedroom")
                 if defunc.indexOfDay(index) :
                     pc.consumers[str(key)+"Temp"].updateState(idleTemp)
                     pc.consumers["Curtains_4"].updateState(1)
@@ -156,6 +175,7 @@ for index in range (0, 143) : # index = timeIntervall 1-144
                     pc.consumers[str(key)+"Temp"].updateState(useTemp)
        
             if key == "Bedroom_5" :
+                print("someone is in their bedroom")
                 if defunc.indexOfDay(index) :
                     pc.consumers[str(key)+"Temp"].updateState(idleTemp)
                     pc.consumers["Curtains_5"].updateState(1)
@@ -163,24 +183,31 @@ for index in range (0, 143) : # index = timeIntervall 1-144
                     pc.consumers[str(key)+"Temp"].updateState(useTemp)
        
             if key == "Bedroom_6" :
+                print("someone is in their bedroom")
                 if defunc.indexOfDay(index) :
                     pc.consumers[str(key)+"Temp"].updateState(idleTemp)
                     pc.consumers["Curtains_6"].updateState(1)
                 else:
                     pc.consumers[str(key)+"Temp"].updateState(useTemp)      
+    
     pc.consumers["Fridge"].updateState(1) # Ensures that Fridge always will be on
-    print("This is INDEX RUN NR: ")
-    print (index)
+
 
 
 # ----------------
     # CHECKS COT STATUS & LOGS
 # ----------------
 
-    if defunc.timePassed(oldTime, timeInterval) == True :
-        oldTime = time.time()
-        pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
-        pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil 
+    oldTime = time.time()
+    print("Updating statuses from COT...! ")
+    pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
+    print("Writing to logfile...")
+    pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil 
+
+
+    print("This was INDEX RUN NR: ")
+    print (index)
+
 
     with open('user_locations.csv', 'w', newline='') as csvfile:
         fieldnames = ['first_name', 'last_name']

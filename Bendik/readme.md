@@ -1,5 +1,17 @@
 
 
+LES FØRST README.md I SERVER MAPPA
+
+Husk:
+pip install pvlib[optional]
+pip install metno_locationforecast
+pip install ENTSOE
+
+Start server
+
+kjør demo
+
+
 CSV filen som genereres består av følgende verdier: 
 
         klokkeslett

@@ -1,4 +1,4 @@
-from time import * 
+import time
 import requests
 import json
 import pandas as pd
@@ -59,7 +59,7 @@ class powerConsumer:
         """
         response = requests.get("https://circusofthings.com/ReadValue", params = self.payload) # Body for request
         self.previousState = self.currentState # Oppdaterer forrige status     
-        print(response.content)
+        # print(response.content) # FOR debug
         self.currentState = json.loads(response.content)["Value"] # Leser verdi fra CoT respons
         return json.loads(response.content) # returnerer 
 
@@ -254,9 +254,7 @@ def setConsumerStatus(newValue, roomlist) :
     """
     print("Setting consumer statuses.......")
     for key in roomlist.keys() :
-        print(key)
         for i in roomlist[key] :
-            print(i)
             roomlist[key][i].updateState(newValue)
 
 ###___ Funksjoner for logging av strømforbruk ___###
@@ -286,10 +284,13 @@ def logThis(df):
 def logThisDemo(df): 
     """ 
     Funksjon for å skrive til en .csv fil
-    Tar inn en pandas dataframe
+    Lagrer med timeStep istedenfor tid. 
+
+    FIKS! 
     """
     df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
     df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
+
 
 def toDF(dict) :
     df = pd.DataFrame().from_records([dict], index =[0])
