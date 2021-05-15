@@ -242,9 +242,9 @@ def updateConsumerStatus(dictionary):
     """ 
     Oppdaterer status (Av/På) til alle apparater i gitt dictionary. 
     """
-    print("Updating Consumer Statuses...")
+    print("Updating Consumer objects status from COT...")
     for i in dictionary:
-        print(dictionary[i])
+        #print(dictionary[i])
         dictionary[i].status()
 
 def setConsumerStatus(newValue, roomlist) :
@@ -252,7 +252,7 @@ def setConsumerStatus(newValue, roomlist) :
     Oppdaterer alle objektene i romlisten med identisk, ny verdi. 
     Må ta inn dictionary med powerConsumer objekter. 
     """
-    print("Setting consumer statuses.......")
+    print("Pushing new state to COT.......")
     for key in roomlist.keys() :
         for i in roomlist[key] :
             roomlist[key][i].updateState(newValue)
@@ -271,7 +271,7 @@ def initCsv(roomlist) :
     df = pd.read_csv("powerUsage.csv", header=None)
     df.to_csv("powerUsage.csv", header = listOfCSVHeaders, index=False)
 
-
+#initCsv(rooms)
 
 def logThis(df): 
     """ 
