@@ -112,8 +112,11 @@ def readRooms():
 
 @app.route('/api/getPowerUsage', methods=['GET'])
 def getPowerUsage():
-    df = pd.read_csv('../powerUsage.csv')
-    print(df)
+    df = pd.read_csv('../Bendik/powerUsage.csv')
+    # Extract solar panel power generation
+    # Extract total power generated
+    
+    # return as object of three lists, one with usage, one with generation and one with timestamps.
     return {}
 
 # TODO: Implement powerusage api and read/write to csv
