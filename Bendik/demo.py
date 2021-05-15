@@ -89,17 +89,17 @@ for index in range (0, 143): # index = timeIntervall 1-144
     pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
-            pc.consumers[str(room)+"Temp"].updateState(idleTemp)
+        pc.consumers[str(room)+"Temp"].updateState(idleTemp)
     for room in bookingRooms:
-        users = defunc.getRoomOccupants(index, bookingRooms) #Function returns a list of people in the given room 
-        print (users)
+        print(room)
+        print(index)
+        users = defunc.getRoomOccupants(index, room) #Function returns a list of people in the given room 
+        print(users)
         for num in range(1, 7): # 1-6 for 6 personer.
             if num in users:
                     userLocation.pop(room) # Fjerner personer fra rom der de ikke befinner seg lengre.    
         for user in users:
-            userLocation.update({room : user}) # Legger til personer i korrekt rom. 
-        
-
+            userLocation.update({room : user}) # Legger til personer i korrekt rom.
 
     for key in userLocation : 
     #______ Sjekker hvilket rom personer er plassert i og om eventuelle apparater skal skrus på ______#

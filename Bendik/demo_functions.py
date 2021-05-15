@@ -29,23 +29,20 @@ def getRoomOccupants(index, room): # Takes index between 0 and 143, 10 minute in
     dirname = os.path.dirname(__file__)
     filename = os.path.join(dirname, '../server/booking.csv')
     df =  bf.csvToDf(filename)
-    #pd.read_csv("../server/booking.csv")
-    #print(df["Bathroom"])
+    
     users = []
-    if room == 0:
+    if room == "Bathroom":
         for userid in df["Bathroom"][index]:
             if userid != "[" and userid != "]":
                 users.append(userid)
-    elif room == 1:
+    elif room == "Livingroom":
         for userid in df["Livingroom"][index]:
             if userid != "[" and userid != "]":
                 users.append(userid)
-    elif room == 2:
+    elif room == "Kitchen":
         for userid in df["Kitchen"][index]:
             if userid != "[" and userid != "]":
                 users.append(userid)
-    print("THIS IS ALL THE ROOM OCCUPANTS: ")
-    print(users)
     return users
 
 #print(getRoomOccupants(90, 0)) # Takes index and roomID
