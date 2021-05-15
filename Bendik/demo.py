@@ -115,7 +115,7 @@ for index in range (0, 143): # index = timeIntervall 1-144
 
             if key == "Bathroom" :
                 bathroomUses += 1
-                pc.consumers["bathroomTemp"].updateState(23)
+                pc.consumers["BathroomTemp"].updateState(23)
                 if index in range(35, 54) or index in range (108, 112) :
                     # If morning or early evening. Assume people is going to the shower while visiting the bathroom 
                     pc.consumers["shower"].updateState(1) 
@@ -179,11 +179,8 @@ for index in range (0, 143): # index = timeIntervall 1-144
 # ----------------
     # CHECKS COT STATUS & LOGS
 # ----------------
-
-    if defunc.timePassed(oldTime, timeInterval) == True :
-        oldTime = time.time()
-        pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
-        pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil 
+    pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
+    pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil 
 
     with open('user_locations.csv', 'w', newline='') as csvfile:
         fieldnames = ["Livingroom","Kitchen","Bathroom","Bedroom_1","Bedroom_2","Bedroom_3","Bedroom_4","Bedroom_5","Bedroom_6"]
