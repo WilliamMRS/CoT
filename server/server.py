@@ -65,7 +65,7 @@ def bookRoom():
         print(feedback)
         print(df)
 
-        return feedback
+        return render_template('booking.html', feedback=feedback)
     else:
         return render_template('dashboard.html')
 

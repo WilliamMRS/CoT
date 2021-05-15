@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width= , initial-scale=1.0">
+        <title>Kollektiv Dashboard</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="stylesheet" href="/static/css/dashboard.css"> <!-- loaded last to overload previous skeleton.css settings (margin for example) -->
+        <script defer src="/static/dist/chart.js"></script>
+        <script defer src="/static/js/dashboard.js"></script>
+    </head>
+    <body>
+        <div class="panel" id = "Header">
+            <h2>Booking Response</h2>
+        </div>
+        <div class = "panel" id = "response">
+            {% if feedback %}
+            <h2>{{ feedback }}!</h2>
+            <a href="http://localhost:5000">Back to dashboard</a>
+            {% else %}
+            <h2>Please return to dashboard</h2>
+            <a href="http://localhost:5000">Back to dashboard</a>
+            {% endif %}
+        </div>
+    </body>
+</html>
