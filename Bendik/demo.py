@@ -44,9 +44,10 @@ Merk: Alle curtains har samme CoT kode og vil justeres samtidig.
 # ----------------
 
 print ("Initializing......")
-timeInterval = 60 # Endre hyppighet for logging i sekunder
+timeInterval = 10 # Endre hyppighet for logging i sekunder
 
 pc.placeObjectsInRooms(pc.consumers, pc.rooms) # Initialiserer alle objektene. 
+
 oldTime = time.time()
 
 startTime = "20210513" # For strømpris og valuttakurs
@@ -89,10 +90,18 @@ for index in range (0, 143): # index = timeIntervall 1-144
     }
 
     pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on
-    
+    pc.consumers["LivingroomTemp"].updateState(idleTemp)
+    pc.consumers["KitchenTemp"].updateState(idleTemp)
+    pc.consumers["BathroomTemp"].updateState(idleTemp)
+    pc.consumers["Bedroom_1Temp"].updateState(idleTemp)
+    pc.consumers["Bedroom_2Temp"].updateState(idleTemp)
+    pc.consumers["Bedroom_3Temp"].updateState(idleTemp)
+    pc.consumers["Bedroom_4Temp"].updateState(idleTemp)
+    pc.consumers["Bedroom_5Temp"].updateState(idleTemp)
+    pc.consumers["Bedroom_6Temp"].updateState(idleTemp)    
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
-        pc.consumers[str(room)+"Temp"].updateState(idleTemp)
+        #pc.consumers[str(room)+"Temp"].updateState(idleTemp)
         print("setting idle temperature for " + room)
 
     for room in bookingRooms:
@@ -176,15 +185,16 @@ for index in range (0, 143): # index = timeIntervall 1-144
                 else:
                     pc.consumers[str(key)+"Temp"].updateState(useTemp)      
     pc.consumers["Fridge"].updateState(1) # Ensures that Fridge always will be on
-    print("This is INDEX RUN NR: ")
-    print (index)
+    print("This is INDEX run nr.: " + str(index))
 
 
 # ----------------
     # CHECKS COT STATUS & LOGS
 # ----------------
-    pc.updateConsumerStatus(pc.consumers) # Leser av status ffor alle objekter i COT
-    pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil etter hvilke rom objektene er plassert i. 
+
+    pc.updateConsumerStatus(pc.consumers) # Leser av status for alle objekter i COT
+    pc.placeObjectsInRooms(pc.consumers, pc.rooms)    
+    pc.consumptionLogger(pc.rooms, timeInterval, startTime, endTime) # Skriver til CSV fil etter hvilke rom objektene er plassert i. 
 
     with open('user_locations.csv', 'w', newline='') as csvfile:
         fieldnames = ["Livingroom","Kitchen","Bathroom","Bedroom_1","Bedroom_2","Bedroom_3","Bedroom_4","Bedroom_5","Bedroom_6"]
