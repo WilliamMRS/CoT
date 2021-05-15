@@ -83,10 +83,6 @@ def createDf(): #lager en tom df med tidspunkter 24t fram i tid
     listDf(df) # fyller df-en med tomme lister
     return df
 
-def clearCSV(csvPath):
-    df = createDf()
-    saveDf(df, csvPath)
-
 def updateTime(df): # oppdaterer tiden i dataframen
     current_time = time24array()[0] # henter tiden nå
     

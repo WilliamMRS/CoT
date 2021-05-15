@@ -1,4 +1,4 @@
-import time 
+from time import * 
 import requests
 import json
 import pandas as pd
@@ -78,7 +78,7 @@ class powerConsumer:
             self.previousTemp = self.currentTemp
             outsideTemp = WD.getTemperature() # Henter værdata fra weatherStation pakken som ble bygd for prosjektet. 
             if  outsideTemp > targetTemp: 
-                return 0.05 # Varmekabler slås ikke helt av, men forbruker mindre strøm når det er varmt ute. 
+                return 0.1 # Varmekabler slås ikke helt av, men forbruker mindre strøm når det er varmt ute. 
             if outsideTemp < targetTemp:      
                 if tempDelta >= 0:
                     minTemp, maxTemp = 10, 25
@@ -87,7 +87,10 @@ class powerConsumer:
                     return (correctedStartValue * 100) / range 
                 else:
                     return 1
-
+        else:
+            return 1
+        
+    
     def powerOn(self): 
         """ 
         Sjekker hvor mange ganger apparatet er blitt brukt
@@ -117,13 +120,15 @@ class powerConsumer:
 
     def updateState(self, newState):
         """ 
-        Sender ny status til CoT.
+        Sender ny status til CoT dersom det er en endring i egen tilstand 
         Til bruk ved simulering. 
          """
-        dataDict = self.payload
-        dataDict["Value"] = newState
-        response = requests.put("https://circusofthings.com/WriteValue", data=json.dumps(dataDict),headers={'Content-Type':'application/json'} )
-        return json.loads(response.content)
+        self.currentState = newState # Sikrer at ett objekt aldri står på i mer enn en tidsenhet minutter(Dusj, kaffetrakter etc)
+        if newState != self.previousState : # Avoids unneccesary updates to CoT
+            dataDict = self.payload
+            dataDict["Value"] = newState
+            response = requests.put("https://circusofthings.com/WriteValue", data=json.dumps(dataDict),headers={'Content-Type':'application/json'} )
+            #return json.loads(response.content) # For feilsøking
 
 
 # Definerer "kontaktinfo" til apparatene i CoT
@@ -139,6 +144,7 @@ info_kitchenLight = {'Key':'8485','Value':0,'Token':token}
 info_shower = {'Key':'29262','Value':0,'Token':token} 
 info_washingMachine = {'Key':'28922','Value':0,'Token':token} 
 info_heatingCable = {'Key':'373','Value':0,'Token':token}
+info_bathroomLight = {'key':'29768', 'value':0, 'token':token}
 info_light_1 = {'Key':'21462','Value':0,'Token':token}
 info_curtains_1 = {'Key':'8365','Value':0,'Token':token}
 info_heater_1 = {'Key':'20954','Value':0,'Token':token}
@@ -169,33 +175,34 @@ Legg inn nye objekter her:
 "livingroomLight" : powerConsumer("livingroom", 40, 1, info_livingRoomLight),
 "TV" : powerConsumer("livingroom", 150, 1, info_TV),
 "LivingroomTemp" : powerConsumer("livingroom", 1500, 1, info_TV), #BYTT UT COT-KODE
-"stove" : powerConsumer("kitchen", 2200, 1, info_stove),
-"dishwasher" : powerConsumer("kitchen",2000, 4, info_dishwasher),
-"coffeeMachine" : powerConsumer("kitchen", 1500, 1, info_coffeeMachine),
-"fridge" : powerConsumer("kitchen", 160, 1, info_fridge),
-"kitchenTemp" : powerConsumer("kitchen", 1500, 1, info_kitchenHeater), #Sjekk i COT
-"kitchenLight" : powerConsumer("kitchen", 40, 1, info_kitchenLight),
-"washingMachine" : powerConsumer("bathroom", 2500, 4, info_washingMachine),
-"shower" : powerConsumer("bathroom", 1000, 1, info_shower),
-"bathroomTemp" : powerConsumer("bathroom", 1500, 1, info_heatingCable),#Sjekk i COT
-"light_1" : powerConsumer("bedroom_1", 40, 1, info_light_1),
-"curtains_1" : powerConsumer("bedroom_1", 10, 1, info_curtains_1),
-"bedroom_1Temp" : powerConsumer("bedroom_1", 1500, 1, info_heater_1),
-"light_2" : powerConsumer("bedroom_2", 40, 1, info_light_2),
-"curtains_2" : powerConsumer("bedroom_2", 10, 1, info_curtains_2),
-"bedroom_2Temp" : powerConsumer("bedroom_2", 1500, 1, info_heater_2),
-"light_3" : powerConsumer("bedroom_3", 40, 1, info_light_3),
-"curtains_3" : powerConsumer("bedroom_3", 10, 1, info_curtains_3),
-"bedroom_3Temp" : powerConsumer("bedroom_3", 1500, 1, info_heater_3),
-"light_4" : powerConsumer("bedroom_4", 40, 1, info_light_4),
-"curtains_4" : powerConsumer("bedroom_4", 10, 1, info_curtains_4),
-"bedroom_4Temp" : powerConsumer("bedroom_4", 1500, 1, info_heater_4),
-"light_5" : powerConsumer("bedroom_5", 40, 1, info_light_4),
-"curtains_5" : powerConsumer("bedroom_5", 10, 1, info_curtains_4),
-"bedroom_5Temp" : powerConsumer("bedroom_5", 1500, 1, info_heater_4),
-"light_6" : powerConsumer("bedroom_6", 40, 1, info_light_4),
-"curtains_6" : powerConsumer("bedroom_6", 10, 1, info_curtains_4),
-"bedroom_6Temp" : powerConsumer("bedroom_6", 1500, 1, info_heater_4),
+"Stove" : powerConsumer("kitchen", 2200, 1, info_stove),
+"Dishwasher" : powerConsumer("kitchen",2000, 4, info_dishwasher),
+"CoffeeMachine" : powerConsumer("kitchen", 1500, 1, info_coffeeMachine),
+"Fridge" : powerConsumer("kitchen", 160, 1, info_fridge),
+"KitchenTemp" : powerConsumer("kitchen", 1500, 1, info_kitchenHeater), #Sjekk i COT
+"KitchenLight" : powerConsumer("kitchen", 40, 1, info_kitchenLight),
+"WashingMachine" : powerConsumer("bathroom", 2500, 4, info_washingMachine),
+"Shower" : powerConsumer("bathroom", 1000, 1, info_shower),
+"BathroomTemp" : powerConsumer("bathroom", 1500, 1, info_heatingCable),#Sjekk i COT
+"BathroomLight" : powerConsumer("bathroom", 40, 1, info_bathroomLight),
+"Light_1" : powerConsumer("bedroom_1", 40, 1, info_light_1),
+"Curtains_1" : powerConsumer("bedroom_1", 10, 1, info_curtains_1),
+"Bedroom_1Temp" : powerConsumer("bedroom_1", 1500, 1, info_heater_1),
+"Light_2" : powerConsumer("bedroom_2", 40, 1, info_light_2),
+"Curtains_2" : powerConsumer("bedroom_2", 10, 1, info_curtains_2),
+"Bedroom_2Temp" : powerConsumer("bedroom_2", 1500, 1, info_heater_2),
+"Light_3" : powerConsumer("bedroom_3", 40, 1, info_light_3),
+"Curtains_3" : powerConsumer("bedroom_3", 10, 1, info_curtains_3),
+"Bedroom_3Temp" : powerConsumer("bedroom_3", 1500, 1, info_heater_3),
+"Light_4" : powerConsumer("bedroom_4", 40, 1, info_light_4),
+"Curtains_4" : powerConsumer("bedroom_4", 10, 1, info_curtains_4),
+"Bedroom_4Temp" : powerConsumer("bedroom_4", 1500, 1, info_heater_4),
+"Light_5" : powerConsumer("bedroom_5", 40, 1, info_light_4),
+"Curtains_5" : powerConsumer("bedroom_5", 10, 1, info_curtains_4),
+"Bedroom_5Temp" : powerConsumer("bedroom_5", 1500, 1, info_heater_4),
+"Light_6" : powerConsumer("bedroom_6", 40, 1, info_light_4),
+"Curtains_6" : powerConsumer("bedroom_6", 10, 1, info_curtains_4),
+"Bedroom_6Temp" : powerConsumer("bedroom_6", 1500, 1, info_heater_4),
 }
 
 rooms = {
@@ -243,7 +250,9 @@ def setConsumerStatus(newValue, roomlist) :
     Må ta inn dictionary med powerConsumer objekter. 
     """
     for key in roomlist.keys() :
+        print(key)
         for i in roomlist[key] :
+            print(i)
             roomlist[key][i].updateState(newValue)
 
 ###___ Funksjoner for logging av strømforbruk ___###
@@ -270,6 +279,13 @@ def logThis(df):
     df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
     df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
 
+def logThisDemo(df): 
+    """ 
+    Funksjon for å skrive til en .csv fil
+    Tar inn en pandas dataframe
+    """
+    df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
+    df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
 
 def toDF(dict) :
     df = pd.DataFrame().from_records([dict], index =[0])
@@ -287,13 +303,10 @@ def consumptionLogger(roomList, kWhcompensation, start, end) :
 
     for key in roomList.keys() :
         consumption = 0
-        print(key)
         for i in roomList[key] :
             print(i)
             consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt           
             print(consumption)
-        print(key)
-        print(consumption)
         consumptionDict.update({key : consumption})
 
     solarPanels = (SP.solarPanelPower(date, SP.getIndexIntoDay())/1000) # Converts into KiloWatt

@@ -47,6 +47,7 @@ def forecast():
 @app.route('/api/bookRoom', methods=['POST', 'GET'])
 def bookRoom():
     if request.method == 'POST':
+        print(request.form)
         room_id = request.form.get("room_form") #roomid 0: bad, 1: stue/tvkrok, 2: kjøkken
         start_time = request.form.get("time_start") # 14:30
         end_time = request.form.get("time_end") # 15:30
@@ -62,7 +63,7 @@ def bookRoom():
         print(feedback)
         print(df)
 
-        return render_template('dashboard.html')
+        return "suksess!"
     else:
         return render_template('dashboard.html')
 
@@ -70,7 +71,6 @@ def returnUserIds(userList):
     for ids in userList:
         print(ids)
     return 0
-
 
 # TODO: show current bookings as a list in the dashboard
 @app.route('/api/getBookings', methods=['POST', 'GET'])
@@ -82,46 +82,25 @@ def readRooms():
 
     # read dataframe for bookings and add them to bookings{} as a list of all registered bookings.
     # Store id of a user, and start time. Also store endtime using 'previous time' variable.
-    cachedData = [0,{},{},{},{},{},{}] # where index 0 is empty, 1-6 is userdata in form of 
+    cachedData = [0,[],[],[],[],[],[]] # where index 0 is empty, 1-6 is userdata in form of 
     startKey = "startTime"
-    # {
-    #   startTime: "",
-    #   lastTime: ""   //This means last stored time
-    # }
     
     # TODO: Account for multiple bookings. This method only accounts for one booking in a 24 hour span.
-
     for index, row in df.iterrows():
         print(index)
         # ID's: 1-6
         if len(row[1]):
-            for userid in row[1]:
-                if startKey in cachedData[userid]:
-                    cachedData[userid]['lastTime'] =  row[0]
-                else:
-                    cachedData[userid] = {
-                        'startTime': row[0],
-                        'room': 'Bad'
-                    }
-        if len(row[2]):
-            for userid in row[2]:
-                if startKey in cachedData[userid]:
-                    cachedData[userid]['lastTime'] =  row[0]
-                else:
-                    cachedData[userid] = {
-                        'startTime': row[0],
-                        'room': 'Stue'
-                    }
-        if len(row[3]):
-            for userid in row[3]:
-                if startKey in cachedData[userid]:
-                    cachedData[userid]['lastTime'] = row[0]
-                else:
-                    cachedData[userid] = {
-                        'startTime': row[0],
-                        'room': 'Kjøkken'
-                    }
+            for userid in row[1]: # userID's that have booked this room at this time.
+                for booking in cachedData[userid]:  # if this userID's been already checked for this time, skip it.
+                    startTime = booking["startTime"].split(":")
+                    startTime = int(startTime[0]*60) + startTime[1]
+                    print(startTime)
 
+                cachedData[userid] = {
+                    'startTime': row[0],
+                    'endTime': 0,
+                    'room': 'Bad'
+                }
     print(cachedData)
 
     response = app.response_class(
@@ -133,6 +112,8 @@ def readRooms():
 
 @app.route('/api/getPowerUsage', methods=['GET'])
 def getPowerUsage():
+    df = pd.read_csv('../powerUsage.csv')
+    print(df)
     return {}
 
 # TODO: Implement powerusage api and read/write to csv
