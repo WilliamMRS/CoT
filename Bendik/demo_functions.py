@@ -25,8 +25,8 @@ def timePassed(oldTime, interval) :
 
 def getRoomOccupants(index, room): # Takes index between 0 and 143, 10 minute intervals in 24hrs ---- 0: bad, 1: stue, 2: kjøkkenet
     index = index*2
-    df =  bf.csvToDf("../../server/booking.csv")
-    #pd.read_csv("../../server/booking.csv")
+    df =  bf.csvToDf("../server/booking.csv")
+    #pd.read_csv("../server/booking.csv")
     print(df["Bathroom"])
     users = []
     if room == 0:

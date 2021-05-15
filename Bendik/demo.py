@@ -3,6 +3,7 @@ import powerConsumers as pc
 import time
 import demo_functions as defunc
 import demoBooking as debok
+import csv
 
 """ Alle tilgjengelige apparater: Flytt til README?
 
@@ -81,8 +82,8 @@ for index in range (0, 143) : # index = timeIntervall 1-144
         "bedroom_4" : {"[4]"},
         "bedroom_5" : {"[5]"},
         "bedroom_6" : {"[6]"},
-}
-    pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on
+    }
+    pc.setConsumerStatus(0, pc.consumers) #Forces all objects to off state before checking who need to be turned on
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
             pc.consumers[str(room)+"Temp"].updateState(idleTemp)
@@ -176,6 +177,15 @@ for index in range (0, 143) : # index = timeIntervall 1-144
         oldTime = time.time()
         pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
         pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil 
+
+    with open('user_locations.csv', 'w', newline='') as csvfile:
+        fieldnames = ['first_name', 'last_name']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        writer.writerow({'first_name': 'Baked', 'last_name': 'Beans'})
+        writer.writerow({'first_name': 'Lovely', 'last_name': 'Spam'})
+        writer.writerow({'first_name': 'Wonderful', 'last_name': 'Spam'})
 
 
 
