@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import powerConsumers as pc
 import booking_functions as bf
+import os
 
 def bookRoom(rom, start, slutt, bruker): # 0-2, 11:00, 12:00, 1-6    // Dette er eksempel inputs
     url = 'http://localhost:5000/api/bookRoom'
@@ -25,7 +26,9 @@ def timePassed(oldTime, interval) :
 
 def getRoomOccupants(index, room): # Takes index between 0 and 143, 10 minute intervals in 24hrs ---- 0: bad, 1: stue, 2: kjøkkenet
     index = index*2
-    df =  bf.csvToDf("../server/booking.csv")
+    dirname = os.path.dirname(__file__)
+    filename = os.path.join(dirname, '../server/booking.csv')
+    df =  bf.csvToDf(filename)
     #pd.read_csv("../server/booking.csv")
     print(df["Bathroom"])
     users = []
