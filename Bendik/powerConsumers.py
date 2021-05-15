@@ -59,6 +59,7 @@ class powerConsumer:
         """
         response = requests.get("https://circusofthings.com/ReadValue", params = self.payload) # Body for request
         self.previousState = self.currentState # Oppdaterer forrige status     
+        print(response.content)
         self.currentState = json.loads(response.content)["Value"] # Leser verdi fra CoT respons
         return json.loads(response.content) # returnerer 
 
@@ -143,8 +144,8 @@ info_kitchenHeater = {'Key':'3714','Value':0,'Token':token}
 info_kitchenLight = {'Key':'8485','Value':0,'Token':token} 
 info_shower = {'Key':'29262','Value':0,'Token':token} 
 info_washingMachine = {'Key':'28922','Value':0,'Token':token} 
-info_heatingCable = {'Key':'373','Value':0,'Token':token}
-info_bathroomLight = {'key':'29768', 'value':0, 'token':token}
+info_bathroomTemp = {'Key':'373','Value':0,'Token':token}
+info_bathroomLight = {'Key':'29768', 'Value':0,'Token':token} ### ??!!???!!
 info_light_1 = {'Key':'21462','Value':0,'Token':token}
 info_curtains_1 = {'Key':'8365','Value':0,'Token':token}
 info_heater_1 = {'Key':'20954','Value':0,'Token':token}
@@ -183,7 +184,7 @@ Legg inn nye objekter her:
 "KitchenLight" : powerConsumer("kitchen", 40, 1, info_kitchenLight),
 "WashingMachine" : powerConsumer("bathroom", 2500, 4, info_washingMachine),
 "Shower" : powerConsumer("bathroom", 1000, 1, info_shower),
-"BathroomTemp" : powerConsumer("bathroom", 1500, 1, info_heatingCable),#Sjekk i COT
+"BathroomTemp" : powerConsumer("bathroom", 1500, 1, info_bathroomTemp),#Sjekk i COT
 "BathroomLight" : powerConsumer("bathroom", 40, 1, info_bathroomLight),
 "Light_1" : powerConsumer("bedroom_1", 40, 1, info_light_1),
 "Curtains_1" : powerConsumer("bedroom_1", 10, 1, info_curtains_1),
@@ -207,18 +208,18 @@ Legg inn nye objekter her:
 
 rooms = {
 "Total" : consumers,
-"livingroom" : {},
-"kitchen" : {},
-"bathroom" : {},
-"bedroom_1" : {},
-"bedroom_2" : {},
-"bedroom_3" : {},
-"bedroom_4" : {},
-"bedroom_5" : {},
-"bedroom_6" : {},
-"costOfPower" : {}, # Price per kWh
-"solarPanels" : {}, # kwH power generated 
-"solarSavings" : {}, # kwh converted to money saved
+"Livingroom" : {},
+"Kitchen" : {},
+"Bathroom" : {},
+"Bedroom_1" : {},
+"Bbedroom_2" : {},
+"Bedroom_3" : {},
+"Bedroom_4" : {},
+"Bbedroom_5" : {},
+"Bedroom_6" : {},
+"CostOfPower" : {}, # Price per kWh
+"SolarPanels" : {}, # kwH power generated 
+"SolarSavings" : {}, # kwh converted to money saved
 "TotalExSolar" : consumers,
 }
 
@@ -229,6 +230,7 @@ def placeObjectsInRooms(consumerList, roomList) :
     """ 
     Funksjon for å sortere alle apparatene inn i riktig rom basert på hvilket rom de ble innitsialisert med. 
     """
+    print("Placing Objects in desiered rooms")
     for key in roomList.keys() :
         for i in consumerList :
             if consumerList[i].room == key :
@@ -236,12 +238,13 @@ def placeObjectsInRooms(consumerList, roomList) :
                 print(key) """
                 roomList[key].update({i : consumerList[i]})
 
-
 def updateConsumerStatus(dictionary): 
     """ 
     Oppdaterer status (Av/På) til alle apparater i gitt dictionary. 
     """
+    print("Updating Consumer Statuses...")
     for i in dictionary:
+        print(dictionary[i])
         dictionary[i].status()
 
 def setConsumerStatus(newValue, roomlist) :
@@ -249,6 +252,7 @@ def setConsumerStatus(newValue, roomlist) :
     Oppdaterer alle objektene i romlisten med identisk, ny verdi. 
     Må ta inn dictionary med powerConsumer objekter. 
     """
+    print("Setting consumer statuses.......")
     for key in roomlist.keys() :
         print(key)
         for i in roomlist[key] :

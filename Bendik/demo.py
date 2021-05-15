@@ -41,7 +41,7 @@ Merk: Alle curtains har samme CoT kode og vil justeres samtidig.
     # Initialisering
 # ----------------
 
-
+print ("Initializing......")
 timeInterval = 60 # Endre hyppighet for logging i sekunder
 
 pc.placeObjectsInRooms(pc.consumers, pc.rooms) # Initialiserer alle objektene. 
@@ -55,9 +55,6 @@ idleTemp = 16
 useTemp = 22
 kitchenUses, bathroomUses, livingroomUses = 0, 0, 0 # For keeping track of num of Uses of a room during a day. 
 
-# Booking og bruksmønster
-
-
 
 
 
@@ -67,106 +64,110 @@ kitchenUses, bathroomUses, livingroomUses = 0, 0, 0 # For keeping track of num o
             # add all bookings planned for today
             # Gjnnomføres i egen fil
 
+
 # ----------------
     # USAGE CONDITIONS
 # ----------------
+print("Starting demo......")
+
 
 for index in range (0, 143) : # index = timeIntervall 1-144 
     userLocation = { # For placing people in their own room as baseline
-        "livingroom" : {},
-        "kitchen" : {},
-        "bathroom" : {},
-        "bedroom_1" : {"[1]"},
-        "bedroom_2" : {"[2]"},
-        "bedroom_3" : {"[3]"},
-        "bedroom_4" : {"[4]"},
-        "bedroom_5" : {"[5]"},
-        "bedroom_6" : {"[6]"},
+        "Livingroom" : {},
+        "Kitchen" : {},
+        "Bathroom" : {},
+        "Bedroom_1" : {"[1]"},
+        "Bedroom_2" : {"[2]"},
+        "Bedroom_3" : {"[3]"},
+        "Bedroom_4" : {"[4]"},
+        "Bedroom_5" : {"[5]"},
+        "Bedroom_6" : {"[6]"},
     }
-    pc.setConsumerStatus(0, pc.consumers) #Forces all objects to off state before checking who need to be turned on
+    pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
             pc.consumers[str(room)+"Temp"].updateState(idleTemp)
 
     for room in bookingRooms:
-        # Sjekker hvem som befinner seg hvor 
-        users = defunc.getRoomOccupants(index, bookingRooms)
+        users = defunc.getRoomOccupants(index, bookingRooms) #Function returns a list of people in the given room 
         print (users)
-        for i in users :
-            # plasserer personer i rommene de befinner seg i. 
-            print(i)
-            # if user in room change. Else ignore. 
-            userLocation.update ({bookingRooms : users}) 
+        for num, in range(0, 5): # 0 - 5 for 6 personer. 
+            if num in users:
+                    userLocation.pop(room) # Fjerner personer fra rom der de ikke befinner seg lengre.    
+        for user in users:
+            userLocation.update({room : user}) # Legger til personer i korrekt rom. 
 
 
     for key in userLocation : 
     #______ Sjekker hvilket rom personer er plassert i og om eventuelle apparater skal skrus på ______#
         if len(userLocation[key]) > 0 : # Sjekker om det befinner seg personer i rommet. 
         
-            if key == "livingroom" : 
+            if key == "Livingroom" : 
                 livingroomUses += 1
                 pc.consumers["livingroomTemp"].updateState(useTemp)
                 pc.consumers["TV"].updateState(1)
 
-            if key == "bathroom" :
+            if key == "Bathroom" :
                 bathroomUses += 1
                 pc.consumers["bathroomTemp"].updateState(23)
                 if index in range(35, 54) or index in range (108, 112) :
                     # If morning or early evening. Assume people is going to the shower while visiting the bathroom 
                     pc.consumers["shower"].updateState(1) 
             
-            if key == "kitchen" :
+            if key == "Kitchen" :
                 kitchenUses += 1
-                pc.consumers["kitchenTemp"].updateState(useTemp)
-                pc.consumers["dishwasher"].updateState(1)
+                pc.consumers["KitchenTemp"].updateState(useTemp)
+                pc.consumers["Dishwasher"].updateState(1)
                 if kitchenUses % 4 == 0:
-                    pc.consumers["coffeMachine"].updateState(1)
+                    pc.consumers["CoffeMachine"].updateState(1)
                 if kitchenUses % 3 == 0:
-                    pc.consumers["stove"].updateState(1)
+                    pc.consumers["Stove"].updateState(1)
 
-            if key == "bedroom_1" :
+            if key == "Bedroom_1" :
                 if defunc.indexOfDay(index) :
-                    pc.consumers["bedroom_1Temp"].updateState(idleTemp)
-                    pc.consumers("curtains_1").updateState(1)
+                    pc.consumers[str(key)+"Temp"].updateState(idleTemp)
+                    pc.consumers["Curtains_1"].updateState(1)
                 else:
-                    pc.consumers["bedroom_1Temp"].updateState(useTemp)
+                    pc.consumers[str(key)+"Temp"].updateState(useTemp)
 
-            if key == "bedroom_2" :
+            if key == "Bedroom_2" :
                 if defunc.indexOfDay(index) :
-                    pc.consumers["bedroom_2Temp"].updateState(idleTemp)
-                    pc.consumers("curtains_2").updateState(1)
+                    pc.consumers[str(key)+"Temp"].updateState(idleTemp)
+                    pc.consumers["Curtains_2"].updateState(1)
                 else:
-                    pc.consumers["bedroom_2Temp"].updateState(useTemp)
+                    pc.consumers[str(key)+"Temp"].updateState(useTemp)
             
-            if key == "bedroom_3" :
+            if key == "Bedroom_3" :
                 if defunc.indexOfDay(index) :
-                    pc.consumers["bedroom_3Temp"].updateState(idleTemp)
-                    pc.consumers["curtains_3"].updateState(1)
+                    pc.consumers[str(key)+"Temp"].updateState(idleTemp)
+                    pc.consumers["Curtains_3"].updateState(1)
                 else:
-                    pc.consumers["bedroom_3Temp"].updateState(useTemp)
-                    pc.consumers["curtains_1"].updateState(1)
+                    pc.consumers[str(key)+"Temp"].updateState(useTemp)
+                    pc.consumers["Curtains_1"].updateState(1)
            
-            if key == "bedroom_4" :
+            if key == "Bedroom_4" :
                 if defunc.indexOfDay(index) :
-                    pc.consumers["bedroom_4Temp"].updateState(idleTemp)
-                    pc.consumers["curtains_4"].updateState(1)
+                    pc.consumers[str(key)+"Temp"].updateState(idleTemp)
+                    pc.consumers["Curtains_4"].updateState(1)
                 else:
-                    pc.consumers["bedroom_4Temp"].updateState(useTemp)
+                    pc.consumers[str(key)+"Temp"].updateState(useTemp)
        
-            if key == "bedroom_5" :
+            if key == "Bedroom_5" :
                 if defunc.indexOfDay(index) :
-                    pc.consumers["bedroom_5Temp"].updateState(idleTemp)
-                    pc.consumers["curtains_5"].updateState(1)
+                    pc.consumers[str(key)+"Temp"].updateState(idleTemp)
+                    pc.consumers["Curtains_5"].updateState(1)
                 else:
-                    pc.consumers["bedroom_5Temp"].updateState(useTemp)
+                    pc.consumers[str(key)+"Temp"].updateState(useTemp)
        
-            if key == "bedroom_6" :
+            if key == "Bedroom_6" :
                 if defunc.indexOfDay(index) :
-                    pc.consumers["bedroom_6Temp"].updateState(idleTemp)
-                    pc.consumers["curtains_6"].updateState(1)
+                    pc.consumers[str(key)+"Temp"].updateState(idleTemp)
+                    pc.consumers["Curtains_6"].updateState(1)
                 else:
-                    pc.consumers["bedroom_6Temp"].updateState(useTemp)      
-    pc.consumers["fridge"].updateState(1) # Checks that Fridge always will be on
+                    pc.consumers[str(key)+"Temp"].updateState(useTemp)      
+    pc.consumers["Fridge"].updateState(1) # Ensures that Fridge always will be on
+    print("This is INDEX RUN NR: ")
+    print (index)
 
 
 # ----------------
