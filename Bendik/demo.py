@@ -89,9 +89,12 @@ for index in range (0, 143): # index = timeIntervall 1-144
     }
 
     pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on
+    
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
         pc.consumers[str(room)+"Temp"].updateState(idleTemp)
+        print("setting idle temperature for " + room)
+
     for room in bookingRooms:
         users = defunc.getRoomOccupants(index, room) #Function returns a list of people in the given room 
         print("Users found", users)
@@ -100,13 +103,15 @@ for index in range (0, 143): # index = timeIntervall 1-144
                 hybel = "Bedroom_" + str(num)
                 userLocation.update({hybel: {}}) # Fjerner personer fra rom der de ikke befinner seg lengre.    
         for user in users:
+            print(userLocation[room])
             userLocation[room].append(user) # Legger til personer i korrekt rom.
-            print(userLocation[room], "Bruker funnet i annet rom!")
 
-    for key in userLocation.keys() : 
+    for key in userLocation : 
     #______ Sjekker hvilket rom personer er plassert i og om eventuelle apparater skal skrus på ______#
+        print("KEY", key)
+        
         if len(userLocation[key]) > 0 : # Sjekker om det befinner seg personer i rommet. 
-            print("found user inside room", key)
+        
             if key == "Livingroom" : 
                 livingroomUses += 1
                 pc.consumers["livingroomTemp"].updateState(useTemp)
@@ -124,7 +129,7 @@ for index in range (0, 143): # index = timeIntervall 1-144
                 pc.consumers["KitchenTemp"].updateState(useTemp)
                 pc.consumers["Dishwasher"].updateState(1)
                 if kitchenUses % 4 == 0:
-                    pc.consumers["CoffeMachine"].updateState(1)
+                    pc.consumers["CoffeeMachine"].updateState(1)
                 if kitchenUses % 3 == 0:
                     pc.consumers["Stove"].updateState(1)
 
@@ -178,8 +183,8 @@ for index in range (0, 143): # index = timeIntervall 1-144
 # ----------------
     # CHECKS COT STATUS & LOGS
 # ----------------
-    pc.updateConsumerStatus(pc.consumers) # Henter inn ny status 
-    pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil 
+    pc.updateConsumerStatus(pc.consumers) # Leser av status ffor alle objekter i COT
+    pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil etter hvilke rom objektene er plassert i. 
 
     with open('user_locations.csv', 'w', newline='') as csvfile:
         fieldnames = ["Livingroom","Kitchen","Bathroom","Bedroom_1","Bedroom_2","Bedroom_3","Bedroom_4","Bedroom_5","Bedroom_6"]
