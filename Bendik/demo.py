@@ -100,11 +100,13 @@ for index in range (0, 143) : # index = timeIntervall 1-144
         users = defunc.getRoomOccupants(index, bookingRooms) #Function returns a list of people in the given room 
         print("Who is in this room....? ")
         print (users)
-        for num in range(0, 5): # 0 - 5 for 6 personer. Går gjennom personIDene og sjekker om de befinner seg i det gitte rommet. 
+
+        for num in range(0, 6): # 0 - 5 for 6 personer. Går gjennom personIDene og sjekker om de befinner seg i det gitte rommet. 
             print("num is:" + str(num))
             if num in users:
                 print("removing someone from a room...")
-                userLocation.pop(room) # Fjerner personer fra rom der de ikke befinner seg lengre.    
+                userLocation.pop(room) # Fjerner personer fra key = rom der de ikke befinner seg lengre.    
+        
         for user in users:
             print("user: " + (str(user)))
             print("updating roomlist")
@@ -113,9 +115,11 @@ for index in range (0, 143) : # index = timeIntervall 1-144
 
     for key in userLocation : 
     #______ Sjekker hvilket rom personer er plassert i og om eventuelle apparater skal skrus på ______#
+        
         print(userLocation)
         print (key)
         print(len(userLocation[key]))
+        
         if len(userLocation[key]) > 0 : # Sjekker om det befinner seg personer i rommet. 
             
             if key == "Livingroom" : 

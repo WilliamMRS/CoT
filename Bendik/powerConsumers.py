@@ -309,7 +309,7 @@ def consumptionLogger(roomList, kWhcompensation, start, end) :
     for key in roomList.keys() :
         consumption = 0
         for i in roomList[key] :
-            print(i)
+            print("Printing consumption for: " + str(i))
             consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt           
             print(consumption)
         consumptionDict.update({key : consumption})
