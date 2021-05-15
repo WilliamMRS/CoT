@@ -1,9 +1,10 @@
 ## DEMOSKRIPT
-import powerConsumers as pc
+import csv
 import time
+
 import demo_functions as defunc
 import demoBooking as debok
-import csv
+import powerConsumers as pc
 from booking_functions import clearCSV
 
 """ Alle tilgjengelige apparater: Flytt til README?
@@ -76,9 +77,9 @@ print("Starting demo......")
 
 for index in range (0, 143): # index = timeIntervall 1-144 
     userLocation = { # For placing people in their own room as baseline
-        "Livingroom" : {},
-        "Kitchen" : {},
-        "Bathroom" : {},
+        "Livingroom" : [],
+        "Kitchen" : [],
+        "Bathroom" : [],
         "Bedroom_1" : {"[1]"},
         "Bedroom_2" : {"[2]"},
         "Bedroom_3" : {"[3]"},
@@ -86,23 +87,25 @@ for index in range (0, 143): # index = timeIntervall 1-144
         "Bedroom_5" : {"[5]"},
         "Bedroom_6" : {"[6]"},
     }
+
     pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
         pc.consumers[str(room)+"Temp"].updateState(idleTemp)
     for room in bookingRooms:
-        print(room)
-        print(index)
         users = defunc.getRoomOccupants(index, room) #Function returns a list of people in the given room 
-        print(users)
+        print("Users found", users)
         for num in range(1, 7): # 1-6 for 6 personer.
             if num in users:
-                    userLocation.pop(room) # Fjerner personer fra rom der de ikke befinner seg lengre.    
+                hybel = "Bedroom_" + str(num)
+                userLocation.update({room: {}}) # Fjerner personer fra rom der de ikke befinner seg lengre.    
         for user in users:
-            userLocation.update({room : user}) # Legger til personer i korrekt rom.
+            print(userLocation[room])
+            userLocation[room].append(user) # Legger til personer i korrekt rom.
 
     for key in userLocation : 
     #______ Sjekker hvilket rom personer er plassert i og om eventuelle apparater skal skrus på ______#
+        print("KEY", key)
         if len(userLocation[key]) > 0 : # Sjekker om det befinner seg personer i rommet. 
         
             if key == "Livingroom" : 
