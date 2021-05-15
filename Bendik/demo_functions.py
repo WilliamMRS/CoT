@@ -30,7 +30,7 @@ def getRoomOccupants(index, room): # Takes index between 0 and 143, 10 minute in
     filename = os.path.join(dirname, '../server/booking.csv')
     df =  bf.csvToDf(filename)
     #pd.read_csv("../server/booking.csv")
-    print(df["Bathroom"])
+    #print(df["Bathroom"])
     users = []
     if room == 0:
         for userid in df["Bathroom"][index]:

@@ -65,8 +65,8 @@ kitchenUses, bathroomUses, livingroomUses = 0, 0, 0 # For keeping track of num o
             # add all bookings planned for today
             # Gjnnomføres i egen fil
 
-clearCSV("../server/booking.csv")
-debok.bookAllTheRooms()
+#clearCSV("../server/booking.csv")
+#debok.bookAllTheRooms()
 
 # ----------------
     # USAGE CONDITIONS
@@ -74,7 +74,7 @@ debok.bookAllTheRooms()
 print("Starting demo......")
 
 
-for index in range (0, 143) : # index = timeIntervall 1-144 
+for index in range (0, 143): # index = timeIntervall 1-144 
     userLocation = { # For placing people in their own room as baseline
         "Livingroom" : {},
         "Kitchen" : {},
@@ -90,15 +90,15 @@ for index in range (0, 143) : # index = timeIntervall 1-144
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
             pc.consumers[str(room)+"Temp"].updateState(idleTemp)
-
     for room in bookingRooms:
         users = defunc.getRoomOccupants(index, bookingRooms) #Function returns a list of people in the given room 
         print (users)
-        for num, in range(0, 5): # 0 - 5 for 6 personer. 
+        for num in range(1, 7): # 1-6 for 6 personer.
             if num in users:
                     userLocation.pop(room) # Fjerner personer fra rom der de ikke befinner seg lengre.    
         for user in users:
             userLocation.update({room : user}) # Legger til personer i korrekt rom. 
+        
 
 
     for key in userLocation : 
@@ -183,14 +183,10 @@ for index in range (0, 143) : # index = timeIntervall 1-144
         pc.consumptionLogger(pc.rooms, timeInterval*20, startTime, endTime) # Skriver til CSV fil 
 
     with open('user_locations.csv', 'w', newline='') as csvfile:
-        fieldnames = ['first_name', 'last_name']
+        fieldnames = ["Livingroom","Kitchen","Bathroom","Bedroom_1","Bedroom_2","Bedroom_3","Bedroom_4","Bedroom_5","Bedroom_6"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
         writer.writeheader()
-        writer.writerow({'first_name': 'Baked', 'last_name': 'Beans'})
-        writer.writerow({'first_name': 'Lovely', 'last_name': 'Spam'})
-        writer.writerow({'first_name': 'Wonderful', 'last_name': 'Spam'})
-
+        writer.writerow(userLocation)
 
 
 # Dersom brukerID ikke er på ett annet rom antar vi at ID er på eget rom 
