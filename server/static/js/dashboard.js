@@ -20,23 +20,34 @@ let updateRoomTables = async () => {
     try{
         let res = await fetch(url+'/api/getOccupants')
         let json = await res.json()
-        console.log(json)
         roomData = json[1] // roomdata
         let rows = "";
         let allRows = "";
+        let peopleInRoom = 0
 
-        for(let i = 0; i < rooms.length; i++){
-            let peopleInRoom = 0
+        allRows += 
+            `<tr>
+                <th>Rom</th>
+                <th>Personer</th>
+                <th>kwh/24t</th>
+            </tr>`
+
+        for(let i = 0; i < roomData.length; i++){
+            peopleInRoom = 0
             if(i > 2){
-                d = roomData[3].split('{')[1].split('}')[0]
-                x = d.substr(1, 3)
-                peopleInRoom = JSON.parse(x)
+                d = (roomData[i].split('{')[1].split('}')[0]).substr(1, 3)
+                try{
+                    peopleInRoom = JSON.parse(d).length
+                }catch(e){
+                }
             }
             else{
-                peopleInRoom = JSON.parse(roomData[0]).length
+                peopleInRoom = JSON.parse(roomData[i]).length
             }
 
-            let room = rooms[i]
+        rooms[i].people = peopleInRoom
+
+        let room = rooms[i]
             rows = `<tr>`;
             rows += `<td>${room.name ? room.name : "-"}</td>`
             rows += `<td>${room.people ? room.people : peopleInRoom}</td>`
@@ -45,6 +56,7 @@ let updateRoomTables = async () => {
             allRows += rows
         }
         table.innerHTML = allRows;
+        onTableChange();
     }catch(err){
         alert("Room table update failed!");
         console.log(err);
@@ -59,10 +71,9 @@ let updateRoomTables = async () => {
 
 onTableChange = () => {
     let roomData = document.getElementById("roomData");
-    console.log(roomData);
     let table = roomData.querySelector("table");
-    for(let i = 1; i < table.children.length; i++){ // starts at 1 to skip the header
-        let attributes = table.children[i].querySelector("tr").children;
+    for(let i = 1; i < table.children[0].children.length; i++){ // starts at 1 to skip the header
+        let attributes = table.children[0].children[i].children
         parseFloat(attributes[1].innerText) > 0 ? attributes[1].style.color = "white" : attributes[1].style.color = "gray";
     }
 }
@@ -247,7 +258,6 @@ updatePowerTable = async () => {
     table.innerHTML = builtHTML;
 }
 
-
 // Timepicker 
 document.querySelector("#timePickerStart").addEventListener("input", function(e) {
     const reTime = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
@@ -272,7 +282,6 @@ winInit = ()=>{
     // Run once after everything has loaded:
     updateRoomTables(); // run once to init
     onWindowResize(); // run once to style graph
-    onTableChange();
     getWeatherData();
     buildPowerChart();
 }
@@ -283,6 +292,6 @@ setInterval( async ()=>{
     getWeatherData();
     updateRoomTables();
     //refreshPowerChart();
-}, 5000)
+}, 60000)
 
 window.onload = winInit;
