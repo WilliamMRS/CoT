@@ -36,6 +36,7 @@ def get_irradiance(site_location, date, tilt, surface_azimuth):
     # Generate clearsky data using the Ineichen model, which is the default
     # The get_clearsky method returns a dataframe with values for GHI, DNI,
     # and DHI
+
     clearsky = site_location.get_clearsky(times)
     # Get solar azimuth and zenith to pass to the transposition function
     solar_position = site_location.get_solarposition(times=times)

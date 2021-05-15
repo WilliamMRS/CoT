@@ -44,6 +44,8 @@ def getRoomOccupants(index, room): # Takes index between 0 and 143, 10 minute in
         for userid in df["Kitchen"][index]:
             if userid != "[" and userid != "]":
                 users.append(userid)
+    print("THIS IS ALL THE ROOM OCCUPANTS: ")
+    print(users)
     return users
 
 #print(getRoomOccupants(90, 0)) # Takes index and roomID
