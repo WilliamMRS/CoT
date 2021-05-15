@@ -76,6 +76,8 @@ def listDf(df): # gjør at kolonnene med rom inneholder tomme lister (skal bruke
                 #print("notList")
                 df[columns[n]][i] = []
 
+
+
 def createDf(): #lager en tom df med tidspunkter 24t fram i tid
     columns = ["Time", "Bathroom", "Livingroom", "Kitchen"]
     df = pd.DataFrame(columns=columns)
@@ -166,6 +168,10 @@ def saveBookingData(resident, room, startTime, endTime):
     date = str(datetime.datetime.now())
     with open('smittesporing.txt', 'a') as smittesporing:
         smittesporing.write(date + " beboer nr " + str(resident) + " booket " + room + " fra " + startTime + " til " + endTime + "\n")
+
+def clearCSV(csvPath):
+    df = createDf()
+    saveDf(df, csvPath)
 
 
 def website_booking(df, resident, room_num, start_time, end_time): # tar inn en kode på riktig format og booker tilhørende rom

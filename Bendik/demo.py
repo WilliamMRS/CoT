@@ -4,6 +4,7 @@ import time
 import demo_functions as defunc
 import demoBooking as debok
 import csv
+from booking_functions import clearCSV
 
 """ Alle tilgjengelige apparater: Flytt til README?
 
@@ -64,6 +65,8 @@ kitchenUses, bathroomUses, livingroomUses = 0, 0, 0 # For keeping track of num o
             # add all bookings planned for today
             # Gjnnomføres i egen fil
 
+clearCSV("../server/booking.csv")
+debok.bookAllTheRooms()
 
 # ----------------
     # USAGE CONDITIONS
