@@ -30,7 +30,6 @@ def bookAllTheRooms() :
     defunc.bookRoom(2, "12:15", "12:30", 4)
     defunc.bookRoom(2, "12:30", "13:00", 5)
     defunc.bookRoom(2, "12:30", "13:00", 6)
-    defunc.bookRoom(2, "12:50", "13:00", 6) # TESTLINE
 
     # 2 går på toalettet. 13:15 til 13:30
     defunc.bookRoom(0, "13:15", "13:30", 1)
