@@ -117,8 +117,7 @@ for index in range (0, 143): # index = timeIntervall 1-144
 
     for key in userLocation : 
     #______ Sjekker hvilket rom personer er plassert i og om eventuelle apparater skal skrus på ______#
-        print("KEY", key)
-        
+
         if len(userLocation[key]) > 0 : # Sjekker om det befinner seg personer i rommet. 
         
             if key == "Livingroom" : 

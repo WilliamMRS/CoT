@@ -8,6 +8,8 @@ import json
 import booking_functions
 import key
 import pandas as pd
+import csv
+import numpy as np
 
 app = Flask(__name__, static_url_path='/static')
 
@@ -63,7 +65,7 @@ def bookRoom():
         print(feedback)
         print(df)
 
-        return "suksess!"
+        return feedback
     else:
         return render_template('dashboard.html')
 
@@ -115,9 +117,40 @@ def getPowerUsage():
     df = pd.read_csv('../Bendik/powerUsage.csv')
     # Extract solar panel power generation
     # Extract total power generated
-    
+    print(len(df.columns))
+
+    data = {
+        "powerUsage": (df.iloc[:, [17]]).to_numpy().tolist(),
+        "solarSavings": (df.iloc[:, [16]]).to_numpy().tolist(),
+        "PvGeneration": (df.iloc[:, [15]]).to_numpy().tolist(),
+        "costOfPower": (df.iloc[:, [14]]).to_numpy().tolist(),
+        "time": (df.iloc[:, [0]]).to_numpy().tolist(),
+    }
+    response = app.response_class(
+        response=json.dumps(data, indent=4, sort_keys=True, default=str),
+        status=200,
+        mimetype='application/json'
+    )
     # return as object of three lists, one with usage, one with generation and one with timestamps.
-    return {}
+    return response
+
+@app.route('/api/getOccupants', methods=['GET'])
+def getOccupants():
+    data = []
+    with open('../Bendik/user_locations.csv', 'r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            data.append(row)
+
+    response = app.response_class(
+        response=json.dumps(data, indent=4, sort_keys=True, default=str),
+        status=200,
+        mimetype='application/json'
+    )
+
+    # return as object of three lists, one with usage, one with generation and one with timestamps.
+    return response
+
 
 # TODO: Implement powerusage api and read/write to csv
 
