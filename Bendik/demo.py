@@ -98,7 +98,7 @@ for index in range (0, 143): # index = timeIntervall 1-144
         for num in range(1, 7): # 1-6 for 6 personer.
             if num in users:
                 hybel = "Bedroom_" + str(num)
-                userLocation.update({room: {}}) # Fjerner personer fra rom der de ikke befinner seg lengre.    
+                userLocation.update({hybel: {}}) # Fjerner personer fra rom der de ikke befinner seg lengre.    
         for user in users:
             print(userLocation[room])
             userLocation[room].append(user) # Legger til personer i korrekt rom.
