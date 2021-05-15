@@ -20,6 +20,7 @@ let updateRoomTables = async () => {
     try{
         let res = await fetch(url+'/api/getOccupants')
         let json = await res.json()
+
         roomData = json[1] // roomdata
         let rows = "";
         let allRows = "";
@@ -57,6 +58,41 @@ let updateRoomTables = async () => {
         }
         table.innerHTML = allRows;
         onTableChange();
+
+        // also update hybelplan
+        let hybel = document.getElementById("hybel")
+        for (let i=0; i<hybel.children.length; i++){
+            for(let y=0; y < hybel.children[i].children.length; y++){
+                let name = hybel.children[i].children[y];
+                let number = hybel.children[i].children[y].querySelector(".peopleCount")
+                // Add people to correct room visually
+                if(name.innerText.includes("Kjøkken"))
+                    number.innerText = rooms[1].people
+                else if(name.innerText.includes("Bad"))
+                    number.innerText = rooms[2].people
+                else if(name.innerText.includes("Stue"))
+                    number.innerText = rooms[0].people
+                else if(name.innerText.includes("H1"))
+                    number.innerText = rooms[3].people
+                else if(name.innerText.includes("H2"))
+                    number.innerText = rooms[4].people
+                else if(name.innerText.includes("H3"))
+                    number.innerText = rooms[5].people
+                else if(name.innerText.includes("H4"))
+                    number.innerText = rooms[6].people
+                else if(name.innerText.includes("H5"))
+                    number.innerText = rooms[7].people
+                else if(name.innerText.includes("H6"))
+                    number.innerText = rooms[8].people
+
+                if(number.innerText > 0){
+                    number.style.color = "yellow"
+                }else{
+                    number.style.color = "gray"
+                }
+            }
+        }
+
     }catch(err){
         alert("Room table update failed!");
         console.log(err);
@@ -74,7 +110,7 @@ onTableChange = () => {
     let table = roomData.querySelector("table");
     for(let i = 1; i < table.children[0].children.length; i++){ // starts at 1 to skip the header
         let attributes = table.children[0].children[i].children
-        parseFloat(attributes[1].innerText) > 0 ? attributes[1].style.color = "white" : attributes[1].style.color = "gray";
+        parseFloat(attributes[1].innerText) > 0 ? attributes[1].style.color = "yellow" : attributes[1].style.color = "gray";
     }
 }
 
