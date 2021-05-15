@@ -100,14 +100,13 @@ for index in range (0, 143): # index = timeIntervall 1-144
                 hybel = "Bedroom_" + str(num)
                 userLocation.update({hybel: {}}) # Fjerner personer fra rom der de ikke befinner seg lengre.    
         for user in users:
-            print(userLocation[room])
             userLocation[room].append(user) # Legger til personer i korrekt rom.
+            print(userLocation[room], "Bruker funnet i annet rom!")
 
-    for key in userLocation : 
+    for key in userLocation.keys() : 
     #______ Sjekker hvilket rom personer er plassert i og om eventuelle apparater skal skrus på ______#
-        print("KEY", key)
         if len(userLocation[key]) > 0 : # Sjekker om det befinner seg personer i rommet. 
-        
+            print("found user inside room", key)
             if key == "Livingroom" : 
                 livingroomUses += 1
                 pc.consumers["livingroomTemp"].updateState(useTemp)

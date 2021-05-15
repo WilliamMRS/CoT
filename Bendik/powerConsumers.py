@@ -244,7 +244,7 @@ def updateConsumerStatus(dictionary):
     """
     print("Updating Consumer Statuses...")
     for i in dictionary:
-        print(dictionary[i])
+        #print(dictionary[i])
         dictionary[i].status()
 
 def setConsumerStatus(newValue, roomlist) :
@@ -306,12 +306,13 @@ def consumptionLogger(roomList, kWhcompensation, start, end) :
     consumptionDict = {}
     date = '14-05-2021'
 
+    print("Writing to csv...")
     for key in roomList.keys() :
         consumption = 0
         for i in roomList[key] :
-            print("Printing consumption for: " + str(i))
+            #print("Printing consumption for: " + str(i))
             consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt           
-            print(consumption)
+            #print(consumption)
         consumptionDict.update({key : consumption})
 
     solarPanels = (SP.solarPanelPower(date, SP.getIndexIntoDay())/1000) # Converts into KiloWatt
