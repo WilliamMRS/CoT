@@ -43,7 +43,7 @@ def getRoomOccupants(index, room): # Takes index between 0 and 143, 10 minute in
                 users.append(userid)
     return users
 
-#print(getRoomOccupants(90, 0)) # Takes index and roomID
+print(getRoomOccupants(90, 0)) # Takes index and roomID
 
 def timeIndex():
     now = datetime.datetime.now()
