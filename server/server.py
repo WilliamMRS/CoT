@@ -44,7 +44,7 @@ def forecast():
         )
         return response
     else:
-        return "POST Not ready yet"
+        return "POST Not working"
 
 @app.route('/api/bookRoom', methods=['POST', 'GET'])
 def bookRoom():
