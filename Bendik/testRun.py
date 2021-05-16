@@ -1,7 +1,11 @@
 import powerConsumers
 import time 
 
-
+def timePassed(oldTime, interval) :
+    if time.time() - oldTime >= interval:
+        return True
+    else:
+        return False
 
 timeInterval = 60
 
@@ -15,13 +19,12 @@ oldTime = time.time()
 n = 0
 
 
-# powerConsumers.initCsv(powerConsumers.rooms) # For setting header in .csv file
+#powerConsumers.initCsv(powerConsumers.rooms) # For setting header in .csv file
 
-while (n < 50) :  # Enkel løkke for å generere 50 linjer med data 
-    if powerConsumers.timePassed(oldTime, timeInterval) == True :
+while (n < 50) :  # Enkel løkke for å generere 50 linjer med data med gitt tidsintervall 
+    if timePassed(oldTime, timeInterval) == True :
         oldTime = time.time()
         n += 1
-        #powerConsumers.randomizeStatus(powerConsumers.consumers) # Gir tilfeldig verdi til CoT objektene 
         powerConsumers.updateConsumerStatus(powerConsumers.consumers) # Henter inn ny status 
         powerConsumers.consumptionLogger(powerConsumers.rooms, timeInterval, startTime, endTime) # SKriver til CSV fil 
 

@@ -44,7 +44,8 @@ Merk: Alle curtains har samme CoT kode og vil justeres samtidig.
 # ----------------
 
 print ("Initializing......")
-timeInterval = 10 # Endre hyppighet for logging i sekunder
+
+
 
 pc.placeObjectsInRooms(pc.consumers, pc.rooms) # Initialiserer alle objektene. 
 
@@ -65,18 +66,22 @@ kitchenUses, bathroomUses, livingroomUses = 0, 0, 0 # For keeping track of num o
     #Bookings
 # ----------------
             # add all bookings planned for today
-            # Gjnnomføres i egen fil
 
-#clearCSV("../server/booking.csv")
-#debok.bookAllTheRooms()
+
+clearCSV("../server/booking.csv")
+debok.bookAllTheRooms()
 
 # ----------------
     # USAGE CONDITIONS
 # ----------------
 print("Starting demo......")
 
+loops = 144
+timeInterval = 24/loops #approx 0,16666667
+loops = loops-1
+# Loop should run 144 times, since 24 hours divided into 10 minute chunks give 144 intervalls. This will also be our time multiplicant for KWh calculations 
 
-for index in range (0, 143): # index = timeIntervall 1-144 
+for index in range (0, loops): # index = timeIntervall 1-144 
     userLocation = { # For placing people in their own room as baseline
         "Livingroom" : [],
         "Kitchen" : [],
@@ -90,7 +95,8 @@ for index in range (0, 143): # index = timeIntervall 1-144
     }
 
     pc.setConsumerStatus(0, pc.rooms) #Forces all objects to off state before checking who need to be turned on
-    pc.consumers["LivingroomTemp"].updateState(idleTemp)
+
+    """     pc.consumers["LivingroomTemp"].updateState(idleTemp)
     pc.consumers["KitchenTemp"].updateState(idleTemp)
     pc.consumers["BathroomTemp"].updateState(idleTemp)
     pc.consumers["Bedroom_1Temp"].updateState(idleTemp)
@@ -98,10 +104,11 @@ for index in range (0, 143): # index = timeIntervall 1-144
     pc.consumers["Bedroom_3Temp"].updateState(idleTemp)
     pc.consumers["Bedroom_4Temp"].updateState(idleTemp)
     pc.consumers["Bedroom_5Temp"].updateState(idleTemp)
-    pc.consumers["Bedroom_6Temp"].updateState(idleTemp)    
+    pc.consumers["Bedroom_6Temp"].updateState(idleTemp)    """ 
+
     for room in bookingRooms:
         # Lower temperature inn all rooms before checking if there is people there
-        #pc.consumers[str(room)+"Temp"].updateState(idleTemp)
+        pc.consumers[str(room)+"Temp"].updateState(idleTemp)
         print("setting idle temperature for " + room)
 
     for room in bookingRooms:
@@ -122,18 +129,21 @@ for index in range (0, 143): # index = timeIntervall 1-144
         
             if key == "Livingroom" : 
                 livingroomUses += 1
+                print(str(key) + " has now been used")
                 pc.consumers["livingroomTemp"].updateState(useTemp)
                 pc.consumers["TV"].updateState(1)
 
             if key == "Bathroom" :
                 bathroomUses += 1
+                print(str(key) + " has now been used")
                 pc.consumers["BathroomTemp"].updateState(23)
                 if index in range(35, 54) or index in range (108, 112) :
                     # If morning or early evening. Assume people is going to the shower while visiting the bathroom 
-                    pc.consumers["shower"].updateState(1) 
+                    pc.consumers["Shower"].updateState(1) 
             
             if key == "Kitchen" :
                 kitchenUses += 1
+                print(str(key) + " has now been used")
                 pc.consumers["KitchenTemp"].updateState(useTemp)
                 pc.consumers["Dishwasher"].updateState(1)
                 if kitchenUses % 4 == 0:
@@ -199,7 +209,7 @@ for index in range (0, 143): # index = timeIntervall 1-144
         fieldnames = ["Livingroom","Kitchen","Bathroom","Bedroom_1","Bedroom_2","Bedroom_3","Bedroom_4","Bedroom_5","Bedroom_6"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerow(userLocation)
+        writer.writerow(userLocation) 
 
 
 # Dersom brukerID ikke er på ett annet rom antar vi at ID er på eget rom 
