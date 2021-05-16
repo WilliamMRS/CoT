@@ -122,7 +122,7 @@ for index in range (0, 143): # index = timeIntervall 1-144
         
             if key == "Livingroom" : 
                 livingroomUses += 1
-                pc.consumers["livingroomTemp"].updateState(useTemp)
+                pc.consumers["LivingroomTemp"].updateState(useTemp)
                 pc.consumers["TV"].updateState(1)
 
             if key == "Bathroom" :
