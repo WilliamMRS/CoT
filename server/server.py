@@ -113,12 +113,10 @@ def readRooms():
     return response
 
 @app.route('/api/getPowerUsage', methods=['GET'])
-def getPowerUsage():
+def getPowerUsage(): # Get power data
     df = pd.read_csv('../Bendik/powerUsage.csv')
     # Extract solar panel power generation
     # Extract total power generated
-    print(len(df.columns))
-
     data = {
         "powerUsage": (df.iloc[:, [1]]).to_numpy().tolist(),
         "solarSavings": (df.iloc[:, [17]]).to_numpy().tolist(),
@@ -134,6 +132,7 @@ def getPowerUsage():
     # return as object of three lists, one with usage, one with generation and one with timestamps.
     return response
 
+# Get information about all occupants on the floor.
 @app.route('/api/getOccupants', methods=['GET'])
 def getOccupants():
     data = []

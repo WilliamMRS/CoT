@@ -2,6 +2,17 @@
 let roomData = document.getElementById("roomData")
 let table = roomData.querySelector("table");
 
+/*
+ Denne url'en er viktig. Hvis flask hostes i development mode i localhost må den være slik. Hvis flask hostes 
+ på adresse 0.0.0.0 (dette gjør at den lokale ip-adressen til datamaskinen brukes) kan andre maskiner på nettverket se
+ flask serveren, og til og med gå inn på den. Se eksempel med ipad video i vedlegg.
+ For å koble til gjennom internett, må man gjøre en 'port forward' gjennom routeren. Slik at hvis noen etterspør en GET
+ request til routeren sin IP adresse, vil routeren videreføre requesten til flask serveren. Her kommer det mye sikkerhet
+ inn i bildet, men i essensen er det slik man kan hoste den online. Da må denne adressen være byttet til domenenavn eller
+ 'public ip'.
+*/
+url = 'http://localhost:5000'
+
 // Denne dataen må byttes ut med data fra CoT / Raspberry Pi Serveren
 const rooms = [
     {name: "Stue", people: 0, kwh: 0},
@@ -15,6 +26,7 @@ const rooms = [
     {name: "Hybel 6", people: 1, kwh: 0}
 ]
 
+// Oppdaterer romtabellene.
 let updateRoomTables = async () => {
     // Looper over hvert rom og legger til data
     try{
@@ -114,8 +126,7 @@ onTableChange = () => {
     }
 }
 
-url = 'http://localhost:5000'
-
+// Henter værdata fra flask serveren
 getWeatherData = async ()=>{
     let res = await fetch(url+'/api/forecast')
     let json = await res.json()
@@ -189,7 +200,7 @@ function onWindowResize(){
 }
 
 /* Chartjs */
-
+// Bygger grafene som viser størmdataen
 buildPowerChart = async () => {
     // labels are x-axis (time)
     // data is y-axis (Kwh used)
@@ -282,18 +293,6 @@ buildPowerChart = async () => {
     });
 }
 
-updatePowerTable = async () => {
-    builtHTML = "";
-
-
-    builtHTML += 
-    `<tr>
-        <td>${value}</td>
-        <td>${prefix}</td>
-    </tr>`
-    table.innerHTML = builtHTML;
-}
-
 // Timepicker 
 document.querySelector("#timePickerStart").addEventListener("input", function(e) {
     const reTime = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
@@ -314,15 +313,15 @@ document.querySelector("#timePickerEnd").addEventListener("input", function(e) {
     }
 });
 
+// Kjører en gang for å laste inn alt
 winInit = ()=>{
-    // Run once after everything has loaded:
     updateRoomTables(); // run once to init
     onWindowResize(); // run once to style graph
     getWeatherData();
     buildPowerChart();
 }
 
-
+// Oppdaterer værdata og hvor brukerene befinner seg 1 gang i minuttet.
 setInterval( async ()=>{
     //graphs.drawChart(canvas, ctx, [0,1,2,3,4,5], [5,3,-2,6,1,3], true, 30);
     getWeatherData();
