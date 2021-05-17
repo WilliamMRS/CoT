@@ -72,7 +72,7 @@ def getIndexIntoDay():
 
 def solarPanelPower(date, index):
     """ 
-    Returns solarPower generationn in Watt
+    Returns solarPower generation in Watt
      """   
 
     irradiance = get_irradiance(site, date, 20, 180) # irradiance i Trondheim, i dag
@@ -85,7 +85,7 @@ def solarPanelPower(date, index):
     
 #power = solarPanelPower('14-05-2021', getIndexIntoDay())
 #print(power)
-
+''
 
 
 """
