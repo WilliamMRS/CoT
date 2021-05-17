@@ -70,21 +70,22 @@ def getIndexIntoDay():
     seconds_in_day = 24 * 60 * 60
     return int((144 / seconds_in_day) * diff.seconds) # converts seconds to intervals of 144 (10 min) and throws away decimal.
 
-#Returns solarPower generationn in Watt
 def solarPanelPower(date, index):
+    """ 
+    Returns solarPower generation in Watt
+     """   
+
     irradiance = get_irradiance(site, date, 20, 180) # irradiance i Trondheim, i dag
     wattPerSquareMeter = irradiance["POA"][index]
     solarPanelArrayPower = wattPerSquareMeter * 150 * 0.19 # times square meters * solar panel efficiency.
     cloudCover = weatherData.Get_data_now().variables["cloud_area_fraction"]
-    cloudCover = float(str(cloudCover).split()[1][:-1])/100 # string manip and map Cloud Cover data to a value between 0 and 1.
+    cloudCover = float(str(cloudCover).split()[1][:-1])/100
     solarPanelArrayPower = solarPanelArrayPower * (1 - cloudCover) # power * 1 - cloud coverage
-    print("Cloudcover", cloudCover)
-    print("Date", date)
     return solarPanelArrayPower
     
-#power = solarPanelPower('16-05-2021', getIndexIntoDay())
+#power = solarPanelPower('14-05-2021', getIndexIntoDay())
 #print(power)
-
+''
 
 
 """

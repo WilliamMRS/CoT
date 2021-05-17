@@ -32,7 +32,7 @@ CSV filen som genereres består av følgende verdier:
 
 
 
-""" Alle tilgjengelige apparater: Flytt til README?
+""" Alle tilgjengelige apparater: 
 
 Oppdater tilstand med pc.consumers["apparatnavn"].updateState(NewState)
 
