@@ -120,9 +120,9 @@ def getPowerUsage():
     print(len(df.columns))
 
     data = {
-        "powerUsage": (df.iloc[:, [17]]).to_numpy().tolist(),
-        "solarSavings": (df.iloc[:, [16]]).to_numpy().tolist(),
-        "PvGeneration": (df.iloc[:, [15]]).to_numpy().tolist(),
+        "powerUsage": (df.iloc[:, [1]]).to_numpy().tolist(),
+        "solarSavings": (df.iloc[:, [17]]).to_numpy().tolist(),
+        "PvGeneration": (df.iloc[:, [16]]).to_numpy().tolist(),
         "costOfPower": (df.iloc[:, [14]]).to_numpy().tolist(),
         "time": (df.iloc[:, [0]]).to_numpy().tolist(),
     }
