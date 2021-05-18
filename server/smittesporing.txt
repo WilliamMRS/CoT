@@ -127,3 +127,6 @@
 2021-05-15 14:34:50.968862 beboer nr 3 booket 0 fra 22:30 til 22:40
 2021-05-15 14:34:51.080864 beboer nr 4 booket 0 fra 22:40 til 22:50
 2021-05-15 14:34:51.191033 beboer nr 5 booket 0 fra 22:50 til 23:00
+2021-05-16 11:46:39.304407 beboer nr 1 booket 0 fra 12:50 til 13:00
+2021-05-16 11:46:53.353868 beboer nr 1 booket 0 fra 12:50 til 13:00
+2021-05-16 11:47:11.995190 beboer nr 2 booket 0 fra 12:50 til 13:00
