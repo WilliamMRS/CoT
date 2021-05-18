@@ -23,15 +23,15 @@ class rooms:
 
 ###___ Angir størrelsen til rommene ___###
 ### Areal * høyde
-livingroom = rooms(25, 3)
-kitchen =  rooms(15, 3)
-bathroom = rooms(12, 3)
-bedroom_1 = rooms(10, 3)
-bedroom_2 = rooms(10, 3)
-bedroom_3 = rooms(10, 3)
-bedroom_4 = rooms(10, 3)
-bedroom_5 = rooms(10, 3)
-bedroom_6 = rooms(10, 3)
+Livingroom = rooms(25, 3)
+Kitchen =  rooms(15, 3)
+Bathroom = rooms(12, 3)
+Bedroom_1 = rooms(10, 3)
+Bedroom_2 = rooms(10, 3)
+Bedroom_3 = rooms(10, 3)
+Bedroom_4 = rooms(10, 3)
+Bedroom_5 = rooms(10, 3)
+Bedroom_6 = rooms(10, 3)
 
 
 class powerConsumer:
@@ -168,42 +168,42 @@ info_heater_6 = {'Key':'14945','Value':0,'Token':token}
 
 
 consumers = { 
-""" 
-Definerer ulike strømforbrukende apparater 
-Legg inn nye objekter her:
-"""
 
-"LivingroomLight" : powerConsumer("livingroom", 40, 1, info_livingRoomLight),
-"TV" : powerConsumer("livingroom", 150, 1, info_TV),
-"LivingroomTemp" : powerConsumer("livingroom", 1500, 1, info_LivingroomTemp), #BYTT UT COT-KODE
-"Stove" : powerConsumer("kitchen", 2200, 1, info_stove),
-"Dishwasher" : powerConsumer("kitchen",2000, 4, info_dishwasher),
-"CoffeeMachine" : powerConsumer("kitchen", 1500, 1, info_coffeeMachine),
-"Fridge" : powerConsumer("kitchen", 160, 1, info_fridge),
-"KitchenTemp" : powerConsumer("kitchen", 1500, 1, info_kitchenHeater), #Sjekk i COT
-"KitchenLight" : powerConsumer("kitchen", 40, 1, info_kitchenLight),
-"WashingMachine" : powerConsumer("bathroom", 2500, 4, info_washingMachine),
-"Shower" : powerConsumer("bathroom", 1000, 1, info_shower),
-"BathroomTemp" : powerConsumer("bathroom", 1500, 1, info_bathroomTemp),#Sjekk i COT
-"BathroomLight" : powerConsumer("bathroom", 40, 1, info_bathroomLight),
-"Light_1" : powerConsumer("bedroom_1", 40, 1, info_light_1),
-"Curtains_1" : powerConsumer("bedroom_1", 10, 1, info_curtains_1),
-"Bedroom_1Temp" : powerConsumer("bedroom_1", 1500, 1, info_heater_1),
-"Light_2" : powerConsumer("bedroom_2", 40, 1, info_light_2),
-"Curtains_2" : powerConsumer("bedroom_2", 10, 1, info_curtains_2),
-"Bedroom_2Temp" : powerConsumer("bedroom_2", 1500, 1, info_heater_2),
-"Light_3" : powerConsumer("bedroom_3", 40, 1, info_light_3),
-"Curtains_3" : powerConsumer("bedroom_3", 10, 1, info_curtains_3),
-"Bedroom_3Temp" : powerConsumer("bedroom_3", 1500, 1, info_heater_3),
-"Light_4" : powerConsumer("bedroom_4", 40, 1, info_light_4),
-"Curtains_4" : powerConsumer("bedroom_4", 10, 1, info_curtains_4),
-"Bedroom_4Temp" : powerConsumer("bedroom_4", 1500, 1, info_heater_4),
-"Light_5" : powerConsumer("bedroom_5", 40, 1, info_light_4),
-"Curtains_5" : powerConsumer("bedroom_5", 10, 1, info_curtains_4),
-"Bedroom_5Temp" : powerConsumer("bedroom_5", 1500, 1, info_heater_4),
-"Light_6" : powerConsumer("bedroom_6", 40, 1, info_light_4),
-"Curtains_6" : powerConsumer("bedroom_6", 10, 1, info_curtains_4),
-"Bedroom_6Temp" : powerConsumer("bedroom_6", 1500, 1, info_heater_4),
+#Definerer ulike strømforbrukende apparater 
+#Legg inn nye objekter her:
+
+
+"LivingroomLight" : powerConsumer("Livingroom", 40, 1, info_livingRoomLight),
+"TV" : powerConsumer("Livingroom", 150, 1, info_TV),
+"LivingroomTemp" : powerConsumer("Livingroom", 1500, 1, info_LivingroomTemp), #BYTT UT COT-KODE
+"Stove" : powerConsumer("Kitchen", 2200, 1, info_stove),
+"Dishwasher" : powerConsumer("Kitchen",2000, 4, info_dishwasher),
+"CoffeeMachine" : powerConsumer("Kitchen", 1500, 1, info_coffeeMachine),
+"Fridge" : powerConsumer("Kitchen", 160, 1, info_fridge),
+"KitchenTemp" : powerConsumer("Kitchen", 1500, 1, info_kitchenHeater), #Sjekk i COT
+"KitchenLight" : powerConsumer("Kitchen", 40, 1, info_kitchenLight),
+"WashingMachine" : powerConsumer("Bathroom", 2500, 4, info_washingMachine),
+"Shower" : powerConsumer("Bathroom", 1000, 1, info_shower),
+"BathroomTemp" : powerConsumer("Bathroom", 1500, 1, info_bathroomTemp),#Sjekk i COT
+"BathroomLight" : powerConsumer("Bathroom", 40, 1, info_bathroomLight),
+"Light_1" : powerConsumer("Bedroom_1", 40, 1, info_light_1),
+"Curtains_1" : powerConsumer("Bedroom_1", 10, 1, info_curtains_1),
+"Bedroom_1Temp" : powerConsumer("Bedroom_1", 1500, 1, info_heater_1),
+"Light_2" : powerConsumer("Bedroom_2", 40, 1, info_light_2),
+"Curtains_2" : powerConsumer("Bedroom_2", 10, 1, info_curtains_2),
+"Bedroom_2Temp" : powerConsumer("Bedroom_2", 1500, 1, info_heater_2),
+"Light_3" : powerConsumer("Bedroom_3", 40, 1, info_light_3),
+"Curtains_3" : powerConsumer("Bedroom_3", 10, 1, info_curtains_3),
+"Bedroom_3Temp" : powerConsumer("Bedroom_3", 1500, 1, info_heater_3),
+"Light_4" : powerConsumer("Bedroom_4", 40, 1, info_light_4),
+"Curtains_4" : powerConsumer("Bedroom_4", 10, 1, info_curtains_4),
+"Bedroom_4Temp" : powerConsumer("Bedroom_4", 1500, 1, info_heater_4),
+"Light_5" : powerConsumer("Bedroom_5", 40, 1, info_light_4),
+"Curtains_5" : powerConsumer("Bedroom_5", 10, 1, info_curtains_4),
+"Bedroom_5Temp" : powerConsumer("Bedroom_5", 1500, 1, info_heater_4),
+"Light_6" : powerConsumer("Bedroom_6", 40, 1, info_light_4),
+"Curtains_6" : powerConsumer("Bedroom_6", 10, 1, info_curtains_4),
+"Bedroom_6Temp" : powerConsumer("Bedroom_6", 1500, 1, info_heater_4),
 }
 
 rooms = {
@@ -227,9 +227,9 @@ rooms = {
 
 
 def placeObjectsInRooms(consumerList, roomList) :
-    """ 
-    Funksjon for å sortere alle apparatene inn i riktig rom basert på hvilket rom de ble innitsialisert med. 
-    """
+    
+    #Funksjon for å sortere alle apparatene inn i riktig rom basert på hvilket rom de ble innitsialisert med. 
+    
     print("Placing Objects in desiered rooms")
     for key in roomList.keys() :
         for i in consumerList :
@@ -237,6 +237,7 @@ def placeObjectsInRooms(consumerList, roomList) :
                 """ print(consumerList[i].room)
                 print(key) """
                 roomList[key].update({i : consumerList[i]})
+    #print(roomList)            
 
 def updateConsumerStatus(dictionary): 
     """ 
@@ -281,15 +282,6 @@ def logThis(df):
     df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
     df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
 
-def logThisDemo(df): 
-    """ 
-    Funksjon for å skrive til en .csv fil
-    Lagrer med timeStep istedenfor tid. 
-
-    FIKS! 
-    """
-    df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
-    df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
 
 
 def toDF(dict) :
@@ -297,7 +289,7 @@ def toDF(dict) :
     return df
 
 
-def consumptionLogger(roomList, kWhcompensation, start, end) : 
+def consumptionLogger(roomList, timedelta, start, end) : 
     """ 
     Henter forbruket fra alle apparater
     Tar inn dictionary med key : rom, en tidskonstant for kWh beregning, start og sluttid.
@@ -311,7 +303,7 @@ def consumptionLogger(roomList, kWhcompensation, start, end) :
         consumption = 0
         for i in roomList[key] :
             #print("Printing consumption for: " + str(i))
-            consumption += (roomList[key][i].powerOn()*kWhcompensation)/1000 # Deler på 1000 for å få KiloWatt           
+            consumption += (roomList[key][i].powerOn()*timedelta)/1000 # consumption * time / 1000 = KWh     
             #print(consumption)
         consumptionDict.update({key : consumption})
 

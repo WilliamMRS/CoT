@@ -49,10 +49,10 @@ def bookAllTheRooms() :
     defunc.bookRoom(2, "17:15", "18:00", 6)
 
     # 1,2,4 og 5 bruker stua fra 18:00 til 22:00
-    defunc.bookRoom(2, "18:00", "22:00", 1)
-    defunc.bookRoom(2, "18:00", "22:00", 2)
-    defunc.bookRoom(2, "18:00", "22:00", 3)
-    defunc.bookRoom(2, "18:00", "22:00", 4)
+    defunc.bookRoom(1, "18:00", "22:00", 1)
+    defunc.bookRoom(1, "18:00", "22:00", 2)
+    defunc.bookRoom(1, "18:00", "22:00", 3)
+    defunc.bookRoom(1, "18:00", "22:00", 4)
 
     # alle booker toalettet for 10 minutter før de legger seg, en og en. Mellom 22:00 og 23:00
     defunc.bookRoom(0, "22:00", "22:10", 1)
