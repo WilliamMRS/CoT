@@ -282,15 +282,6 @@ def logThis(df):
     df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
     df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
 
-def logThisDemo(df): 
-    """ 
-    Funksjon for å skrive til en .csv fil
-    Lagrer med timeStep istedenfor tid. 
-
-    FIKS! 
-    """
-    df.insert(0, 'timestamp', time.strftime('%d-%m-%Y %H:%M:%S'))
-    df.to_csv("powerUsage.csv", mode = 'a', index=False, header = False)
 
 
 def toDF(dict) :
