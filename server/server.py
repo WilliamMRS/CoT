@@ -114,7 +114,7 @@ def readRooms():
 
 @app.route('/api/getPowerUsage', methods=['GET'])
 def getPowerUsage():
-    df = pd.read_csv('../Bendik/powerUsage.csv')
+    df = pd.read_csv('../strøm_&_simulering/powerUsage.csv')
     # Extract solar panel power generation
     # Extract total power generated
     print(len(df.columns))
@@ -137,7 +137,7 @@ def getPowerUsage():
 @app.route('/api/getOccupants', methods=['GET'])
 def getOccupants():
     data = []
-    with open('../Bendik/user_locations.csv', 'r') as file:
+    with open('../strøm_&_simulering/user_locations.csv', 'r') as file:
         reader = csv.reader(file)
         for row in reader:
             data.append(row)
