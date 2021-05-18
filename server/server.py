@@ -117,13 +117,19 @@ def getPowerUsage():
     df = pd.read_csv('../strøm_&_simulering/powerUsage.csv')
     # Extract solar panel power generation
     # Extract total power generated
-    print(len(df.columns))
+
+    # ganger strømforbrukslisten med prisen av strøm for å plotte kostnaden til brukt strøm.
+    costOfPower = (df.iloc[:, [14]]).to_numpy().tolist() # powerUsage
+    for i in range (0, len(costOfPower)):
+        cost = (df.iloc[:, [15]]).to_numpy().tolist()[i][0]
+        usage = (costOfPower[i][0])
+        costOfPower[i][0] = usage * cost
 
     data = {
-        "powerUsage": (df.iloc[:, [17]]).to_numpy().tolist(),
-        "solarSavings": (df.iloc[:, [16]]).to_numpy().tolist(),
-        "PvGeneration": (df.iloc[:, [15]]).to_numpy().tolist(),
-        "costOfPower": (df.iloc[:, [14]]).to_numpy().tolist(),
+        "powerUsage": (df.iloc[:, [14]]).to_numpy().tolist(),
+        "solarSavings": (df.iloc[:, [17]]).to_numpy().tolist(),
+        "PvGeneration": (df.iloc[:, [16]]).to_numpy().tolist(),
+        "costOfPower": costOfPower,
         "time": (df.iloc[:, [0]]).to_numpy().tolist(),
     }
     response = app.response_class(
