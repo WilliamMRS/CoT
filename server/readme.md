@@ -1,3 +1,5 @@
+Skrevet på engelsk, da det er mest komfortabelt mtp python er på engelsk også.
+
 GET STARTED:
 
 ---- Ignore if you already have flask installed
